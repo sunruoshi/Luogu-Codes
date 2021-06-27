@@ -3,6 +3,8 @@ using namespace std;
 
 const int MAXN = 26;
 
+int n, root;
+
 struct Node {
     int left, right;
 } node[MAXN];
@@ -15,7 +17,6 @@ void preOrder(int root) {
 }
 
 int main() {
-    int n, root;
     scanf("%d", &n);
     for (int i = 0; i < n; i++) {
         char s[3];
