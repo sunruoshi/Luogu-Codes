@@ -39,12 +39,26 @@ int getNum(int x, int root) {
         return getNum(x - node[node[root].left].weight - node[root].num, node[root].right);
 }
 
-int findPrev(int root) {
-
+int findPrev(int x, int root, int res) {
+    if (node[root].val >= x) {
+        if (!node[root].left) return res;
+        else return findPrev(x, node[root].left, res);
+    } else {
+        if (!node[root].right) return node[root].val < x ? node[root].val : res;
+        if (node[root].num) return findPrev(x, node[root].right, node[root].val);
+        else return findPrev(x, node[root].right, res);
+    }
 }
 
-int findNext(int root) {
-
+int findNext(int x, int root, int res) {
+    if (node[root].val <= x) {
+        if (!node[root].right) return res;
+        else return findNext(x, node[root].right, res);
+    } else {
+        if (!node[root].left) return node[root].val > x ? node[root].val : res;
+        if (node[root].num) return findNext(x, node[root].left, node[root].val);
+        else return findNext(x, node[root].left, res);
+    }
 }
 
 void insertNode(int &root, int x) {
@@ -67,8 +81,8 @@ int main() {
         scanf("%d %d", &op, &x);
         if (op == 1) printf("%d\n", getRank(x, root));
         else if (op == 2) printf("%d\n", getNum(x, root));
-        else if (op == 3) printf("%d\n", findPrev(x, root));
-        else if (op == 4) printf("%d\n", findNext(x, root));
+        else if (op == 3) printf("%d\n", findPrev(x, root, -INF));
+        else if (op == 4) printf("%d\n", findNext(x, root, INF));
         else if (op == 5) insertNode(root, x);
     }
     return 0;
