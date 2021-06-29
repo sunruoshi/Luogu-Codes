@@ -3,7 +3,7 @@ Luogu AC Codes
 ### 洛谷题单
 - [[入门1] 顺序结构](https://www.luogu.com.cn/training/100#problems)
 - [[入门2] 分支结构](https://www.luogu.com.cn/training/101#problems)
-- [[入门3] 魂环结构](https://www.luogu.com.cn/training/102#problems)
+- [[入门3] 循环结构](https://www.luogu.com.cn/training/102#problems)
 - [[入门4] 数组](https://www.luogu.com.cn/training/103#problems)
 - [[入门5] 字符串](https://www.luogu.com.cn/training/104#problems)
 - [[入门6] 函数与结构体](https://www.luogu.com.cn/training/105#problems)
