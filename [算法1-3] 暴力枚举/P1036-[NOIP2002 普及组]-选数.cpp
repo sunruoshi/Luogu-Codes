@@ -1,5 +1,7 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
+
+int n, k, arr[20];
 
 bool isPrime(int d) {
     if (d < 2) return false;
@@ -10,22 +12,20 @@ bool isPrime(int d) {
     return true;
 }
 
-int dfs(int arr[], int n, int k, int start, int sum, int cnt) {
+int dfs(int start, int sum, int cnt) {
     if (cnt == k) return isPrime(sum);
     int ans = 0;
     for (int i = start; i < n; i++) {
-        ans += dfs(arr, n, k, i + 1, sum + arr[i], cnt + 1);
+        ans += dfs(i + 1, sum + arr[i], cnt + 1);
     }
     return ans;
 }
 
 int main() {
-    int n, k;
     cin >> n >> k;
-    int arr[n];
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
     }
-    cout << dfs(arr, n, k, 0, 0, 0);
+    cout << dfs(0, 0, 0);
     return 0;
 }
