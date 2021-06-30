@@ -1,28 +1,26 @@
-#include <cstdio>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-int n, r;
+int n, r, p, temp[21];
 
-void dfs(int cur, vector<int>& temp) {
-    if (cur > n || temp.size() == r) {
-        if (temp.size() == r) {
-            for (int i = 0; i < temp.size(); i++) {
+void dfs(int cur) {
+    if (cur > n || p == r) {
+        if (p == r) {
+            for (int i = 0; i < r; i++) {
                 printf("%3d", temp[i]);
             }
             printf("\n");
         }
         return;
     }
-    temp.push_back(cur);
-    dfs(cur + 1, temp);
-    temp.pop_back();
-    dfs(cur + 1, temp);
+    temp[p++] = cur;
+    dfs(cur + 1);
+    temp[p--] = 0;
+    dfs(cur + 1);
 }
 
 int main() {
-    vector<int> temp;
     scanf("%d %d", &n, &r);
-    dfs(1, temp);
+    dfs(1);
     return 0;
 }
