@@ -9,15 +9,13 @@
 "
 " Sam's (not so) minimal vimrc.
 "
-
-" You want Vim, not vi. When Vim finds a vimrc, 'nocompatible' is set anyway.
-" We set it explicitely to make our position clear!
 set nocompatible
 
 call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
 Plug 'rakr/vim-one'
+Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'ycm-core/YouCompleteMe'
@@ -30,13 +28,11 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_no_function_highlight = 1
 let g:lightline = {
-            \ 'colorscheme': 'one',
-            \ }
+      \ 'colorscheme': 'onedark',
+      \ }
 
 
-colorscheme one
-
-set background  =dark      " for the dark version
+colorscheme onedark
 
 set nobackup
 set nowb
