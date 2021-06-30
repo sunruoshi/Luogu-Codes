@@ -52,7 +52,7 @@ set hidden                 " Switch between buffers without having to save first
 set laststatus  =2         " Always show statusline.
 set display     =lastline  " Show as much as possible of the last line.
 
-set showmode               " Show current mode in command-line.
+set noshowmode             " Show current mode (or not) in command-line.
 set showcmd                " Show already typed keys when more are expected.
 
 set incsearch              " Highlight while searching with / or ?.
@@ -71,6 +71,7 @@ set synmaxcol   =200       " Only highlight the first 200 columns.
 
 set list                   " Show non-printable characters.
 set number                 " Show line numbers
+
 if has('multi_byte') && &encoding ==# 'utf-8'
     let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
 else
@@ -81,6 +82,10 @@ endif
 " breaks things that use 'shell'.
 if &shell =~# 'fish$'
     set shell=/bin/zsh
+endif
+
+if !has('gui_running')
+  set t_Co=256
 endif
 
 " Auto complete quotes and brackets
