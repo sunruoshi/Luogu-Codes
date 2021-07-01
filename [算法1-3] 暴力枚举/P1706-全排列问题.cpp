@@ -3,6 +3,13 @@ using namespace std;
 
 int n, arr[9];
 
+void print() {
+    for (int i = 0; i < n; i++) {
+        printf("%5d", arr[i]);
+    }
+    printf("\n");
+}
+
 int next_permute() {
     if (n < 2) return 0;
     // 从后往前查找第一个相邻的元素对(i, j), 满足arr[i] < arr[j]
@@ -28,15 +35,7 @@ int main() {
     for (int i = 0; i < n; i++) {
         arr[i] = i + 1;
     }
-    for (int i = 0; i < n; i++) {
-        printf("%5d", arr[i]);
-    }
-    printf("\n");
-    while (next_permute()) {
-        for (int i = 0; i < n; i++) {
-            printf("%5d", arr[i]);
-        }
-        printf("\n");
-    }
+    print();
+    while (next_permute()) print();
     return 0;
 }
