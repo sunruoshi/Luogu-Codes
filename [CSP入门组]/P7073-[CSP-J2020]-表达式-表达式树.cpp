@@ -1,21 +1,19 @@
-#include <iostream>
-#include <stack>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 500001;
+const int MAXN = 500001;
 
-int index, n, q, value[maxn];
-bool check[maxn];
+int idx, n, q, value[MAXN];
+bool check[MAXN];
 string s;
 
 struct Node {
     int val, op, left, right;
-} node[maxn];
+} node[MAXN];
 
 int newNode(int val, int op, int left, int right) {
-    node[index] = Node({val, op, left, right});
-    return index++;
+    node[idx] = Node({val, op, left, right});
+    return idx++;
 }
 
 void dfs(int root) {
