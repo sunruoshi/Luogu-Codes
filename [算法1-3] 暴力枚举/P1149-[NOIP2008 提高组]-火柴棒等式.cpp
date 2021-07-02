@@ -1,8 +1,7 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-int n, ans, num[1000] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
+int n, p, ans, temp[3], num[1000] = {6, 2, 5, 5, 4, 5, 6, 3, 7, 6};
 
 int cost(int d) {
     if (num[d]) return num[d];
@@ -17,24 +16,23 @@ int cost(int d) {
     }
 }
 
-void dfs(int cur, int sum, vector<int>& temp) {
-    if (sum >= n - 4 || temp.size() == 3) {
-        if (temp.size() == 3 && temp[0] + temp[1] == temp[2] && sum == n - 4) ans++;
+void dfs(int sum) {
+    if (sum >= n - 4 || p == 3) {
+        if (p == 3 && temp[0] + temp[1] == temp[2] && sum == n - 4) ans++;
         return;
     }
     for (int i = 0; i < 1000; i++) {
         sum += cost(i);
-        temp.push_back(i);
-        dfs(i + 1, sum, temp);
-        temp.pop_back();
+        temp[p++] = i;
+        dfs(sum);
+        temp[p--] = 0;
         sum -= cost(i);
     }
 }
 
 int main() {
-    cin >> n;
-    vector<int> temp;
-    dfs(0, 0, temp);
-    cout << ans;
+    scanf("%d", &n);
+    dfs(0);
+    printf("%d", ans);
     return 0;
 }
