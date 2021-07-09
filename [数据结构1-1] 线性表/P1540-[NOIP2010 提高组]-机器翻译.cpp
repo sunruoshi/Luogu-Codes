@@ -1,23 +1,26 @@
-#include <iostream>
-#include <deque>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
+const int MAXN = 1001;
+
+int m, n, cnt, ram[MAXN];
+
 int main() {
-	int m, n, cnt = 0;
-	deque<int> dict;
-	cin >> m >> n;
-	for (int i = 0; i < n; i++) {
-		int word;
-		cin >> word;
-		if (find(dict.begin(), dict.end(), word) == dict.end()) {
-			if (dict.size() == m) {
-				dict.pop_front();
-			}
-			dict.push_back(word);
-			cnt++;
-		}
-	}
-	cout << cnt;
-	return 0;
+    deque<int> dict;
+    scanf("%d %d", &m, &n);
+    for (int i = 0; i < n; i++) {
+        int word;
+        scanf("%d", &word);
+        if (!ram[word]) {
+            if (dict.size() == m) {
+                ram[dict.front()] = 0;
+                dict.pop_front();
+            }
+            ram[word] = 1;
+            dict.push_back(word);
+            cnt++;
+        }
+    }
+    printf("%d", cnt);
+    return 0;
 }
