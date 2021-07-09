@@ -19,6 +19,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'ycm-core/YouCompleteMe'
+Plug 'Yggdroot/indentLine'
 
 call plug#end()
 
