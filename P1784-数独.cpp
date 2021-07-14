@@ -47,8 +47,6 @@ int main() {
             }
             printf("\n");
         }
-    } else {
-        printf("No Answer!\n");
     }
     return 0;
 }
