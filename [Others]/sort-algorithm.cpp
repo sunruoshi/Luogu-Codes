@@ -102,20 +102,41 @@ void countingSort() {
     printArr(res);
 }
 
+// 快速排序
 void quickSort(int num[], int left, int right) {
     if (left >= right) return;
+    // 基准数可以任意选取，这里取序列中间的数为基准数
     int pivot = num[left + (right - left) / 2], i = left, j = right;
     while (i <= j) {
-        while (num[i] < pivot) i++;
-        while (num[j] > pivot) j--;
-        if (i <= j) swap(num[i++], num[j--]);
+        while (num[i] < pivot) i++; // 找到基准数左边第一个大于基准数的元素
+        while (num[j] > pivot) j--; // 找到基准数右边第一个小于基准数的元素
+        if (i <= j) swap(num[i++], num[j--]); // 交换这两个元素
     }
+    // 递归的操作基准数左右两边的区间
     quickSort(num, left, j);
     quickSort(num, i, right);
 }
 
+// 归并排序
+void mergeSort(int num[], int left, int right) {
+    if (left >= right) return;
+    int mid = left + (right - left) / 2;
+    mergeSort(num, left, mid);
+    mergeSort(num, mid + 1, right);
+    int i = left, j = mid + 1, pos = 0, temp[right - left + 1];
+    while (i <= mid && j <= right) {
+        if (num[i] <= num[j]) temp[pos++] = num[i++];
+        else temp[pos++] = num[j++];
+    }
+    while (i <= mid) temp[pos++] = num[i++];
+    while (j <= right) temp[pos++] = num[j++];
+    copy(temp, temp + right - left + 1, num + left);
+}
+
 int main() {
     init();
+
+    int num[LEN];
 
     printf("冒泡排序：");
     bubbleSort();
@@ -130,9 +151,13 @@ int main() {
     countingSort();
 
     printf("快速排序：");
-    int num[LEN];
     copy(arr, arr + LEN, num);
     quickSort(num, 0, LEN - 1);
+    printArr(num);
+
+    printf("归并排序：");
+    copy(arr, arr + LEN, num);
+    mergeSort(num, 0, LEN - 1);
     printArr(num);
 
     printf("  未排序：");
