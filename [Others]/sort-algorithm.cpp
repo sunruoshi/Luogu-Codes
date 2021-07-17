@@ -102,6 +102,47 @@ void countingSort() {
     printArr(res);
 }
 
+// 桶排序
+void bucketSort() {
+    int res[LEN];
+    copy(arr, arr + LEN, res);
+    // 桶的个数，待排序元素的最大值和最小值
+    int num = 5, maxn = 0, minn = 1e9;
+    for (int i = 0; i < LEN; i++) {
+        if (res[i] > maxn) maxn = res[i];
+        if (res[i] < minn) minn = res[i];
+    }
+    // 计算每个桶存放的数据范围，至少为1
+    int range = (maxn - minn) / num;
+    if (range < 1) range = 1;
+    // 创建二维数组，第一维表示第几个桶，第二维表示桶中的元素
+    int buckets[num][range];
+    // 表示每个桶里元素的个数
+    int bucketSum[num];
+    memset(bucketSum, 0, sizeof(bucketSum));
+    for (int i = 0; i < LEN; i++) {
+        // 计算元素应该分布在哪个桶
+        int index = (res[i] - minn) / range;
+        if (index >= num) index = num - 1;
+        // 插入排序，将元素有序插入到桶中
+        int j = bucketSum[index] - 1;
+        while (j >= 0 && res[i] < buckets[index][j]) {
+            buckets[index][j + 1] = buckets[index][j];
+            j--;
+        }
+        buckets[index][j + 1] = res[i];
+        bucketSum[index]++;
+    }
+    // 修改回原数组
+    int pos = 0;
+    for (int i = 0; i < num; i++) {
+        for (int j = 0; j < bucketSum[i]; j++) {
+            res[pos++] = buckets[i][j];
+        }
+    }
+    printArr(res);
+}
+
 // 快速排序
 void quickSort(int num[], int left, int right) {
     if (left >= right) return;
@@ -149,6 +190,9 @@ int main() {
 
     printf("计数排序：");
     countingSort();
+
+    printf("  桶排序：");
+    bucketSort();
 
     printf("快速排序：");
     copy(arr, arr + LEN, num);
