@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <cstdio>
 using namespace std;
 
 int pos, sudoku[9][9], spaces[81][2];
