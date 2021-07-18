@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+#include <cstdio>
+#include <deque>
 using namespace std;
 
 const int MAXN = 1e5;
