@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <cstdio>
 using namespace std;
 
 int n, p, temp[10], visited[10];
