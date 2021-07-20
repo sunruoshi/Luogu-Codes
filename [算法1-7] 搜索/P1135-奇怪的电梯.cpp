@@ -1,7 +1,9 @@
-#include <iostream>
+#include <cstdio>
 using namespace std;
 
-int n, a, b, ans = 2147483647, arr[201], visited[201];
+const int MAXN = 201;
+
+int n, a, b, ans = 1e9, arr[MAXN], visited[MAXN];
 
 void dfs(int cur, int cnt) {
     if (cnt >= ans || cur == b) {
@@ -15,12 +17,12 @@ void dfs(int cur, int cnt) {
 }
 
 int main() {
-    cin >> n >> a >> b;
+    scanf("%d %d %d", &n, &a, &b);
     for (int i = 1; i <= n; i++) {
-        cin >> arr[i];
+        scanf("%d", &arr[i]);
     }
     dfs(a, 0);
-    if (ans == 2147483647) cout << -1;
-    else cout << ans;
+    if (ans == 1e9) printf("-1");
+    else printf("%d", ans);
     return 0;
 }
