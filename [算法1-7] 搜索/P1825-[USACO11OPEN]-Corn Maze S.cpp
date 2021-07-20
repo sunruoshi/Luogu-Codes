@@ -1,17 +1,20 @@
 #include <iostream>
-#include <queue>
+#include <deque>
 using namespace std;
 
-struct node {
-    int x;
-    int y;
-    int step;
-};
+struct Node {
+    int x, y, step;
+    Node() {}
+    Node(int _x, int _y, int _step) {
+        x = _x;
+        y = _y;
+        step = _step;
+    }
+} gate[26][2], start;
 
 int n, m, dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 char maze[301][301];
 bool visited[301][301], letter[26];
-node gate[26][2], start;
 
 int main() {
     cin >> n >> m;
@@ -34,11 +37,11 @@ int main() {
             }
         }
     }
-    queue<node> q;
-    q.push(start);
+    deque<Node> q;
+    q.push_back(start);
     while (q.size()) {
-        node cur = q.front();
-        q.pop();
+        Node cur = q.front();
+        q.pop_front();
         if (maze[cur.x][cur.y] == '=') {
             cout << cur.step;
             return 0;
@@ -57,7 +60,7 @@ int main() {
             int nx = cur.x + dirs[i][0], ny = cur.y + dirs[i][1];
             if (nx >= 0 && nx < n && ny >= 0 && ny < m && !visited[nx][ny] && maze[nx][ny] != '#') {
                 visited[nx][ny] = true;
-                q.push(node({nx, ny, cur.step + 1}));
+                q.push_back(Node(nx, ny, cur.step + 1));
             }
         }
     }
