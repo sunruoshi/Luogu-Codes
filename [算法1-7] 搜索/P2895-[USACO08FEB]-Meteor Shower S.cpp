@@ -1,12 +1,15 @@
 #include <cstdio>
 #include <cstring>
-#include <queue>
+#include <deque>
 using namespace std;
 
-struct node {
-    int x;
-    int y;
-    int t;
+struct Node {
+    int x, y, t;
+    Node(int _x, int _y, int _t) {
+        x = _x;
+        y = _y;
+        t = _t;
+    }
 };
 
 int m, farm[302][302], visited[302][302], dirs[5][2] = {{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}};
@@ -24,20 +27,20 @@ int main() {
             }
         }
     }
-    queue<node> q;
-    q.push(node({0, 0, 0}));
+    deque<Node> q;
+    q.push_back(Node(0, 0, 0));
     while (q.size()) {
-        node cur = q.front();
+        Node cur = q.front();
         if (farm[cur.x][cur.y] == -1) {
             printf("%d", cur.t);
             return 0;
         }
-        q.pop();
+        q.pop_front();
         for (int i = 1; i < 5; i++) {
             int nx = cur.x + dirs[i][0], ny = cur.y + dirs[i][1];
             if (nx >= 0 && ny >= 0 && (cur.t + 1 < farm[nx][ny] || farm[nx][ny] == -1) && !visited[nx][ny]) {
                 visited[nx][ny] = 1;
-                q.push(node({nx, ny, cur.t + 1}));
+                q.push_back(Node(nx, ny, cur.t + 1));
             }
         }
     }
