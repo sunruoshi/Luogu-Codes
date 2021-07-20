@@ -1,44 +1,42 @@
 #include <cstdio>
+#include <cstring>
 #include <deque>
-#include <vector>
 using namespace std;
 
-int main() {
-    int n, m, cnt = 0, sx, sy, dirs[8][2] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
-    scanf("%d %d %d %d", &n, &m, &sx, &sy);
-    int board[n + 1][m + 1];
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            board[i][j] = -1;
-        }
+int n, m, dirs[8][2] = {{2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1}};
+
+struct Node {
+    int x, y, step;
+    Node(int _x, int _y, int _step) {
+        x = _x;
+        y = _y;
+        step = _step;
     }
-    deque<vector<int> > q;
-    q.push_back({sx, sy});
-    board[sx][sy] = cnt++;
+} s(0, 0, 0);
+
+int main() {
+    scanf("%d %d %d %d", &n, &m, &s.x, &s.y);
+    int board[n + 1][m + 1];
+    memset(board, -1, sizeof(board));
+    deque<Node> q;
+    q.push_back(s);
+    board[s.x][s.y] = 0;
     while (q.size()) {
-        deque<vector<int> > cur;
-        while (q.size()) {
-            cur.push_back(q.front());
-            q.pop_front();
-        }
-        while (cur.size()) {
-            vector<int> pos = cur.front();
-            for (int i = 0; i < 8; i++) {
-                int nx = pos[0] + dirs[i][0], ny = pos[1] + dirs[i][1];
-                if (nx >= 1 && nx <= n && ny >= 1 && ny <= m && board[nx][ny] == -1) {
-                    q.push_back({nx, ny});
-                    board[nx][ny] = cnt;
-                }
+        Node cur = q.front();
+        for (int i = 0; i < 8; i++) {
+            int nx = cur.x + dirs[i][0], ny = cur.y + dirs[i][1];
+            if (nx >= 1 && nx <= n && ny >= 1 && ny <= m && board[nx][ny] == -1) {
+                board[nx][ny] = cur.step + 1;
+                q.push_back(Node(nx, ny, board[nx][ny]));
             }
-            cur.pop_front();
         }
-        cnt++;
+        q.pop_front();
     }
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
             printf("%-5d", board[i][j]);
         }
-        if (i != n) printf("\n");
+        printf("\n");
     }
     return 0;
 }
