@@ -14,8 +14,6 @@ set nocompatible
 call plug#begin()
 
 Plug 'sheerun/vim-polyglot'
-Plug 'rakr/vim-one'
-Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'ycm-core/YouCompleteMe'
