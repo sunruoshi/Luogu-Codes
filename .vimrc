@@ -20,20 +20,18 @@ Plug 'itchyny/lightline.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'ycm-core/YouCompleteMe'
 Plug 'Yggdroot/indentLine'
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 call plug#end()
 
-let g:ycm_extra_conf_globlist = ['~/Dev/*','!~/*']
+let g:ycm_extra_conf_globlist = ['~/Documents/Dev/*','!~/*']
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_no_function_highlight = 1
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ }
+let g:lightline = { 'colorscheme': 'onehalfdark' }
 
-
-colorscheme onedark
+colorscheme onehalfdark
 
 set nobackup
 set nowb
@@ -77,6 +75,12 @@ if has('multi_byte') && &encoding ==# 'utf-8'
     let &listchars = 'tab:▸ ,extends:❯,precedes:❮,nbsp:±'
 else
     let &listchars = 'tab:> ,extends:>,precedes:<,nbsp:.'
+endif
+
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
 endif
 
 " The fish shell is not very compatible to other shells and unexpectedly
