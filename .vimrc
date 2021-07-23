@@ -76,9 +76,9 @@ else
 endif
 
 if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
 endif
 
 " The fish shell is not very compatible to other shells and unexpectedly
@@ -88,8 +88,14 @@ if &shell =~# 'fish$'
 endif
 
 if !has('gui_running')
-  set t_Co=256
+    set t_Co=256
 endif
+
+" Leader Mode
+nnoremap <leader>q :q<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>sa ggVG"
+nnoremap <leader>fa gg=G
 
 " Auto complete quotes and brackets
 inoremap ' ''<ESC>i
@@ -97,3 +103,13 @@ inoremap " ""<ESC>i
 inoremap ( ()<ESC>i
 inoremap [ []<ESC>i
 inoremap { {<CR>}<ESC>O
+inoremap jj <Esc>
+
+" Cursor moving
+nnoremap la ^
+nnoremap ld $
+nnoremap ls <C-d>
+nnoremap lw <C-u>
+
+" Apply changes after save
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
