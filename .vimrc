@@ -81,8 +81,7 @@ if exists('+termguicolors')
     set termguicolors
 endif
 
-" The fish shell is not very compatible to other shells and unexpectedly
-" breaks things that use 'shell'.
+" Switch the fish shell.
 if &shell =~# 'fish$'
     set shell=/bin/zsh
 endif
