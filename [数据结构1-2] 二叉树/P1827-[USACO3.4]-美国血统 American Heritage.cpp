@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
 
 const int MAXN = 26;
@@ -8,14 +9,18 @@ string inOrder, preOrder;
 struct Node {
     char val;
     int left, right;
+    Node() {}
+    Node(char _val, int _left, int _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
 } node[MAXN];
 
 int idx = 0;
 
 int newNode(char v) {
-    node[idx].val = v;
-    node[idx].left = -1;
-    node[idx].right = -1;
+    node[idx] = Node(v, -1, -1);
     return idx++;
 }
 
