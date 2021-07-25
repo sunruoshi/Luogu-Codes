@@ -1,7 +1,5 @@
 #include <cstdio>
-#include <cstring>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 const int MAXN = 1e5 + 1;
