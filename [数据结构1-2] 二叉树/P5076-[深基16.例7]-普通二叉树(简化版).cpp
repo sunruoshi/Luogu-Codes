@@ -29,10 +29,8 @@ void update(int root) {
 
 int getRank(int x, int root) {
     if (root) {
-        if (x < node[root].val) 
-            return getRank(x, node[root].left);
-        if (x > node[root].val) 
-            return getRank(x, node[root].right) + node[node[root].left].weight + node[root].num;
+        if (x < node[root].val) return getRank(x, node[root].left);
+        if (x > node[root].val) return getRank(x, node[root].right) + node[node[root].left].weight + node[root].num;
         return node[node[root].left].weight + node[root].num;
     }
     return 1;
