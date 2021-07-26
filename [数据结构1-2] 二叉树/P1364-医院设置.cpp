@@ -6,12 +6,6 @@ const int MAXN = 101, INF = 0x3f3f3f;
 
 struct Node {
     int val, left, right;
-    Node() {}
-    Node(int _val, int _left, int _right) {
-        val = _val;
-        left = _left;
-        right = _right;
-    }
 } node[MAXN];
 
 int n, ans = INF, dis[MAXN], size[MAXN];
