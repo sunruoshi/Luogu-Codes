@@ -1,16 +1,15 @@
 #include <cstdio>
-using namespace std;
 
 const int MAXN = 1e4, INF = 2147483647;
 
 struct Node {
-    int val, left, right, weight, num;
+    int val, left, right, size, num;
     Node() {}
-    Node(int _val, int _left, int _right, int _weight, int _num) {
+    Node(int _val, int _left, int _right, int _size, int _num) {
         val = _val;
         left = _left;
         right = _right;
-        weight = _weight;
+        size = _size;
         num = _num;
     }
 } node[MAXN];
@@ -24,22 +23,22 @@ int newNode(int v) {
 
 void update(int root) {
     int left = node[root].left, right = node[root].right;
-    node[root].weight = node[left].weight + node[right].weight + node[root].num;
+    node[root].size = node[left].size + node[right].size + node[root].num;
 }
 
 int getRank(int x, int root) {
     if (root) {
         if (x < node[root].val) return getRank(x, node[root].left);
-        if (x > node[root].val) return getRank(x, node[root].right) + node[node[root].left].weight + node[root].num;
-        return node[node[root].left].weight + node[root].num;
+        if (x > node[root].val) return getRank(x, node[root].right) + node[node[root].left].size + node[root].num;
+        return node[node[root].left].size + node[root].num;
     }
     return 1;
 }
 
 int getNum(int x, int root) {
-    if (x <= node[node[root].left].weight) return getNum(x, node[root].left);
-    else if (x <= node[node[root].left].weight + node[root].num) return node[root].val;
-    else return getNum(x - node[node[root].left].weight - node[root].num, node[root].right);
+    if (x <= node[node[root].left].size) return getNum(x, node[root].left);
+    else if (x <= node[node[root].left].size + node[root].num) return node[root].val;
+    else return getNum(x - node[node[root].left].size - node[root].num, node[root].right);
 }
 
 int findPrev(int x, int root, int res) {
