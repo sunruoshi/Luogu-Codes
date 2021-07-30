@@ -39,7 +39,7 @@ void dijkstra(int s) {
         q.pop();
         if (visited[u]) continue;
         visited[u] = 1;
-        for (int j = 0; j < adj[u].size(); j++) {
+        for (unsigned int j = 0; j < adj[u].size(); j++) {
             int v = adj[u][j].v;
             if (!visited[v] && dis[u] + adj[u][j].w < dis[v]) {
                 dis[v] = dis[u] + adj[u][j].w;
