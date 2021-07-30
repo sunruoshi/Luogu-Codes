@@ -13,7 +13,7 @@ bool visited[MAXN], inq[MAXN];
 void dfs(int u) {
     printf("%d ", u);
     visited[u] = 1;
-    for (int i = 0; i < adj[u].size(); i++) {
+    for (unsigned int i = 0; i < adj[u].size(); i++) {
         int v = adj[u][i];
         if (!visited[v]) dfs(v);
     }
@@ -27,7 +27,7 @@ void bfs(int u) {
         int cur = q.front();
         q.pop_front();
         printf("%d ", cur);
-        for (int i = 0; i < adj[cur].size(); i++) {
+        for (unsigned int i = 0; i < adj[cur].size(); i++) {
             int v = adj[cur][i];
             if (!inq[v]) {
                 q.push_back(v);

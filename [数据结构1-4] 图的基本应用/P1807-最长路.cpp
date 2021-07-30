@@ -18,7 +18,7 @@ vector<Edge> adj[MAXN];
 
 int dfs(int u) {
     if (dis[u] > -INF) return dis[u];
-    for (int i = 0; i < adj[u].size(); i++) {
+    for (unsigned int i = 0; i < adj[u].size(); i++) {
         int v = adj[u][i].v;
         dis[u] = max(dis[u], dfs(v) + adj[u][i].w);
     }

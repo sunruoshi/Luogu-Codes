@@ -10,7 +10,7 @@ vector<int> adj[MAXN];
 void dfs(int u, int s) {
     if (dis[u]) return;
     dis[u] = s;
-    for (int i = 0; i < adj[u].size(); i++) {
+    for (unsigned int i = 0; i < adj[u].size(); i++) {
         int v = adj[u][i];
         dfs(v, s);
     }

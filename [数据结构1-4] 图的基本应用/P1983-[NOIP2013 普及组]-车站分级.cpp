@@ -46,7 +46,7 @@ int main() {
     while (q.size()) {
         Node cur = q.front();
         q.pop_front();
-        for (int i = 0; i < adj[cur.u].size(); i++) {
+        for (unsigned int i = 0; i < adj[cur.u].size(); i++) {
             int v = adj[cur.u][i];
             in[v]--;
             if (!in[v]) {

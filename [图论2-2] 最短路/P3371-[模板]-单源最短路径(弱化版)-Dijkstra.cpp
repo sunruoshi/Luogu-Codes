@@ -30,7 +30,7 @@ void dijkstra(int s) {
         }
         if (u == -1) return;
         visited[u] = 1;
-        for (int j = 0; j < adj[u].size(); j++) {
+        for (unsigned int j = 0; j < adj[u].size(); j++) {
             int v = adj[u][j].v;
             if (!visited[v] && dis[u] + adj[u][j].w < dis[v]) {
                 dis[v] = dis[u] + adj[u][j].w;

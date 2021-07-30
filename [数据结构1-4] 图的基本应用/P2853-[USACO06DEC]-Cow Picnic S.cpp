@@ -12,7 +12,7 @@ bool visited[MAXN];
 void dfs(int u) {
     visited[u] = 1;
     cnt[u]++;
-    for (int i = 0; i < adj[u].size(); i++) {
+    for (unsigned int i = 0; i < adj[u].size(); i++) {
         int v = adj[u][i];
         if (!visited[v]) dfs(v);
     }
