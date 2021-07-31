@@ -1,10 +1,16 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <vector>
+#include <queue>
 using namespace std;
 
 const int MAXN = 1000001, INF = 0x3f3f3f3f, MOD = 100003;
 
 struct Node {
     int v, dis;
+    Node(int _v, int _dis) {
+        v = _v;
+        dis = _dis;
+    }
 };
 
 bool operator < (Node a, Node b) {
@@ -20,13 +26,13 @@ void dijkstra(int s) {
     priority_queue<Node> q;
     dis[s] = 0;
     num[s] = 1;
-    q.push(Node({s, 0}));
+    q.push(Node(s, 0));
     while (!q.empty()) {
         int u = q.top().v;
         q.pop();
         if (visited[u]) continue;
         visited[u] = 1;
-        for (int j = 0; j < adj[u].size(); j++) {
+        for (unsigned int j = 0; j < adj[u].size(); j++) {
             int v = adj[u][j];
             if (!visited[v]) {
                 if (dis[u] + 1 < dis[v]) {
