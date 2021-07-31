@@ -37,13 +37,13 @@ bool SPFA(int s) {
     num[s]++;
     dis[s] = 0;
     while (!q.empty()) {
-        Node u = q.top();
+        int u = q.top().v;
         q.pop();
-        inq[u.v] = 0;
-        for (unsigned int i = 0; i < adj[u.v].size(); i++) {
-            int v = adj[u.v][i].v;
-            if (dis[u.v] + adj[u.v][i].w < dis[v]) {
-                dis[v] = dis[u.v] + adj[u.v][i].w;
+        inq[u] = 0;
+        for (unsigned int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i].v;
+            if (dis[u] + adj[u][i].w < dis[v]) {
+                dis[v] = dis[u] + adj[u][i].w;
                 if (!inq[v]) {
                     q.push(Node(v, dis[v]));
                     inq[v] = 1;
