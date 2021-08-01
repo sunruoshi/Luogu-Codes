@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cmath>
+#include <algorithm>
 using namespace std;
 
 const int MAXN = 30001;
@@ -7,19 +7,20 @@ const int MAXN = 30001;
 int n, fa[MAXN], dis[MAXN], size[MAXN];
 
 int Find(int x) {
-    if (x == fa[x]) return x;
-    int fx = Find(fa[x]);
-    dis[x] += dis[fa[x]];
-    fa[x] = fx;
-    return fx;
+    if (x != fa[x]) {
+        int temp = fa[x];
+        fa[x] = Find(fa[x]);
+        dis[x] += dis[temp];
+    }
+    return fa[x];
 }
 
 void Union(int x, int y) {
-    int fx = Find(x), fy = Find(y);
-    dis[fx] += size[fy];
-    size[fy] += size[fx];
-    size[fx] = 0;
-    fa[fx] = fy;
+    int xx = Find(x), yy = Find(y);
+    dis[xx] += size[yy];
+    size[yy] += size[xx];
+    size[xx] = 0;
+    fa[xx] = yy;
 }
 
 int main() {
@@ -34,8 +35,7 @@ int main() {
         cin >> opt >> i >> j;
         if (opt == 'M') Union(i, j);
         else {
-            int fi = Find(i), fj = Find(j);
-            if (fi != fj) cout << "-1" << endl;
+            if (Find(i) != Find(j)) cout << "-1" << endl;
             else cout << abs(dis[i] - dis[j]) - 1 << endl;
         }
     }
