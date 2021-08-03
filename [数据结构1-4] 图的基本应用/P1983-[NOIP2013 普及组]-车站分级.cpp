@@ -29,13 +29,14 @@ int main() {
             scanf("%d", &s[j]);
             stoped[s[j]] = 1;
         }
-        for (int j = s[1]; j <= s[t]; j++) {
-            if (stoped[j]) continue;
-            for (int k = 1; k <= t; k++) {
-                if (visited[s[k]][j]) continue;
-                in[j]++;
-                visited[s[k]][j] = 1;
-                adj[s[k]].push_back(j);
+        for (int u = s[1]; u <= s[t]; u++) {
+            if (stoped[u]) continue;
+            for (int j = 1; j <= t; j++) {
+                int v = s[j];
+                if (visited[u][v]) continue;
+                in[v]++;
+                visited[u][v] = 1;
+                adj[u].push_back(v);
             }
         }
     }
