@@ -20,11 +20,10 @@ struct Node {
         v = _v;
         dis = _dis;
     }
+    bool operator < (const Node &a) const {
+        return dis > a.dis;
+    }
 };
-
-bool operator < (Node a, Node b) {
-    return a.dis > b.dis;
-}
 
 vector<Edge> adj1[MAXN], adj2[MAXN];
 int n, m, ans, dis1[MAXN], dis2[MAXN];

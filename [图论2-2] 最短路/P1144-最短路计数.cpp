@@ -11,11 +11,10 @@ struct Node {
         v = _v;
         dis = _dis;
     }
+    bool operator < (const Node &a) const {
+        return dis > a.dis;
+    }
 };
-
-bool operator < (Node a, Node b) {
-    return a.dis > b.dis;
-}
 
 vector<int> adj[MAXN];
 int n, m, dis[MAXN], num[MAXN];
