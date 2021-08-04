@@ -39,9 +39,9 @@ void dijkstra(int s) {
         if (visited[u]) continue;
         visited[u] = 1;
         for (unsigned int j = 0; j < adj[u].size(); j++) {
-            int v = adj[u][j].v;
-            if (!visited[v] && dis[u] + adj[u][j].w < dis[v]) {
-                dis[v] = dis[u] + adj[u][j].w;
+            int v = adj[u][j].v, w = adj[u][j].w;
+            if (!visited[v] && dis[u] + w < dis[v]) {
+                dis[v] = dis[u] + w;
                 q.push(Node(v, dis[v]));
             }
         }

@@ -19,11 +19,10 @@ struct Node {
         v = _v;
         dis = _dis;
     }
+    bool operator < (const Node &a) const {
+        return dis > a.dis;
+    }
 };
-
-bool operator < (Node a, Node b) {
-    return a.dis > b.dis;
-}
 
 vector<Edge> adj[MAXN];
 int n, m, s, dis[MAXN], num[MAXN];
@@ -41,19 +40,19 @@ bool SPFA(int s) {
         q.pop();
         inq[u] = 0;
         for (unsigned int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i].v;
-            if (dis[u] + adj[u][i].w < dis[v]) {
-                dis[v] = dis[u] + adj[u][i].w;
+            int v = adj[u][i].v, w = adj[u][i].w;
+            if (dis[u] + w < dis[v]) {
+                dis[v] = dis[u] + w;
                 if (!inq[v]) {
                     q.push(Node(v, dis[v]));
                     inq[v] = 1;
                     num[v]++;
-                    if (num[v] >= n) return false;
+                    if (num[v] >= n) return 0;
                 }
             }
         }
     }
-    return true;
+    return 1;
 }
 
 int main() {
