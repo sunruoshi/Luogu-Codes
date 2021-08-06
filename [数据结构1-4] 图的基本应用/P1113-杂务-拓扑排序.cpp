@@ -32,8 +32,7 @@ int main() {
     while (q.size()) {
         int u = q.front();
         q.pop_front();
-        for (unsigned int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i];
+        for (int v : adj[u]) {
             f[v] = max(f[v], f[u] + len[v]);
             in[v]--;
             if (!in[v]) q.push_back(v);
