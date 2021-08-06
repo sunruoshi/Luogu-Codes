@@ -9,10 +9,7 @@ const int MAXN = 1001;
 
 struct Node {
     int u, level;
-    Node(int _u, int _level) {
-        u = _u;
-        level = _level;
-    }
+    Node(int _u, int _level) : u(_u), level(_level) {}
 };
 
 int n, m, ans, s[MAXN], in[MAXN];
@@ -47,8 +44,7 @@ int main() {
     while (q.size()) {
         Node cur = q.front();
         q.pop_front();
-        for (unsigned int i = 0; i < adj[cur.u].size(); i++) {
-            int v = adj[cur.u][i];
+        for (int v : adj[cur.u]) {
             in[v]--;
             if (!in[v]) {
                 q.push_back(Node(v, cur.level + 1));
