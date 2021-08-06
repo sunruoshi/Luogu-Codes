@@ -7,18 +7,12 @@ const int MAXN = 100001, INF = 0x3f3f3f3f;
 
 struct Edge {
     int v, w;
-    Edge(int _v, int _w) {
-        v = _v;
-        w = _w;
-    }
+    Edge(int _v, int _w) : v(_v), w(_w) {}
 };
 
 struct Node {
     int v, dis;
-    Node(int _v, int _dis) {
-        v = _v;
-        dis = _dis;
-    }
+    Node(int _v, int _dis) : v(_v), dis(_dis) {}
     bool operator < (const Node &a) const {
         return dis > a.dis;
     }
