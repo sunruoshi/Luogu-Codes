@@ -7,18 +7,12 @@ const int MAXN = 100001, INF = 0x3f3f3f3f;
 
 struct Edge {
     int v, w;
-    Edge(int _v, int _w) {
-        v = _v;
-        w = _w;
-    }
+    Edge(int _v, int _w) : v(_v), w(_w) {}
 };
 
 struct Node {
     int v, dis;
-    Node(int _v, int _dis) {
-        v = _v;
-        dis = _dis;
-    }
+    Node(int _v, int _dis) : v(_v), dis(_dis) {}
     bool operator < (const Node &a) const {
         return dis > a.dis;
     }
@@ -38,8 +32,8 @@ void dijkstra(int s) {
         q.pop();
         if (visited[u]) continue;
         visited[u] = 1;
-        for (unsigned int j = 0; j < adj[u].size(); j++) {
-            int v = adj[u][j].v, w = adj[u][j].w;
+        for (Edge edge : adj[u]) {
+            int v = edge.v, w = edge.w;
             if (!visited[v] && dis[u] + w < dis[v]) {
                 dis[v] = dis[u] + w;
                 q.push(Node(v, dis[v]));

@@ -7,9 +7,7 @@ const int MAXN = 1000001, INF = 0x3f3f3f3f, MOD = 100003;
 
 struct Node {
     int v, dis;
-    Node(int _v, int _dis) {
-        v = _v, dis = _dis;
-    }
+    Node(int _v, int _dis) : v(_v), dis(_dis) {}
     bool operator < (const Node &a) const {
         return dis > a.dis;
     }
@@ -37,8 +35,7 @@ int main() {
         q.pop();
         if (visited[u]) continue;
         visited[u] = 1;
-        for (unsigned int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i];
+        for (int v : adj[u]) {
             if (visited[v]) continue;
             if (dis[u] + 1 < dis[v]) {
                 dis[v] = dis[u] + 1;

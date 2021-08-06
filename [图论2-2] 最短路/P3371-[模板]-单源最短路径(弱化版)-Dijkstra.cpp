@@ -7,10 +7,7 @@ const int MAXN = 10001, INF = (1 << 31) - 1;
 
 struct Edge {
     int v, w;
-    Edge(int _v, int _w) {
-        v = _v;
-        w = _w;
-    }
+    Edge(int _v, int _w) : v(_v), w(_w) {}
 };
 
 vector<Edge> adj[MAXN];
@@ -30,8 +27,8 @@ void dijkstra(int s) {
         }
         if (u == -1) return;
         visited[u] = 1;
-        for (unsigned int j = 0; j < adj[u].size(); j++) {
-            int v = adj[u][j].v, w = adj[u][j].w;
+        for (Edge edge : adj[u]) {
+            int v = edge.v, w = edge.w;
             if (!visited[v] && dis[u] + w < dis[v]) {
                 dis[v] = dis[u] + w;
             }

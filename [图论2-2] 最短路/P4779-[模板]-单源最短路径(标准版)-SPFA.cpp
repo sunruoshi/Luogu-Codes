@@ -33,8 +33,8 @@ bool SPFA(int s) {
         int u = q.top().v;
         q.pop();
         inq[u] = 0;
-        for (unsigned int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i].v, w = adj[u][i].w;
+        for (Edge edge : adj[u]) {
+            int v = edge.v, w = edge.w;
             if (dis[u] + w < dis[v]) {
                 dis[v] = dis[u] + w;
                 if (!inq[v]) {
