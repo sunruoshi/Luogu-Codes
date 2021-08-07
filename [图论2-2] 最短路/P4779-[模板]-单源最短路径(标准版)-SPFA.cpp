@@ -19,17 +19,22 @@ struct Node {
 };
 
 vector<Edge> adj[MAXN];
-int n, m, s, dis[MAXN], num[MAXN];
+int n, m, s, dis[MAXN];
 bool inq[MAXN];
 
-bool SPFA(int s) {
+int main() {
+    scanf("%d %d %d", &n, &m, &s);
+    for (int i = 1; i <= m; i++) {
+        int u, v, w;
+        scanf("%d %d %d", &u, &v, &w);
+        adj[u].push_back(Edge(v, w));
+    }
     fill(dis, dis + MAXN, INF);
+    dis[s] = 0;
     priority_queue<Node> q;
     q.push(Node(s, 0));
     inq[s] = 1;
-    num[s]++;
-    dis[s] = 0;
-    while (!q.empty()) {
+    while (q.size()) {
         int u = q.top().v;
         q.pop();
         inq[u] = 0;
@@ -40,23 +45,10 @@ bool SPFA(int s) {
                 if (!inq[v]) {
                     q.push(Node(v, dis[v]));
                     inq[v] = 1;
-                    num[v]++;
-                    if (num[v] >= n) return 0;
                 }
             }
         }
     }
-    return 1;
-}
-
-int main() {
-    scanf("%d %d %d", &n, &m, &s);
-    for (int i = 1; i <= m; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        adj[u].push_back(Edge(v, w));
-    }
-    SPFA(s);
     for (int i = 1; i <= n; i++) {
         printf("%d ", dis[i]);
     }
