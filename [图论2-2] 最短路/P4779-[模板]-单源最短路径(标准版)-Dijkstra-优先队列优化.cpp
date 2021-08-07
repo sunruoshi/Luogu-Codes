@@ -22,7 +22,13 @@ vector<Edge> adj[MAXN];
 int n, m, s, dis[MAXN];
 bool visited[MAXN];
 
-void dijkstra(int s) {
+int main() {
+    scanf("%d %d %d", &n, &m, &s);
+    for (int i = 1; i <= m; i++) {
+        int u, v, w;
+        scanf("%d %d %d", &u, &v, &w);
+        adj[u].push_back(Edge(v, w));
+    }
     fill(dis, dis + MAXN, INF);
     priority_queue<Node> q;
     dis[s] = 0;
@@ -40,16 +46,6 @@ void dijkstra(int s) {
             }
         }
     }
-}
-
-int main() {
-    scanf("%d %d %d", &n, &m, &s);
-    for (int i = 1; i <= m; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        adj[u].push_back(Edge(v, w));
-    }
-    dijkstra(s);
     for (int i = 1; i <= n; i++) {
         printf("%d ", dis[i]);
     }
