@@ -11,8 +11,7 @@ vector<int> adj[MAXN];
 
 void dfs(int u, int s, int len) {
     in[u]--;
-    for (unsigned int i = 0; i < adj[u].size(); i++) {
-        int v = adj[u][i];
+    for (int v : adj[u]) {
         if (v == s) {
             ans = min(ans, len);
             return;
@@ -36,8 +35,7 @@ int main() {
     while (q.size()) {
         int u = q.front();
         q.pop_front();
-        for (unsigned int i = 0; i < adj[u].size(); i++) {
-            int v = adj[u][i];
+        for (int v : adj[u]) {
             in[v]--;
             if (!in[v]) q.push_back(v);
         }
