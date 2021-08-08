@@ -2,17 +2,23 @@
 
 const int MAXN = 1000;
 
-int n, m, fa[MAXN];
+int n, m;
 
-int Find(int x) {
-    if (x != fa[x]) fa[x] = Find(fa[x]);
-    return fa[x];
-}
-
-void Union(int x, int y) {
-    int xx = Find(x), yy = Find(y);
-    fa[xx] = yy;
-}
+struct UnionFind {
+    int fa[MAXN];
+    UnionFind(int n) {
+        for (int i = 1; i <= n; i++) {
+            fa[i] = i;
+        }
+    }
+    int Find(int x) {
+        if (x != fa[x]) fa[x] = Find(fa[x]);
+        return fa[x];
+    }
+    void Union(int x, int y) {
+        fa[Find(x)] = Find(y);
+    }
+};
 
 int main() {
     while (1) {
@@ -23,17 +29,15 @@ int main() {
             printf("%d\n", n - 1);
             continue;
         }
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
-        }
+        UnionFind uf(n);
         for (int i = 1; i <= m; i++) {
             int x, y;
             scanf("%d %d", &x, &y);
-            Union(x, y);
+            uf.Union(x, y);
         }
         int ans = 0;
         for (int i = 1; i <= n; i++) {
-            if (i == Find(i)) ans++;
+            if (i == uf.Find(i)) ans++;
         }
         printf("%d\n", ans - 1);
     }
