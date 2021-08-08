@@ -4,14 +4,13 @@ using namespace std;
 
 const int MAXN = 30001;
 
-int n, dis[MAXN];
-
 struct UnionFind {
-    int fa[MAXN], size[MAXN];
+    int fa[MAXN], dis[MAXN], size[MAXN];
     UnionFind() {
         for (int i = 1; i < MAXN; i++) {
             fa[i] = i;
             size[i] = 1;
+            dis[i] = 0;
         }
     }
     int Find(int x) {
@@ -29,9 +28,13 @@ struct UnionFind {
         size[xx] = 0;
         fa[xx] = yy;
     }
+    int Dis(int x, int y) {
+        return abs(dis[x] - dis[y]) - 1;
+    }
 };
 
 int main() {
+    int n;
     cin >> n;
     UnionFind uf;
     while (n--) {
@@ -41,7 +44,7 @@ int main() {
         if (opt == 'M') uf.Union(i, j);
         else {
             if (uf.Find(i) != uf.Find(j)) cout << "-1" << endl;
-            else cout << abs(dis[i] - dis[j]) - 1 << endl;
+            else cout << uf.Dis(i, j) << endl;
         }
     }
     return 0;
