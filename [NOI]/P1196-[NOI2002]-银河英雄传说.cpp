@@ -9,7 +9,7 @@ int n, dis[MAXN];
 struct UnionFind {
     int fa[MAXN], size[MAXN];
     UnionFind() {
-        for (int i = 1; i <= MAXN; i++) {
+        for (int i = 1; i < MAXN; i++) {
             fa[i] = i;
             size[i] = 1;
         }
