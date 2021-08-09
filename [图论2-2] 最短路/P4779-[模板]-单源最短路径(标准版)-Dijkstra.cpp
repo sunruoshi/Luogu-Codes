@@ -29,9 +29,10 @@ int main() {
         scanf("%d %d %d", &u, &v, &w);
         adj[u].push_back(Edge(v, w));
     }
+    // Dijkstra
     fill(dis, dis + MAXN, INF);
-    priority_queue<Node> q;
     dis[s] = 0;
+    priority_queue<Node> q;
     q.push(Node(s, 0));
     while (q.size()) {
         int u = q.top().v;

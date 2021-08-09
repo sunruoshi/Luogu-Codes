@@ -29,6 +29,7 @@ int main() {
         scanf("%d %d %d", &u, &v, &w);
         adj[u].push_back(Edge(v, w));
     }
+    // SPFA
     fill(dis, dis + MAXN, INF);
     dis[s] = 0;
     priority_queue<Node> q;
