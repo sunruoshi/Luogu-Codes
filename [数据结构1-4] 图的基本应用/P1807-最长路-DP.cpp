@@ -10,29 +10,31 @@ struct Edge {
     Edge(int _v, int _w) : v(_v), w(_w) {}
 };
 
-int n, m, dis[MAXN];
+int n, m, dp[MAXN];
 vector<Edge> adj[MAXN];
+bool visited[MAXN];
 
-int dfs(int u) {
-    if (dis[u] > -INF) return dis[u];
+int DP(int u) {
+    if (visited[u]) return dp[u];
+    visited[u] = 1;
     for (Edge edge : adj[u]) {
         int v = edge.v, w = edge.w;
-        dis[u] = max(dis[u], dfs(v) + w);
+        dp[u] = max(dp[u], DP(v) + w);
     }
-    return dis[u];
+    return dp[u];
 }
 
 int main() {
     scanf("%d %d", &n, &m);
-    fill(dis, dis + MAXN, -INF);
-    dis[1] = 0;
+    fill(dp, dp + MAXN, -INF);
+    dp[n] = 0;
     for (int i = 0; i < m; i++) {
         int u, v, w;
         scanf("%d %d %d", &u, &v, &w);
-        adj[v].push_back(Edge(u, w));
+        adj[u].push_back(Edge(v, w));
     }
-    int ans = dfs(n);
-    if (ans != -INF) printf("%d", ans);
+    int ans = DP(1);
+    if (visited[n]) printf("%d", ans);
     else printf("-1");
     return 0;
 }
