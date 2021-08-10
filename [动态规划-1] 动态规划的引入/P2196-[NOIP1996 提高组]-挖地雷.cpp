@@ -1,40 +1,46 @@
 #include <cstdio>
+#include <vector>
+using namespace std;
 
-int n, start, ans, arr[21], mat[21][21], prev[21], dp[21];
+int n, start, ans, w[21], Next[21], dp[21];
+vector<int> adj[21];
 
-void print(int x) {
-    if (prev[x] == 0) {
-        printf("%d ", x);
-        return;
+int DP(int u) {
+    if (dp[u]) return dp[u];
+    for (int v : adj[u]) {
+        int temp = DP(v);
+        if (temp > dp[u]) {
+            dp[u] = temp;
+            Next[u] = v;
+        }
     }
-    print(prev[x]);
-    printf("%d ", x);
+    dp[u] += w[u];
+    return dp[u];
 }
 
 int main() {
     scanf("%d", &n);
     for (int i = 1; i <= n; i++) {
-        scanf("%d", &arr[i]);
+        scanf("%d", &w[i]);
     }
     for (int i = 1; i < n; i++) {
         for (int j = i + 1; j <= n; j++) {
-            scanf("%d", &mat[i][j]);
+            int t;
+            scanf("%d", &t);
+            if (t) adj[i].push_back(j);
         }
     }
     for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            if (mat[j][i] && dp[j] > dp[i]) {
-                dp[i] = dp[j];
-                prev[i] = j;
-            }
-        }
-        dp[i] += arr[i];
+        dp[i] = DP(i);
         if (dp[i] > ans) {
             ans = dp[i];
             start = i;
         }
     }
-    print(start);
+    while (start) {
+        printf("%d ", start);
+        start = Next[start];
+    }
     printf("\n%d", ans);
     return 0;
 }
