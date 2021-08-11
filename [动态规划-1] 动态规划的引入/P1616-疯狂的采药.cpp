@@ -8,7 +8,7 @@ int main() {
     scanf("%d %d", &t, &m);
     long long w[m], c[m], dp[t + 1];
     for (int i = 0; i < m; i++) {
-        scanf("%ld %ld", &w[i], &c[i]);
+        scanf("%lld %lld", &w[i], &c[i]);
     }
     memset(dp, 0, sizeof(dp));
     for (int i = 0; i < m; i++) {
@@ -16,6 +16,6 @@ int main() {
             if (w[i] <= j) dp[j] = max(dp[j], dp[j - w[i]] + c[i]);
         }
     }
-    printf("%ld", dp[t]);
+    printf("%lld", dp[t]);
     return 0;
 }
