@@ -1,23 +1,18 @@
-#include <iostream>
-#include <string>
-using namespace std;
+#include <cstdio>
+#include <cstring>
 
-const int MAXN = 8;
+const int MAXN = 9;
 
-string inOrder, postOrder;
+char inOrder[MAXN], postOrder[MAXN];
 
 struct Node {
     char val;
     int left, right;
     Node() {}
-    Node(char _val, int _left, int _right) {
-        val = _val;
-        left = _left;
-        right = _right;
-    }
+    Node(char _val, int _left, int _right) : val(_val), left(_left), right(_right) {}
 } node[MAXN];
 
-int idx = 0;
+int idx;
 
 int newNode(char v) {
     node[idx] = Node(v, -1, -1);
@@ -26,8 +21,7 @@ int newNode(char v) {
 
 int create(int inL, int inR, int postL, int postR) {
     if (postL > postR) return -1;
-    int root = newNode(postOrder[postR]);
-    int k;
+    int root = newNode(postOrder[postR]), k;
     for (k = inL; k <= inR; k++) {
         if (inOrder[k] == postOrder[postR]) break;
     }
@@ -45,9 +39,9 @@ void preOrder(int root) {
 }
 
 int main() {
-    cin >> inOrder >> postOrder;
-    int len = inOrder.size();
-    int root = create(0, len - 1, 0, len - 1);
+    scanf("%s %s", inOrder, postOrder);
+    int n = strlen(inOrder);
+    int root = create(0, n - 1, 0, n - 1);
     preOrder(root);
     return 0;
 }
