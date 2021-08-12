@@ -2,22 +2,23 @@
 #include <algorithm>
 using namespace std;
 
-int n, a[100001], b[100001], dp[100001][100001];
+const int MAXN = 1e5 + 1;
+
+int n, p, a[MAXN], b[MAXN], m[MAXN], f[MAXN];
 
 int main() {
     scanf("%d", &n);
     for (int i = 1; i <= n; i++) {
         scanf("%d", &a[i]);
+        m[a[i]] = i;
     }
     for (int i = 1; i <= n; i++) {
         scanf("%d", &b[i]);
     }
     for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            if (a[i] == b[j]) dp[i][j] = dp[i - 1][j - 1] + 1;
-            else dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
-        }
+        if (m[b[i]] > f[p]) f[++p] = m[b[i]];
+        else f[lower_bound(f + 1, f + p + 1, m[b[i]]) - f] = m[b[i]];
     }
-    printf("%d", dp[n][n]);
+    printf("%d", p);
     return 0;
 }
