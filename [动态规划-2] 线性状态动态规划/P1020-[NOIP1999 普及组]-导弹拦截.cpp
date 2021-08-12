@@ -1,35 +1,21 @@
 #include <cstdio>
 #include <algorithm>
+#include <functional>
 using namespace std;
 
 const int MAXN = 1e5 + 1;
 
-int n, ans1, ans2, arr[MAXN], dp[MAXN], f[MAXN];
+int n, p1, p2, arr[MAXN], dp1[MAXN], dp2[MAXN];
 
 int main() {
     while (~scanf("%d", &arr[++n]));
-    for (int i = 1; i < n; i++) {
-        dp[i] = 1;
-        for (int j = ans1; j > 0; j--) {
-            if (arr[i] <= arr[f[j]]) {
-                dp[i] = max(dp[i], dp[f[j]] + 1);
-                break;
-            }
-        }
-        f[dp[i]] = i;
-        ans1 = max(ans1, dp[i]);
+    dp1[++p1] = dp2[++p2] = arr[1];
+    for (int i = 2; i < n; i++) {
+        if (arr[i] <= dp1[p1]) dp1[++p1] = arr[i];
+        else dp1[upper_bound(dp1 + 1, dp1 + p1 + 1, arr[i], greater<int>()) - dp1] = arr[i];
+        if (arr[i] > dp2[p2]) dp2[++p2] = arr[i];
+        else dp2[lower_bound(dp2 + 1, dp2 + p2 + 1, arr[i]) - dp2] = arr[i];
     }
-    for (int i = 1; i < n; i++) {
-        dp[i] = 1;
-        for (int j = ans2; j > 0; j--) {
-            if (arr[i] > arr[f[j]]) {
-                dp[i] = max(dp[i], dp[f[j]] + 1);
-                break;
-            }
-        }
-        f[dp[i]] = i;
-        ans2 = max(ans2, dp[i]);
-    }
-    printf("%d\n%d", ans1, ans2);
+    printf("%d\n%d", p1, p2);
     return 0;
 }

@@ -1,23 +1,22 @@
-// P1048 采药 二维DP数组解法
 #include <cstdio>
 #include <algorithm>
 using namespace std;
 
-int w[101], c[101], dp[101][1001];
+int w[101], c[101], dp[2][1001];
 
 int main() {
-    int t, m; // t为背包容量
+    int t, m, cur = 0;
     scanf("%d %d", &t, &m);
     for (int i = 1; i <= m; i++) {
-        scanf("%d %d", &w[i], &c[i]); // 读入每种草药采摘需要的时间和草药的价值
+        scanf("%d %d", &w[i], &c[i]);
     }
     for (int i = 1; i <= m; i++) {
+        cur = 1 - cur;
         for (int j = 0; j <= t; j++) {
-            // 状态转移方程
-            if (w[i] <= j) dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i]] + c[i]);
-            else dp[i][j] = dp[i - 1][j];
+            if (w[i] <= j) dp[cur][j] = max(dp[1 - cur][j], dp[1 - cur][j - w[i]] + c[i]);
+            else dp[cur][j] = dp[1 - cur][j];
         }
     }
-    printf("%d", dp[m][t]); // dp[m][t]即为答案
+    printf("%d", dp[cur][t]);
     return 0;
 }
