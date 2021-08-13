@@ -8,8 +8,6 @@ const int MAXN = 501;
 
 struct Node {
     int x, y;
-    Node() {}
-    Node(int _x, int _y) : x(_x), y(_y) {}
 } node[MAXN];
 
 struct Edge {

@@ -8,8 +8,6 @@ const int MAXN = 1001;
 
 struct Node {
     int x, y;
-    Node(){}
-    Node(int _x, int _y) : x(_x), y(_y) {}
 } node[MAXN];
 
 struct Edge {
@@ -49,9 +47,7 @@ bool e[MAXN][MAXN];
 int main() {
     scanf("%d %d", &n, &m);
     for (int i = 1; i <= n; i++) {
-        int x, y;
-        scanf("%d %d", &x, &y);
-        node[i] = Node(x, y);
+        scanf("%d %d", &node[i].x, &node[i].y);
     }
     for (int i = 1; i <= m; i++) {
         int u, v;
