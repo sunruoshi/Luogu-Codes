@@ -2,6 +2,7 @@
 #include <cstring>
 #include <vector>
 #include <algorithm>
+#include <functional>
 using namespace std;
 
 struct UnionFind {
