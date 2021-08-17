@@ -32,7 +32,6 @@ struct UnionFind {
         if (xx > yy) swap(xx, yy);
         fa[xx] = yy;
         size[yy] += size[xx];
-        size[xx] = 0;
     }
 };
 
