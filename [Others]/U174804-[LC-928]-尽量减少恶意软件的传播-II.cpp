@@ -60,21 +60,21 @@ int main() {
     }
     int cnt[n];
     memset(cnt, 0, sizeof(cnt));
-    map<int, unordered_set<int>> Map;
+    map<int, unordered_set<int>> initial_to_clean;
     for (int u: initial) {
-        unordered_set<int> compo;
+        unordered_set<int> components;
         for (int v = 0; v < n; v++) {
-            if (clean[v] && graph[u][v]) compo.insert(uf.Find(v));
+            if (clean[v] && graph[u][v]) components.insert(uf.Find(v));
         }
-        Map.emplace(u, compo);
-        for (int c: compo) {
+        initial_to_clean.emplace(u, components);
+        for (int c: components) {
             cnt[c]++;
         }
     }
-    for (auto element : Map) {
+    for (auto element : initial_to_clean) {
         int size = 0, u = element.first;
-        unordered_set<int> compo = element.second;
-        for (int c : compo) {
+        unordered_set<int> components = element.second;
+        for (int c : components) {
             if (cnt[c] == 1) size += uf.getSize(c);
         }
         if (size > maxSize || (size == maxSize && u < ans)) {
