@@ -23,8 +23,11 @@ struct UnionFind {
         if (x != fa[x]) fa[x] = Find(fa[x]);
         return fa[x];
     }
-    void Union(int x, int y) {
-        fa[Find(x)] = Find(y);
+    bool Union(int x, int y) {
+        int xx = Find(x), yy = Find(y);
+        if (xx == yy) return false;
+        fa[xx] = yy;
+        return true;
     }
 };
 
@@ -43,8 +46,7 @@ int main() {
     while (num < n - 1 && q.size()) {
         Edge edge = q.top();
         q.pop();
-        if (uf.Find(edge.u) != uf.Find(edge.v)) {
-            uf.Union(edge.u, edge.v);
+        if (uf.Union(edge.u, edge.v)) {
             ans += edge.w;
             num++;
         }
