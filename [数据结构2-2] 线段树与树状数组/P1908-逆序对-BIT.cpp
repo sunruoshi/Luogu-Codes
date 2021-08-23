@@ -9,24 +9,26 @@ const int MAXN = 500001;
 
 struct Node {
     int val, pos;
-} arr[MAXN];
+} a[MAXN];
 
 struct BinaryIndexedTree {
     int c[MAXN];
     BinaryIndexedTree() {
         memset(c, 0, sizeof(c));
     }
-    void update(int x, int v) {
-        for (int i = x; i < MAXN; i += lowbit(i)) {
-            c[i] += v;
+    void update(int pos) {
+        while (pos < MAXN) {
+            c[pos] += 1;
+            pos += lowbit(pos);
         }
     }
-    int getSum(int x) {
-        int sum = 0;
-        for (int i = x; i > 0; i -= lowbit(i)) {
-            sum += c[i];
+    int query(int pos) {
+        int res = 0;
+        while (pos > 0) {
+            res += c[pos];
+            pos -= lowbit(pos);
         }
-        return sum;
+        return res;
     }
 };
 
@@ -34,19 +36,19 @@ int main() {
     int n;
     scanf("%d", &n);
     for (int i = 1; i <= n; i++) {
-        scanf("%d", &arr[i].val);
-        arr[i].pos = i;
+        scanf("%d", &a[i].val);
+        a[i].pos = i;
     }
-    sort(arr + 1, arr + n + 1, [](Node a, Node b) { return a.val == b.val ? a.pos < b.pos : a.val < b.val; });
+    sort(a + 1, a + n + 1, [](Node x, Node y) { return x.val == y.val ? x.pos < y.pos : x.val < y.val; });
     int Hash[n + 1];
     for (int i = 1; i <= n; i++) {
-        Hash[arr[i].pos] = i;
+        Hash[a[i].pos] = i;
     }
     BinaryIndexedTree bit;
     long long ans = 0;
     for (int i = 1; i <= n; i++) {
-        bit.update(Hash[i], 1);
-        ans += i - bit.getSum(Hash[i]);
+        bit.update(Hash[i]);
+        ans += i - bit.query(Hash[i]);
     }
     printf("%lld", ans);
     return 0;

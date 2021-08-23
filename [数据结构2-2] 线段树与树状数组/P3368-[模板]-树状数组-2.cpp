@@ -9,16 +9,18 @@ struct BinaryIndexedTree {
     BinaryIndexedTree() {
         memset(c, 0, sizeof(c));
     }
-    int getSum(int x) {
-        int sum = 0;
-        for (int i = x; i < MAXN; i += lowbit(i)) {
-            sum += c[i];
+    int query(int pos) {
+        int res = 0;
+        while (pos < MAXN) {
+            res += c[pos];
+            pos += lowbit(pos);
         }
-        return sum;
+        return res;
     }
-    void update(int x, int v) {
-        for (int i = x; i > 0; i -= lowbit(i)) {
-            c[i] += v;
+    void update(int pos, int v) {
+        while (pos > 0) {
+            c[pos] += v;
+            pos -= lowbit(pos);
         }
     }
 };
@@ -44,7 +46,7 @@ int main() {
         } else {
             int x;
             scanf("%d", &x);
-            printf("%d\n", bit.getSum(x));
+            printf("%d\n", bit.query(x));
         }
     }
     return 0;
