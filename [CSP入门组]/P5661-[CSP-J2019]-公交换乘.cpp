@@ -1,8 +1,12 @@
 #include <cstdio>
 
-int ans, left, right, price[100000], time[100000];
+const int MAXN = 100000;
+
+int ans, left, right, price[MAXN], time[MAXN];
 
 int main() {
+    // freopen("transfer.in", "r", stdin);
+    // freopen("transfer.out", "w", stdout);
     int n;
     scanf("%d", &n);
     for (int i = 0; i < n; i++) {
@@ -29,5 +33,7 @@ int main() {
         }
     }
     printf("%d", ans);
+    // fclose(stdin);
+    // fclose(stdout);
     return 0;
 }
