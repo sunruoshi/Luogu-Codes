@@ -1,15 +1,10 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
+#define lowbit(i) ((i) & (-i))
 using namespace std;
 
-#define lowbit(i) ((i) & (-i))
-
 const int MAXN = 500001;
-
-struct Node {
-    int val, pos;
-} a[MAXN];
 
 struct BinaryIndexedTree {
     int c[MAXN];
@@ -35,22 +30,20 @@ struct BinaryIndexedTree {
 int main() {
     int n;
     scanf("%d", &n);
-    for (int i = 1; i <= n; i++) {
-        scanf("%d", &a[i].val);
-        a[i].pos = i;
+    int nums[n], temp[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &nums[i]);
+        temp[i] = nums[i];
     }
-    sort(a + 1, a + n + 1, [](Node x, Node y) {
-        return x.val == y.val ? x.pos < y.pos : x.val < y.val;
-    });
-    int Hash[n + 1];
-    for (int i = 1; i <= n; i++) {
-        Hash[a[i].pos] = i;
+    sort(temp, temp + n);
+    for (int &num : nums) {
+        num = lower_bound(temp, temp + n, num) - temp + 1;
     }
     BinaryIndexedTree bit;
     long long ans = 0;
-    for (int i = 1; i <= n; i++) {
-        bit.update(Hash[i]);
-        ans += i - bit.query(Hash[i]);
+    for (int i = n - 1; i >= 0; i--) {
+        bit.update(nums[i]);
+        ans += bit.query(nums[i] - 1);
     }
     printf("%lld", ans);
     return 0;
