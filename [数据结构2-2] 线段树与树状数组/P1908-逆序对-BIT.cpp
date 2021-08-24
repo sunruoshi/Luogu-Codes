@@ -39,7 +39,9 @@ int main() {
         scanf("%d", &a[i].val);
         a[i].pos = i;
     }
-    sort(a + 1, a + n + 1, [](Node x, Node y) { return x.val == y.val ? x.pos < y.pos : x.val < y.val; });
+    sort(a + 1, a + n + 1, [](Node x, Node y) {
+        return x.val == y.val ? x.pos < y.pos : x.val < y.val;
+    });
     int Hash[n + 1];
     for (int i = 1; i <= n; i++) {
         Hash[a[i].pos] = i;
