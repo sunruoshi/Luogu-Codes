@@ -1,4 +1,6 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <deque>
 using namespace std;
 
 const int MAXN = 500001;
@@ -33,12 +35,12 @@ void dfs(int root) {
 
 int main() {
     getline(cin, s);
-    scanf("%d", &n);
+    cin >> n;
     for(int i = 1; i <= n; i++) {
-        scanf("%d", &value[i]);
+        cin >> value[i];
     }
-    stack<int> _stack;
-    for(int i = 0; i < s.size(); i++) {
+    deque<int> st;
+    for(unsigned int i = 0; i < s.size(); i++) {
         if (s[i] == 'x') {
             i++;
             int temp = 0;
@@ -47,29 +49,29 @@ int main() {
                 temp += s[i] - '0';
                 i++;
             }
-            _stack.push(newNode(value[temp], temp, -1, -1));
+            st.push_back(newNode(value[temp], temp, -1, -1));
         } else if (s[i] == '&') {
-            int right = _stack.top();
-            _stack.pop();
-            int left = _stack.top();
-            _stack.pop();
+            int right = st.back();
+            st.pop_back();
+            int left = st.back();
+            st.pop_back();
             int val = node[left].val & node[right].val;
-            _stack.push(newNode(val, -1, left, right));
+            st.push_back(newNode(val, -1, left, right));
         } else if (s[i] == '|') {
-            int right = _stack.top();
-            _stack.pop();
-            int left = _stack.top();
-            _stack.pop();
+            int right = st.back();
+            st.pop_back();
+            int left = st.back();
+            st.pop_back();
             int val = node[left].val | node[right].val;
-            _stack.push(newNode(val, -2, left, right));
+            st.push_back(newNode(val, -2, left, right));
         } else if (s[i] == '!') {
-            int left = _stack.top();
-            _stack.pop();
+            int left = st.back();
+            st.pop_back();
             int val = !node[left].val;
-            _stack.push(newNode(val, -3, left, -1));
+            st.push_back(newNode(val, -3, left, -1));
         }
     }
-    int root = _stack.top();
+    int root = st.back();
     dfs(root);
     scanf("%d", &q);
     while (q--) {
@@ -79,4 +81,3 @@ int main() {
     }
     return 0;
 }
-
