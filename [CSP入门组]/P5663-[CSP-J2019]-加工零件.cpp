@@ -14,9 +14,9 @@ struct Node {
     }
 };
 
-int n, m, t, dis[MAXN][2];
+int n, m, t, odd[MAXN], even[MAXN];
 vector<int> adj[MAXN];
-bool visited[MAXN][2];
+bool vis_odd[MAXN], vis_even[MAXN];
 
 int main() {
     scanf("%d %d %d", &n, &m, &t);
@@ -26,26 +26,27 @@ int main() {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    fill(dis[0], dis[0] + MAXN * 2, INF);
+    fill(odd, odd + MAXN, INF);
+    fill(even, even + MAXN, INF);
     priority_queue<Node> q;
-    dis[1][0] = 0;
+    even[1] = 0;
     q.push(Node(1, 0));
     while (q.size()) {
         int u = q.top().v;
         q.pop();
         for (int v : adj[u]) {
-            if (dis[u][1] + 1 < dis[v][0]) {
-                dis[v][0] = dis[u][1] + 1;
-                if (!visited[v][0]) {
-                    visited[v][0] = 1;
-                    q.push(Node(v, dis[v][0]));
+            if (odd[u] + 1 < even[v]) {
+                even[v] = odd[u] + 1;
+                if (!vis_even[v]) {
+                    vis_even[v] = 1;
+                    q.push(Node(v, even[v]));
                 }
             }
-            if (dis[u][0] + 1 < dis[v][1]) {
-                dis[v][1] = dis[u][0] + 1;
-                if (!visited[v][1]) {
-                    visited[v][1] = 1;
-                    q.push(Node(v, dis[v][1]));
+            if (even[u] + 1 < odd[v]) {
+                odd[v] = even[u] + 1;
+                if (!vis_odd[v]) {
+                    vis_odd[v] = 1;
+                    q.push(Node(v, odd[v]));
                 }
             }
         }
@@ -53,8 +54,13 @@ int main() {
     while (t--) {
         int a, L;
         scanf("%d %d", &a, &L);
-        if (dis[a][L % 2] <= L) printf("Yes\n");
-        else printf("No\n");
+        if (L % 2) {
+            if (odd[a] <= L) printf("Yes\n");
+            else printf("No\n");
+        } else {
+            if (even[a] <= L) printf("Yes\n");
+            else printf("No\n");
+        }
     }
     return 0;
 }
