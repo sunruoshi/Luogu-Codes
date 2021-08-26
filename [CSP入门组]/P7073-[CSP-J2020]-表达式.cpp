@@ -1,9 +1,9 @@
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <deque>
+#define MAXN 500001
 using namespace std;
-
-const int MAXN = 500001;
 
 int idx, n, q, value[MAXN];
 bool check[MAXN];
@@ -36,6 +36,8 @@ void dfs(int root) {
 }
 
 int main() {
+    // freopen("expr.in", "r", stdin);
+    // freopen("expr.out", "r", stdout);
     getline(cin, s);
     cin >> n;
     for(int i = 1; i <= n; i++) {
@@ -77,9 +79,11 @@ int main() {
     dfs(root);
     scanf("%d", &q);
     while (q--) {
-        int idx;
-        scanf("%d", &idx);
-        printf("%d\n", check[idx] ^ node[root].val);
+        int x;
+        scanf("%d", &x);
+        printf("%d\n", check[x] ^ node[root].val);
     }
+    // fclose(stdin);
+    // fclose(stdout);
     return 0;
 }
