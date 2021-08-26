@@ -10,24 +10,26 @@ bool check[MAXN];
 string s;
 
 struct Node {
-    int val, op, left, right;
+    int val, opt, left, right;
+    Node() {}
+    Node(int _v, int _o, int _l, int _r) : val(_v), opt(_o), left(_l), right(_r) {}
 } node[MAXN];
 
-int newNode(int val, int op, int left, int right) {
-    node[idx] = Node({val, op, left, right});
+int newNode(int val, int opt, int left, int right) {
+    node[idx] = Node(val, opt, left, right);
     return idx++;
 }
 
 void dfs(int root) {
-    if (node[root].op > 0) {
-        check[node[root].op] = 1;
+    if (node[root].opt > 0) {
+        check[node[root].opt] = 1;
         return;
     }
     int left = node[root].left, right = node[root].right;
-    if (node[root].op == -1) {
+    if (node[root].opt == -1) {
         if (node[left].val == 1) dfs(right);
         if (node[right].val == 1) dfs(left);
-    } else if (node[root].op == -2) {
+    } else if (node[root].opt == -2) {
         if (node[left].val == 0) dfs(right);
         if (node[right].val == 0) dfs(left);
     } else dfs(left);
@@ -39,7 +41,7 @@ int main() {
     for(int i = 1; i <= n; i++) {
         cin >> value[i];
     }
-    deque<int> st;
+    deque<int> stk;
     for(unsigned int i = 0; i < s.size(); i++) {
         if (s[i] == 'x') {
             i++;
@@ -49,29 +51,29 @@ int main() {
                 temp += s[i] - '0';
                 i++;
             }
-            st.push_back(newNode(value[temp], temp, -1, -1));
+            stk.push_back(newNode(value[temp], temp, -1, -1));
         } else if (s[i] == '&') {
-            int right = st.back();
-            st.pop_back();
-            int left = st.back();
-            st.pop_back();
+            int right = stk.back();
+            stk.pop_back();
+            int left = stk.back();
+            stk.pop_back();
             int val = node[left].val & node[right].val;
-            st.push_back(newNode(val, -1, left, right));
+            stk.push_back(newNode(val, -1, left, right));
         } else if (s[i] == '|') {
-            int right = st.back();
-            st.pop_back();
-            int left = st.back();
-            st.pop_back();
+            int right = stk.back();
+            stk.pop_back();
+            int left = stk.back();
+            stk.pop_back();
             int val = node[left].val | node[right].val;
-            st.push_back(newNode(val, -2, left, right));
+            stk.push_back(newNode(val, -2, left, right));
         } else if (s[i] == '!') {
-            int left = st.back();
-            st.pop_back();
+            int left = stk.back();
+            stk.pop_back();
             int val = !node[left].val;
-            st.push_back(newNode(val, -3, left, -1));
+            stk.push_back(newNode(val, -3, left, -1));
         }
     }
-    int root = st.back();
+    int root = stk.back();
     dfs(root);
     scanf("%d", &q);
     while (q--) {
