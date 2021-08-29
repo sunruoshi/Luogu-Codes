@@ -1,17 +1,17 @@
 #include <cstdio>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
-const int MAXN = 200001, INF = 0x3f3f3f3f;
-
-int n, ans = INF;
+int n, ans = 0x3f3f3f3f;
 
 struct UnionFind {
-    int fa[MAXN], dis[MAXN];
+    vector<int> fa, dis;
     UnionFind(int n) {
+        fa.resize(n + 1);
+        dis.resize(n + 1, 0);
         for (int i = 1; i <= n; i++) {
             fa[i] = i;
-            dis[i] = 0;
         }
     }
     int Find(int x) {
