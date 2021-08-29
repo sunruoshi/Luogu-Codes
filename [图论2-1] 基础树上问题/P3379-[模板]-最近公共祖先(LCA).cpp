@@ -4,8 +4,8 @@
 #define MAXN 500001
 using namespace std;
 
+vector<vector<int>> node;
 int fa[MAXN][31], depth[MAXN];
-vector<int> node[MAXN];
 
 void dfs(int root, int parent) {
     fa[root][0] = parent;
@@ -38,6 +38,7 @@ int lca(int x, int y) {
 int main() {
     int n, m, root;
     scanf("%d %d %d", &n, &m, &root);
+    node.resize(n + 1);
     for (int i = 1; i < n; i++) {
         int x, y;
         scanf("%d %d", &x, &y);
