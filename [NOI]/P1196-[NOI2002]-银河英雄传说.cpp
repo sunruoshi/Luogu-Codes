@@ -1,16 +1,16 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
-const int MAXN = 30001;
-
 struct UnionFind {
-    int fa[MAXN], dis[MAXN], size[MAXN];
-    UnionFind() {
-        for (int i = 1; i < MAXN; i++) {
+    vector<int> fa, dis, size;
+    UnionFind(int n) {
+        fa.resize(n + 1);
+        dis.resize(n + 1, 0);
+        size.resize(n + 1, 1);
+        for (int i = 1; i <= n; i++) {
             fa[i] = i;
-            size[i] = 1;
-            dis[i] = 0;
         }
     }
     int Find(int x) {
@@ -36,7 +36,7 @@ struct UnionFind {
 int main() {
     int n;
     cin >> n;
-    UnionFind uf;
+    UnionFind uf(n);
     while (n--) {
         char opt;
         int i, j;
