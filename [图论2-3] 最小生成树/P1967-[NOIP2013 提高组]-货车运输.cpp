@@ -14,9 +14,9 @@ struct Edge {
     }
 };
 
-struct Node {
+struct MSTEdge {
     int v, w;
-    Node(int _v, int _w) : v(_v), w(_w) {}
+    MSTEdge(int _v, int _w) : v(_v), w(_w) {}
 };
 
 struct UnionFind {
@@ -41,7 +41,7 @@ struct UnionFind {
 
 int n, m, q, num, p[MAXN][31], w[MAXN][31], depth[MAXN];
 vector<Edge> edge;
-vector<vector<Node>> mst;
+vector<vector<MSTEdge>> mst;
 
 void dfs(int root, int fa, int dis) {
     p[root][0] = fa;
@@ -93,8 +93,8 @@ int main() {
     for (int i = 0; i < m && num < n - 1; i++) {
         int u = edge[i].u, v = edge[i].v, w = edge[i].w;
         if (uf.Union(u, v)) {
-            mst[u].push_back(Node(v, w));
-            mst[v].push_back(Node(u, w));
+            mst[u].push_back(MSTEdge(v, w));
+            mst[v].push_back(MSTEdge(u, w));
             num++;
         }
     }
