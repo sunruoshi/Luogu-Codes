@@ -56,7 +56,7 @@ void dfs(int root, int fa, int dis) {
     }
 }
 
-int lca(int x, int y, UnionFind uf) {
+int lca(int x, int y, UnionFind &uf) {
     if (uf.Find(x) != uf.Find(y)) return -1;
     int res = INF;
     if (depth[x] < depth[y]) swap(x, y);
