@@ -6,42 +6,26 @@
 #define MAXN 100001
 using namespace std;
 
-int n, k, t, diameter, ans, depth[MAXN], maxDepth[MAXN], p[MAXN];
+int n, k, vt, ans, depth[MAXN], maxDepth[MAXN], p[MAXN];
 vector<vector<int>> adj;
 
-void dfs1(int u, int fa) {
-    if (depth[u] > diameter) {
-        diameter = depth[u];
-        t = u;
-    }
+void dfs1(int u, int fa, int stage) {
+    if (depth[u] > depth[vt]) vt = u;
     for (int v : adj[u]) {
         if (v != fa) {
             depth[v] = depth[u] + 1;
-            dfs1(v, u);
+            if (stage) p[v] = u;
+            dfs1(v, u, stage);
         }
     }
 }
 
 void dfs2(int u, int fa) {
-    if (depth[u] > diameter) {
-        diameter = depth[u];
-        t = u;
-    }
-    for (int v : adj[u]) {
-        if (v != fa) {
-            depth[v] = depth[u] + 1;
-            p[v] = u;
-            dfs2(v, u);
-        }
-    }
-}
-
-void dfs3(int u, int fa) {
     maxDepth[u] = depth[u];
     for (int v : adj[u]) {
         if (v != fa) {
             depth[v] = depth[u] + 1;
-            dfs3(v, u);
+            dfs2(v, u);
             maxDepth[u] = max(maxDepth[u], maxDepth[v]);
         }
     }
@@ -56,16 +40,15 @@ int main() {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    dfs1(1, 0);
-    memset(depth, 0, sizeof(depth));
-    diameter = 0;
-    dfs2(t, 0);
-    int root = t;
-    for (int i = 1; i <= (1 + depth[t]) >> 1; i++) {
+    dfs1(1, 0, 0);
+    depth[vt] = 0;
+    dfs1(vt, 0, 1);
+    int root = vt;
+    for (int i = 1; i <= (1 + depth[vt]) >> 1; i++) {
         root = p[root];
     }
-    memset(depth, 0, sizeof(depth));
-    dfs3(root, 0);
+    depth[root] = 0;
+    dfs2(root, 0);
     int node[n + 1];
     for (int i = 1; i <= n; i++) {
         node[i] = maxDepth[i] - depth[i];
