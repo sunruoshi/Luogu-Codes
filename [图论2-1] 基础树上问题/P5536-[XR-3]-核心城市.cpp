@@ -9,13 +9,13 @@ using namespace std;
 int n, k, vt, ans, depth[MAXN], maxDepth[MAXN], p[MAXN];
 vector<vector<int>> adj;
 
-void dfs1(int u, int fa, int stage) {
+void dfs1(int u, int fa) {
+    p[u] = fa;
     if (depth[u] > depth[vt]) vt = u;
     for (int v : adj[u]) {
         if (v != fa) {
             depth[v] = depth[u] + 1;
-            if (stage) p[v] = u;
-            dfs1(v, u, stage);
+            dfs1(v, u);
         }
     }
 }
@@ -40,9 +40,9 @@ int main() {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    dfs1(1, 0, 0);
+    dfs1(1, 0);
     depth[vt] = 0;
-    dfs1(vt, 0, 1);
+    dfs1(vt, 0);
     int root = vt;
     for (int i = 1; i <= (1 + depth[vt]) >> 1; i++) {
         root = p[root];
