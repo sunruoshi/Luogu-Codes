@@ -1,14 +1,13 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-#define INF 0x3f3f3f3f
 using namespace std;
 
 struct Node {
     int val, left, right;
 };
 
-int n, ans = INF;
+int n, ans = 0x3f3f3f3f;
 vector<int> dis, size;
 vector<Node> node;
 
