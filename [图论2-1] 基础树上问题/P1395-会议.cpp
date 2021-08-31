@@ -1,10 +1,9 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-#define INF 0x3f3f3f3f
 using namespace std;
 
-int n, ans1, ans2 = INF;
+int n, ans1, ans2 = 0x3f3f3f3f;
 vector<int> dis, size;
 vector<vector<int>> node;
 
@@ -31,7 +30,7 @@ void cog(int u, int fa) {
         ans1 = u;
     } else if (dis[u] == ans2 && u < ans1) {
         ans1 = u;
-    };
+    }
 }
 
 int main() {
