@@ -5,7 +5,7 @@
 #define MAXN 100001
 using namespace std;
 
-int n, k, vt, ans, depth[MAXN], maxDepth[MAXN], p[MAXN];
+int n, k, vt, depth[MAXN], maxDepth[MAXN], p[MAXN];
 vector<vector<int>> adj;
 
 void dfs1(int u, int fa) {
@@ -48,14 +48,11 @@ int main() {
     }
     depth[root] = 0;
     dfs2(root, 0);
-    int node[n + 1];
+    int ans[n + 1];
     for (int i = 1; i <= n; i++) {
-        node[i] = maxDepth[i] - depth[i];
+        ans[i] = maxDepth[i] - depth[i];
     }
-    sort(node + 1, node + n + 1, greater<int>());
-    for (int i = k + 1; i <= n; i++) {
-        ans = max(ans, node[i] + 1);
-    }
-    printf("%d", ans);
+    sort(ans + 1, ans + n + 1, greater<int>());
+    printf("%d", *max_element(ans + k + 1, ans + n + 1) + 1);
     return 0;
 }
