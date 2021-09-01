@@ -43,16 +43,17 @@ int n, m, q, num, p[MAXN][31], w[MAXN][31], depth[MAXN];
 vector<Edge> edge;
 vector<vector<MSTEdge>> mst;
 
-void dfs(int u, int fa, int dis) {
+void dfs(int u, int fa, int weight) {
     p[u][0] = fa;
-    w[u][0] = dis;
+    w[u][0] = weight;
     depth[u] = depth[fa] + 1;
     for (int i = 1; (1 << i) <= depth[u]; i++) {
         p[u][i] = p[p[u][i - 1]][i - 1];
         w[u][i] = min(w[u][i - 1], w[p[u][i - 1]][i - 1]);
     }
-    for (auto node : mst[u]) {
-        if (node.v != fa) dfs(node.v, u, node.w);
+    for (auto edge : mst[u]) {
+        int v = edge.v, w = edge.w;
+        if (v != fa) dfs(v, u, w);
     }
 }
 
