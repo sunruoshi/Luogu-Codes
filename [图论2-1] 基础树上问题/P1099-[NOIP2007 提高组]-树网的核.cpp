@@ -51,9 +51,6 @@ int main() {
         depth[u] = 0;
         dfs(u, p[u]);
     }
-    for (int i = 1; i <= n; i++) {
-        ans = max(ans, depth[i]);
-    }
-    printf("%d", ans);
+    printf("%d", max(ans, *max_element(depth.begin() + 1, depth.end())));
     return 0;
 }
