@@ -35,10 +35,6 @@ int lca(int x, int y) {
     return p[x][0];
 }
 
-int dis(int u, int v) {
-    return depth[u] + depth[v] - 2 * depth[lca(u, v)];
-}
-
 int main() {
     scanf("%d %d", &n, &q);
     adj.resize(n + 1);
@@ -49,6 +45,9 @@ int main() {
         adj[v].push_back(u);
     }
     dfs(1, 0);
+    auto dis = [&](int u, int v) {
+        return depth[u] + depth[v] - 2 * depth[lca(u, v)];
+    };
     while (q--) {
         int a, b, c, d;
         scanf("%d %d %d %d", &a, &b, &c, &d);
