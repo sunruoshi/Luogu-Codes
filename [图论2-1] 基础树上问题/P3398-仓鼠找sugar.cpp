@@ -36,8 +36,7 @@ int lca(int x, int y) {
 }
 
 int dis(int u, int v) {
-    int t = lca(u, v);
-    return abs(depth[t] - depth[u]) + abs(depth[t] - depth[v]);
+    return depth[u] + depth[v] - 2 * depth[lca(u, v)];
 }
 
 int main() {
