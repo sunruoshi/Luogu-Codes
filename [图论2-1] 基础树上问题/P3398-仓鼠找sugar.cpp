@@ -1,11 +1,11 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
-#define MAXN 500001
+#define MAXN 100001
 using namespace std;
 
 vector<vector<int>> adj;
-int p[MAXN][31], depth[MAXN];
+int n, q, p[MAXN][31], depth[MAXN];
 
 void dfs(int u, int fa) {
     p[u][0] = fa;
@@ -35,21 +35,27 @@ int lca(int x, int y) {
     return p[x][0];
 }
 
+int dis(int u, int v) {
+    int t = lca(u, v);
+    return abs(depth[t] - depth[u]) + abs(depth[t] - depth[v]);
+}
+
 int main() {
-    int n, m, root;
-    scanf("%d %d %d", &n, &m, &root);
+    scanf("%d %d", &n, &q);
     adj.resize(n + 1);
     for (int i = 1; i < n; i++) {
-        int x, y;
-        scanf("%d %d", &x, &y);
-        adj[x].push_back(y);
-        adj[y].push_back(x);
+        int u, v;
+        scanf("%d %d", &u, &v);
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    dfs(root, 0);
-    for (int i = 1; i <= m; i++) {
-        int x, y;
-        scanf("%d %d", &x, &y);
-        printf("%d\n", lca(x, y));
+    dfs(1, 0);
+    while (q--) {
+        int a, b, c, d;
+        scanf("%d %d %d %d", &a, &b, &c, &d);
+        int x = lca(a, b), y = lca(c, d);
+        if (dis(a, y) + dis(b, y) == dis(a, b) || dis(c, x) + dis(d, x) == dis(c, d)) printf("Y\n");
+        else printf("N\n");
     }
     return 0;
 }
