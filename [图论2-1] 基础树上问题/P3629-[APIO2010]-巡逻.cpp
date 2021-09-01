@@ -1,8 +1,6 @@
 #include <cstdio>
-#include <cstring>
 #include <vector>
 #include <algorithm>
-#define MAXN 100001
 using namespace std;
 
 struct Edge {
@@ -10,9 +8,10 @@ struct Edge {
     Edge(int _v) : v(_v), w(1) {}
 };
 
-int n, k, vt, d1, d2, depth[MAXN], p[MAXN];
+int n, k, vt, d1, d2;
+vector<int> depth, p;
 vector<vector<Edge>> adj;
-bool mark[MAXN];
+vector<bool> mark;
 
 void dfs(int u, int fa) {
     p[u] = fa;
@@ -40,6 +39,9 @@ void DP(int u, int fa) {
 int main() {
     scanf("%d %d", &n, &k);
     adj.resize(n + 1);
+    depth.resize(n + 1);
+    p.resize(n + 1);
+    mark.resize(n + 1);
     for (int i = 1; i < n; i++) {
         int u, v;
         scanf("%d %d", &u, &v);
@@ -64,7 +66,7 @@ int main() {
             if (mark[edge.v]) edge.w = -1;
         }
     }
-    memset(depth, 0, sizeof(depth));
+    fill(depth.begin(), depth.end(), 0);
     DP(1, 0);
     printf("%d", 2 * n - d1 - d2);
     return 0;
