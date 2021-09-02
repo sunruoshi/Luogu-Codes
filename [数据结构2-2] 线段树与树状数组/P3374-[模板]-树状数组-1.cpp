@@ -4,27 +4,27 @@
 using namespace std;
 
 class BinaryIndexedTree {
-private:
-    vector<int> c;
+    private:
+        vector<int> c;
 
-public:
-    BinaryIndexedTree(int n) {
-        c.resize(n, 0);
-    }
-    void update(unsigned pos, int v) {
-        while (pos < c.size()) {
-            c[pos] += v;
-            pos += lowbit(pos);
+    public:
+        BinaryIndexedTree(int n) {
+            c.resize(n, 0);
         }
-    }
-    int query(int pos) {
-        int res = 0;
-        while (pos > 0) {
-            res += c[pos];
-            pos -= lowbit(pos);
+        void update(unsigned pos, int v) {
+            while (pos < c.size()) {
+                c[pos] += v;
+                pos += lowbit(pos);
+            }
         }
-        return res;
-    }
+        int query(int pos) {
+            int res = 0;
+            while (pos > 0) {
+                res += c[pos];
+                pos -= lowbit(pos);
+            }
+            return res;
+        }
 };
 
 int main() {
