@@ -3,8 +3,11 @@
 #include <algorithm>
 using namespace std;
 
-struct UnionFind {
+class UnionFind {
+private:
     vector<int> fa, dis, size;
+
+public:
     UnionFind(int n) {
         fa.resize(n + 1);
         dis.resize(n + 1, 0);
