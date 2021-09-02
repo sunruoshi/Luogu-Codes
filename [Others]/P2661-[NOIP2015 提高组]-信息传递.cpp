@@ -3,10 +3,11 @@
 #include <algorithm>
 using namespace std;
 
-int n, ans = 0x3f3f3f3f;
-
-struct UnionFind {
+class UnionFind {
+private:
     vector<int> fa, dis;
+
+public:
     UnionFind(int n) {
         fa.resize(n + 1);
         dis.resize(n + 1, 0);
@@ -22,7 +23,7 @@ struct UnionFind {
         }
         return fa[x];
     }
-    void Union(int x, int y) {
+    void Union(int x, int y, int &ans) {
         int xx = Find(x), yy = Find(y);
         if (xx != yy) {
             fa[xx] = yy;
@@ -34,12 +35,13 @@ struct UnionFind {
 };
 
 int main() {
+    int n, ans = 0x3f3f3f3f;
     scanf("%d", &n);
     UnionFind uf(n);
     for (int x = 1; x <= n; x++) {
         int y;
         scanf("%d", &y);
-        uf.Union(x, y);
+        uf.Union(x, y, ans);
     }
     printf("%d", ans);
     return 0;
