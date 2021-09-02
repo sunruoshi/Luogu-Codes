@@ -2,50 +2,59 @@
 #include <vector>
 using namespace std;
 
-struct SegmentTree {
-    vector<long long> d, mark;
-    SegmentTree(int n) {
-        d.resize(n * 3);
-        mark.resize(n * 3);
-    }
+struct Node {
+    long long val, tag;
+    Node() {}
+    Node(long long v, long long t) : val(v), tag(t) {}
+};
+
+class SegmentTree {
+private:
+    vector<Node> d;
     void build(int s, int t, int root, vector<long long> &a) {
         if (s == t) {
-            d[root] = a[s];
+            d[root] = Node(a[s], 0);
             return;
         }
-        int m = s + ((t - s) >> 1);
-        build(s, m, root * 2, a);
-        build(m + 1, t, root * 2 + 1, a);
-        d[root] = d[root * 2] + d[root * 2 + 1];
+        int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+        build(s, m, left, a);
+        build(m + 1, t, right, a);
+        d[root].val = d[left].val + d[right].val;
     }
     void pushDown(int s, int t, int root) {
-        int m = s + ((t - s) >> 1);
-        d[root * 2] += mark[root] * (m - s + 1);
-        d[root * 2 + 1] += mark[root] * (t - m);
-        mark[root * 2] += mark[root];
-        mark[root * 2 + 1] += mark[root];
-        mark[root] = 0;
+        int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+        d[left].val += d[root].tag * (m - s + 1);
+        d[right].val += d[root].tag * (t - m);
+        d[left].tag += d[root].tag;
+        d[right].tag += d[root].tag;
+        d[root].tag = 0;
     }
-    long long query(int l, int r, int s, int t, int root) {
-        if (l <= s && t <= r) return d[root];
-        int m = s + ((t - s) >> 1);
-        if (mark[root]) pushDown(s, t, root);
-        long long res = 0;
-        if (l <= m) res += query(l, r, s, m, root * 2);
-        if (r > m) res += query(l, r, m + 1, t, root * 2 + 1);
-        return res;
+
+public:
+    SegmentTree(int n, vector<long long> &a) {
+        d.resize(n * 3);
+        build(1, n, 1, a);
     }
-    void update(int l, int r, int c, int s, int t, int root) {
+    void update(int l, int r, int v, int s, int t, int root) {
         if (l <= s && t <= r) {
-            d[root] += (t - s + 1) * c;
-            mark[root] += c;
+            d[root].val += (t - s + 1) * v;
+            d[root].tag += v;
             return;
         }
-        int m = s + ((t - s) >> 1);
-        if (mark[root] && s != t) pushDown(s, t, root);
-        if (l <= m) update(l, r, c, s, m, root * 2);
-        if (r > m) update(l, r, c, m + 1, t, root * 2 + 1);
-        d[root] = d[root * 2] + d[root * 2 + 1];
+        int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+        if (d[root].tag && s != t) pushDown(s, t, root);
+        if (l <= m) update(l, r, v, s, m, left);
+        if (r > m) update(l, r, v, m + 1, t, right);
+        d[root].val = d[left].val + d[right].val;
+    }
+    long long query(int l, int r, int s, int t, int root) {
+        if (l <= s && t <= r) return d[root].val;
+        int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+        if (d[root].tag) pushDown(s, t, root);
+        long long res = 0;
+        if (l <= m) res += query(l, r, s, m, left);
+        if (r > m) res += query(l, r, m + 1, t, right);
+        return res;
     }
 };
 
@@ -56,18 +65,14 @@ int main() {
     for (int i = 1; i <= n; i++) {
         scanf("%lld", &a[i]);
     }
-    SegmentTree st(n + 1);
-    st.build(1, n, 1, a);
+    SegmentTree st(n, a);
     while (m--) {
-        int opt;
-        scanf("%d", &opt);
+        int opt, x, y, k;
+        scanf("%d %d %d", &opt, &x, &y);
         if (opt == 1) {
-            int x, y, k;
-            scanf("%d %d %d", &x, &y, &k);
+            scanf("%d", &k);
             st.update(x, y, k, 1, n, 1);
         } else {
-            int x, y;
-            scanf("%d %d", &x, &y);
             printf("%lld\n", st.query(x, y, 1, n, 1));
         }
     }
