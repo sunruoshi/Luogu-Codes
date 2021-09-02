@@ -1,13 +1,14 @@
 #include <cstdio>
+#include <vector>
+using namespace std;
 
-const int MAXN = 1e5 + 1;
+class UnionFind {
+private:
+    vector<int> fa;
 
-int a, b, p;
-bool notPrime[MAXN];
-
-struct UnionFind {
-    int fa[MAXN];
+public:
     UnionFind(int a, int b) {
+        fa.resize(b + 1);
         for (int i = a; i<= b; i++) {
             fa[i] = i;
         }
@@ -22,8 +23,10 @@ struct UnionFind {
 };
 
 int main() {
+    int a, b, p;
     scanf("%d %d %d", &a, &b, &p);
     int ans = b - a + 1;
+    vector<bool> notPrime(b + 1, 0);
     UnionFind uf(a, b);
     for (int i = 2; i <= b; i++) {
         if (!notPrime[i]) {
