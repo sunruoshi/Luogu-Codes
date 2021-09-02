@@ -34,7 +34,6 @@ class UnionFind {
         }
 };
 
-
 int main() {
     int n, m, num = 0, ans = 0;
     scanf("%d %d", &n, &m);
