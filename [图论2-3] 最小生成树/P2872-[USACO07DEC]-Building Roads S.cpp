@@ -1,14 +1,13 @@
 #include <cstdio>
 #include <cmath>
 #include <queue>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
-const int MAXN = 1001;
-
 struct Node {
     int x, y;
-} node[MAXN];
+};
 
 struct Edge {
     int u, v;
@@ -19,36 +18,39 @@ struct Edge {
     }
 };
 
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+class UnionFind {
+    private:
+        vector<int> fa;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    bool Union(int x, int y) {
-        int xx = Find(x), yy = Find(y);
-        if (xx == yy) return false;
-        fa[xx] = yy;
-        return true;
-    }
+        int Find(int x) {
+            if (x != fa[x]) fa[x] = Find(fa[x]);
+            return fa[x];
+        }
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
+        }
 };
 
-double dist(Node a, Node b) {
-    double dx = a.x - b.x, dy = a.y - b.y;
-    return sqrt(dx * dx + dy * dy);
-}
-
-int n, m, num;
-double ans;
-bool e[MAXN][MAXN];
-
 int main() {
+    int n, m, num = 0;
+    double ans = 0;
     scanf("%d %d", &n, &m);
+    vector<Node> node(n + 1);
+    vector<vector<bool>> e(n + 1, vector<bool>(n + 1));
+    auto dist = [&](Node a, Node b) {
+        double dx = a.x - b.x, dy = a.y - b.y;
+        return sqrt(dx * dx + dy * dy);
+    };
     for (int i = 1; i <= n; i++) {
         scanf("%d %d", &node[i].x, &node[i].y);
     }
@@ -65,7 +67,7 @@ int main() {
         }
     }
     UnionFind uf(n);
-    while (num < n - 1) {
+    while (num < n - 1 && q.size()) {
         Edge edge = q.top();
         q.pop();
         if (uf.Union(edge.u, edge.v)) {

@@ -1,14 +1,13 @@
 #include <cstdio>
+#include <vector>
 #include <cmath>
 #include <queue>
 #include <algorithm>
 using namespace std;
 
-const int MAXN = 501;
-
 struct Node {
     int x, y;
-} node[MAXN];
+};
 
 struct Edge {
     int u, v;
@@ -19,38 +18,41 @@ struct Edge {
     }
 };
 
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+class UnionFind {
+    private:
+        vector<int> fa;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    bool Union(int x, int y) {
-        int xx = Find(x), yy = Find(y);
-        if (xx == yy) return false;
-        fa[xx] = yy;
-        return true;
-    }
+        int Find(int x) {
+            if (x != fa[x]) fa[x] = Find(fa[x]);
+            return fa[x];
+        }
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
+        }
 };
 
-double dist(Node a, Node b) {
-    double dx = a.x - b.x, dy = a.y - b.y;
-    return sqrt(dx * dx + dy * dy);
-}
-
-int s, p, num;
-double ans;
-
 int main() {
+    int s, p, num = 0;
+    double ans = 0;
     scanf("%d %d", &s, &p);
+    vector<Node> node(p + 1);
     for (int i = 1; i <= p; i++) {
         scanf("%d %d", &node[i].x, &node[i].y);
     }
+    auto dist = [&](Node a, Node b) {
+        double dx = a.x - b.x, dy = a.y - b.y;
+        return sqrt(dx * dx + dy * dy);
+    };
     priority_queue<Edge> q;
     for (int u = 1; u < p; u++) {
         for (int v = u + 1; v <= p; v++) {
