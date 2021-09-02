@@ -1,18 +1,19 @@
 #include <cstdio>
-#include <cstring>
+#include <vector>
 #include <algorithm>
 #define lowbit(i) ((i) & (-i))
 using namespace std;
 
-const int MAXN = 500001;
+class BinaryIndexedTree {
+private:
+    vector<int> c;
 
-struct BinaryIndexedTree {
-    int c[MAXN];
-    BinaryIndexedTree() {
-        memset(c, 0, sizeof(c));
+public:
+    BinaryIndexedTree(int n) {
+        c.resize(n, 0);
     }
-    void update(int pos) {
-        while (pos < MAXN) {
+    void update(unsigned pos) {
+        while (pos < c.size()) {
             c[pos] += 1;
             pos += lowbit(pos);
         }
@@ -39,7 +40,7 @@ int main() {
     for (int &num : nums) {
         num = lower_bound(temp, temp + n, num) - temp + 1;
     }
-    BinaryIndexedTree bit;
+    BinaryIndexedTree bit(n + 1);
     long long ans = 0;
     for (int i = n - 1; i >= 0; i--) {
         bit.update(nums[i]);

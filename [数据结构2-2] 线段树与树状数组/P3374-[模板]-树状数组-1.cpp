@@ -1,16 +1,18 @@
 #include <cstdio>
-#include <cstring>
+#include <vector>
 #define lowbit(i) ((i) & (-i))
+using namespace std;
 
-const int MAXN = 500001;
+class BinaryIndexedTree {
+private:
+    vector<int> c;
 
-struct BinaryIndexedTree {
-    int c[MAXN];
-    BinaryIndexedTree() {
-        memset(c, 0, sizeof(c));
+public:
+    BinaryIndexedTree(int n) {
+        c.resize(n, 0);
     }
-    void update(int pos, int v) {
-        while (pos < MAXN) {
+    void update(unsigned pos, int v) {
+        while (pos < c.size()) {
             c[pos] += v;
             pos += lowbit(pos);
         }
@@ -28,7 +30,7 @@ struct BinaryIndexedTree {
 int main() {
     int n, m;
     scanf("%d %d", &n, &m);
-    BinaryIndexedTree bit;
+    BinaryIndexedTree bit(n + 1);
     for (int i = 1; i <= n; i++) {
         int x;
         scanf("%d", &x);
