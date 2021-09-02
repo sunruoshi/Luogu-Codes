@@ -50,7 +50,7 @@ class SegmentTree {
         long long query(int l, int r, int s, int t, int root) {
             if (l <= s && t <= r) return d[root].val;
             int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
-            if (d[root].tag) pushDown(s, t, root);
+            if (d[root].tag && s != t) pushDown(s, t, root);
             long long res = 0;
             if (l <= m) res += query(l, r, s, m, left);
             if (r > m) res += query(l, r, m + 1, t, right);
