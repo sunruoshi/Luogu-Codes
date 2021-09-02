@@ -1,8 +1,7 @@
 #include <cstdio>
 #include <queue>
+#include <vector>
 using namespace std;
-
-const int MAXN = 5001;
 
 struct Edge {
     int u, v, w;
@@ -12,29 +11,32 @@ struct Edge {
     }
 };
 
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+class UnionFind {
+    private:
+        vector<int> fa;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    bool Union(int x, int y) {
-        int xx = Find(x), yy = Find(y);
-        if (xx == yy) return false;
-        fa[xx] = yy;
-        return true;
-    }
+        int Find(int x) {
+            if (x != fa[x]) fa[x] = Find(fa[x]);
+            return fa[x];
+        }
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
+        }
 };
 
-int n, m, num, ans;
 
 int main() {
-    int n, m;
+    int n, m, num = 0, ans = 0;
     scanf("%d %d", &n, &m);
     UnionFind uf(n);
     priority_queue<Edge> q;
