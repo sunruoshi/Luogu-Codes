@@ -1,12 +1,14 @@
 #include <cstdio>
+#include <vector>
+using namespace std;
 
-const int MAXN = 5001;
+class UnionFind {
+private:
+    vector<int> fa;
 
-int n, m, p;
-
-struct UnionFind {
-    int fa[MAXN];
+public:
     UnionFind(int n) {
+        fa.resize(n + 1);
         for (int i = 1; i <= n; i++) {
             fa[i] = i;
         }
@@ -21,6 +23,7 @@ struct UnionFind {
 };
 
 int main() {
+    int n, m, p;
     scanf("%d %d %d", &n, &m, &p);
     UnionFind uf(n);
     for (int i = 1; i <= m; i++) {
