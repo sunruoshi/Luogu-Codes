@@ -9,7 +9,7 @@ class BinaryIndexedTree {
 
     public:
         BinaryIndexedTree(int n) {
-            c.resize(n, 0);
+            c.resize(n);
         }
         int query(unsigned pos) {
             int res = 0;
@@ -19,7 +19,7 @@ class BinaryIndexedTree {
             }
             return res;
         }
-        void update(int pos, int v) {
+        void update(unsigned pos, int v) {
             while (pos > 0) {
                 c[pos] += v;
                 pos -= lowbit(pos);

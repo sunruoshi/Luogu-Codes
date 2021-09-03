@@ -10,7 +10,7 @@ class BinaryIndexedTree {
 
     public:
         BinaryIndexedTree(int n) {
-            c.resize(n, 0);
+            c.resize(n);
         }
         void update(unsigned pos) {
             while (pos < c.size()) {
@@ -18,7 +18,7 @@ class BinaryIndexedTree {
                 pos += lowbit(pos);
             }
         }
-        int query(int pos) {
+        int query(unsigned pos) {
             int res = 0;
             while (pos > 0) {
                 res += c[pos];
