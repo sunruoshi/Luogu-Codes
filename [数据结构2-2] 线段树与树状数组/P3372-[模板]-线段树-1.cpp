@@ -4,16 +4,15 @@ using namespace std;
 
 struct Node {
     long long val, tag;
-    Node() {}
-    Node(long long v, long long t) : val(v), tag(t) {}
 };
 
 class SegmentTree {
     private:
         vector<Node> d;
         void build(int s, int t, int root, vector<long long> &a) {
+            d[root].tag = 0;
             if (s == t) {
-                d[root] = Node(a[s], 0);
+                d[root].val = a[s];
                 return;
             }
             int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
