@@ -17,7 +17,7 @@ class UnionFind {
 
     public:
         UnionFind(int n) {
-            fa.resize(n);
+            fa.resize(n + 1);
             for (int i = 1; i <= n; i++) {
                 fa[i] = i;
             }
@@ -39,7 +39,7 @@ int main() {
         scanf("%d %d %d", &u, &v, &w);
         q.push(Edge(u, v, w));
     }
-    UnionFind uf(2 * n + 1);
+    UnionFind uf(2 * n);
     while (q.size()) {
         int u = q.top().u, v = q.top().v, w = q.top().w;
         q.pop();

@@ -14,8 +14,7 @@ class UnionFind {
             }
         }
         int Find(int x) {
-            if (x != fa[x]) fa[x] = Find(fa[x]);
-            return fa[x];
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
         }
         void Union(int x, int y) {
             fa[Find(x)] = Find(y);
