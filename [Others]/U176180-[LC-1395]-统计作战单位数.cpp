@@ -12,28 +12,31 @@ struct Node {
     }
 };
 
-struct BinaryIndexedTree {
-    vector<int> c;
-    BinaryIndexedTree(int n) {
-        c.resize(n, 0);
-    }
-    void update(unsigned int pos) {
-        while (pos < c.size()) {
-            c[pos] += 1;
-            pos += lowbit(pos);
+class BinaryIndexedTree {
+    private:
+        vector<int> c;
+
+    public:
+        BinaryIndexedTree(int n) {
+            c.resize(n, 0);
         }
-    }
-    int query(unsigned int pos) {
-        int res = 0;
-        while (pos > 0) {
-            res += c[pos];
-            pos -= lowbit(pos);
+        void update(unsigned pos) {
+            while (pos < c.size()) {
+                c[pos] += 1;
+                pos += lowbit(pos);
+            }
         }
-        return res;
-    }
-    void clear() {
-        fill(c.begin(), c.end(), 0);
-    }
+        int query(unsigned pos) {
+            int res = 0;
+            while (pos > 0) {
+                res += c[pos];
+                pos -= lowbit(pos);
+            }
+            return res;
+        }
+        void clear() {
+            fill(c.begin(), c.end(), 0);
+        }
 };
 
 int main() {
