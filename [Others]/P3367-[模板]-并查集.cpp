@@ -1,26 +1,28 @@
 #include <cstdio>
+#include <vector>
+using namespace std;
 
-const int MAXN = 1e4 + 1;
+class UnionFind {
+    private:
+        vector<int> fa;
 
-int n, m;
-
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    void Union(int x, int y) {
-        fa[Find(x)] = Find(y);
-    }
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
+        void Union(int x, int y) {
+            fa[Find(x)] = Find(y);
+        }
 };
 
 int main() {
+    int n, m;
     scanf("%d %d", &n, &m);
     UnionFind uf(n);
     while (m--) {
