@@ -12,27 +12,30 @@ struct Edge {
     }
 };
 
-struct UnionFind {
-    vector<int> fa, size;
-    UnionFind(int n) {
-        fa.resize(n);
-        size.resize(n);
-        for (int i = 0; i < n; i++) {
-            fa[i] = i;
-            size[i] = 1;
+class UnionFind {
+    private:
+        vector<int> fa, size;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n);
+            size.resize(n);
+            for (int i = 0; i < n; i++) {
+                fa[i] = i;
+                size[i] = 1;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    void Union(int x, int y) {
-        int xx = Find(x), yy = Find(y);
-        if (xx == yy) return;
-        if (xx > yy) swap(xx, yy);
-        fa[xx] = yy;
-        size[yy] += size[xx];
-    }
+        int Find(int x) {
+            if (x != fa[x]) fa[x] = Find(fa[x]);
+            return fa[x];
+        }
+        void Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return;
+            if (xx > yy) swap(xx, yy);
+            fa[xx] = yy;
+            size[yy] += size[xx];
+        }
 };
 
 int main() {
