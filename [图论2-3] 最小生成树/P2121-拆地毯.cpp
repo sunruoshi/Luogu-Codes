@@ -1,52 +1,49 @@
 #include <cstdio>
-#include <queue>
+#include <vector>
+#include <algorithm>
 using namespace std;
-
-const int MAXN = 1e5 + 1;
 
 struct Edge {
     int u, v, w;
-    Edge(int _u, int _v, int _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w < a.w;
-    }
 };
 
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+class UnionFind {
+    private:
+        vector<int> fa;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    void Union(int x, int y) {
-        fa[Find(x)] = Find(y);
-    }
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
+        }
 };
-
-int n, m, k, num, ans;
 
 int main() {
+    int n, m, k, num = 0, ans = 0;
     scanf("%d %d %d", &n, &m, &k);
-    UnionFind uf(n);
-    priority_queue<Edge> q;
-    for (int i = 1; i <= m; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        q.push(Edge(u, v, w));
+    vector<Edge> edges(m);
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
     }
-    while (num < k) {
-        Edge edge = q.top();
-        q.pop();
-        if (uf.Find(edge.u) != uf.Find(edge.v)) {
-            uf.Union(edge.u, edge.v);
+    UnionFind uf(n);
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w > b.w; });
+    for (auto edge : edges) {
+        if (uf.Union(edge.u, edge.v)) {
             ans += edge.w;
             num++;
         }
+        if (num == k) break;
     }
     printf("%d", ans);
     return 0;

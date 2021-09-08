@@ -1,15 +1,10 @@
 #include <cstdio>
 #include <vector>
-#include <queue>
 #include <algorithm>
 using namespace std;
 
 struct Edge {
     int u, v, w;
-    Edge(int _u, int _v, int _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w > a.w;
-    }
 };
 
 class UnionFind {
@@ -24,8 +19,7 @@ class UnionFind {
             }
         }
         int Find(int x) {
-            if (x != fa[x]) fa[x] = Find(fa[x]);
-            return fa[x];
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
         }
         bool Union(int x, int y) {
             int xx = Find(x), yy = Find(y);
@@ -38,16 +32,13 @@ class UnionFind {
 int main() {
     int n, m, s, t, num = 0, ans = 0;
     scanf("%d %d %d %d", &n, &m, &s, &t);
-    UnionFind uf(n);
-    priority_queue<Edge> q;
-    for (int i = 1; i <= m; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        q.push(Edge(u, v, w));
+    vector<Edge> edges(m);
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
     }
-    while (num < n - 1 && q.size()) {
-        Edge edge = q.top();
-        q.pop();
+    UnionFind uf(n);
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
+    for (auto edge : edges) {
         if (uf.Union(edge.u, edge.v)) {
             ans = max(ans, edge.w);
             num++;

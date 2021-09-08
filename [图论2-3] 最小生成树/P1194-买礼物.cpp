@@ -1,54 +1,56 @@
 #include <cstdio>
-#include <queue>
+#include <vector>
+#include <algorithm>
 using namespace std;
-
-const int MAXN = 501;
 
 struct Edge {
     int u, v, w;
     Edge(int _u, int _v, int _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w > a.w;
-    }
 };
 
-struct UnionFind {
-    int fa[MAXN];
-    UnionFind(int n) {
-        for (int i = 1; i <= n; i++) {
-            fa[i] = i;
+class UnionFind {
+    private:
+        vector<int> fa;
+
+    public:
+        UnionFind(int n) {
+            fa.resize(n + 1);
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
         }
-    }
-    int Find(int x) {
-        if (x != fa[x]) fa[x] = Find(fa[x]);
-        return fa[x];
-    }
-    void Union(int x, int y) {
-        fa[Find(x)] = Find(y);
-    }
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
+        }
 };
 
-int a, b, num, ans;
 
 int main() {
+    int a, b, num = 0, ans = 0;
     scanf("%d %d", &a, &b);
-    UnionFind uf(b);
-    priority_queue<Edge> q;
+    vector<Edge> edges;
     for (int i = 1; i <= b; i++) {
         for (int j = 1; j <= b; j++) {
             int k;
             scanf("%d", &k);
-            if (i < j && k != 0 && k <= a) q.push(Edge(i, j, k));
+            if (i < j && k != 0 && k <= a) edges.push_back(Edge(i, j, k));
         }
     }
-    while (num < b - 1 && q.size()) {
-        Edge edge = q.top();
-        q.pop();
+    UnionFind uf(b);
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
+    for (auto edge : edges) {
         if (uf.Find(edge.u) != uf.Find(edge.v)) {
             uf.Union(edge.u, edge.v);
             ans += edge.w;
             num++;
         }
+        if (num == b - 1) break;
     }
     if (num == b - 1) printf("%d", ans + a);
     else printf("%d", ans + (b - num) * a);
