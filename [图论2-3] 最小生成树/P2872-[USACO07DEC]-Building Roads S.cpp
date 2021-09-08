@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <cmath>
-#include <queue>
 #include <vector>
 #include <algorithm>
 using namespace std;
@@ -13,9 +12,6 @@ struct Edge {
     int u, v;
     double w;
     Edge(int _u, int _v, double _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w > a.w;
-    }
 };
 
 class UnionFind {
@@ -30,8 +26,7 @@ class UnionFind {
             }
         }
         int Find(int x) {
-            if (x != fa[x]) fa[x] = Find(fa[x]);
-            return fa[x];
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
         }
         bool Union(int x, int y) {
             int xx = Find(x), yy = Find(y);
@@ -46,7 +41,7 @@ int main() {
     double ans = 0;
     scanf("%d %d", &n, &m);
     vector<Node> node(n + 1);
-    vector<vector<bool>> e(n + 1, vector<bool>(n + 1));
+    vector<vector<bool>> vis(n + 1, vector<bool>(n + 1));
     auto dist = [&](Node a, Node b) {
         double dx = a.x - b.x, dy = a.y - b.y;
         return sqrt(dx * dx + dy * dy);
@@ -57,23 +52,23 @@ int main() {
     for (int i = 1; i <= m; i++) {
         int u, v;
         scanf("%d %d", &u, &v);
-        e[u][v] = e[v][u] = 1;
+        vis[u][v] = vis[v][u] = 1;
     }
-    priority_queue<Edge> q;
+    vector<Edge> edges;
     for (int u = 1; u < n; u++) {
         for (int v = u + 1; v <= n; v++) {
-            if (e[u][v]) q.push(Edge(u, v, 0));
-            else q.push(Edge(u, v, dist(node[u], node[v])));
+            if (vis[u][v]) edges.push_back(Edge(u, v, 0));
+            else edges.push_back(Edge(u, v, dist(node[u], node[v])));
         }
     }
     UnionFind uf(n);
-    while (num < n - 1 && q.size()) {
-        Edge edge = q.top();
-        q.pop();
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
+    for (auto edge : edges) {
         if (uf.Union(edge.u, edge.v)) {
             ans += edge.w;
             num++;
         }
+        if (num == n - 1) break;
     }
     printf("%.2lf", ans);
     return 0;

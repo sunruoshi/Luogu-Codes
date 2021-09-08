@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <vector>
-#include <queue>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 struct Node {
@@ -12,9 +12,6 @@ struct Edge {
     int u, v;
     double w;
     Edge(int _u, int _v, double _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w > a.w;
-    }
 };
 
 class UnionFind {
@@ -29,8 +26,7 @@ class UnionFind {
             }
         }
         int Find(int x) {
-            if (x != fa[x]) fa[x] = Find(fa[x]);
-            return fa[x];
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
         }
         bool Union(int x, int y) {
             int xx = Find(x), yy = Find(y);
@@ -51,17 +47,16 @@ int main() {
         double dx = a.x - b.x, dy = a.y - b.y;
         return sqrt(dx * dx + dy * dy);
     };
-    priority_queue<Edge> q;
+    vector<Edge> edges;
     for (int u = 0; u < n - 1; u++) {
         for (int v = u + 1; v < n; v++) {
-            q.push(Edge(u, v, dist(node[u], node[v])));
+            edges.push_back(Edge(u, v, dist(node[u], node[v])));
         }
     }
     UnionFind uf(n);
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
     int num = 0;
-    while (q.size()) {
-        Edge edge = q.top();
-        q.pop();
+    for (auto edge : edges) {
         if (uf.Union(edge.u, edge.v)) num++;
         if (num == n - k + 1) {
             printf("%.2lf", edge.w);

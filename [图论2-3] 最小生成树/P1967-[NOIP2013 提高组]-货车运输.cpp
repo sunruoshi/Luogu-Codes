@@ -5,11 +5,6 @@ using namespace std;
 
 struct Edge {
     int u, v, w;
-    Edge() {}
-    Edge(int _u, int _v, int _w) : u(_u), v(_v), w(_w) {}
-    bool operator < (const Edge &a) const {
-        return w > a.w;
-    }
 };
 
 struct MSTEdge {
@@ -29,8 +24,7 @@ class UnionFind {
             }
         }
         int Find(int x) {
-            if (x != fa[x]) fa[x] = Find(fa[x]);
-            return fa[x];
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
         }
         bool Union(int x, int y) {
             int xx = Find(x), yy = Find(y);
@@ -95,15 +89,13 @@ int main() {
     scanf("%d %d", &n, &m);
     UnionFind uf(n);
     vector<vector<MSTEdge>> mst(n + 1);
-    vector<Edge> edge;
-    for (int i = 1; i <= m; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        edge.push_back(Edge(u, v, w));
+    vector<Edge> edges(m);
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
     }
-    sort(edge.begin(), edge.end());
+    sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w > b.w; });
     for (int i = 0; i < m && num < n - 1; i++) {
-        int u = edge[i].u, v = edge[i].v, w = edge[i].w;
+        int u = edges[i].u, v = edges[i].v, w = edges[i].w;
         if (uf.Union(u, v)) {
             mst[u].push_back(MSTEdge(v, w));
             mst[v].push_back(MSTEdge(u, w));
