@@ -3,13 +3,13 @@
 #include <algorithm>
 using namespace std;
 
-int n, m, num, ans;
+int n, m, tag, ans;
 vector<int> dfn, low;
 vector<bool> res;
 vector<vector<int>> adj;
 
 void tarjan(int u, int fa) {
-    dfn[u] = low[u] = ++num;
+    dfn[u] = low[u] = ++tag;
     int child = 0;
     for (int v : adj[u]) {
         if (v == fa) continue;
@@ -45,7 +45,7 @@ int main() {
     }
     for (int u = 1; u <= n; u++) {
         if (!dfn[u]) {
-            num = 0;
+            tag = 0;
             tarjan(u, u);
         }
     }
