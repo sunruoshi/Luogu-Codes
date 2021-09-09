@@ -1,12 +1,13 @@
 #include <cstdio>
 #include <vector>
 #include <algorithm>
+#define MAXN 20001
 using namespace std;
 
 int n, m, tag, ans;
-vector<int> dfn, low;
-vector<bool> res;
-vector<vector<int>> adj;
+int dfn[MAXN], low[MAXN];
+bool res[MAXN];
+vector<int> adj[MAXN];
 
 void tarjan(int u, int fa) {
     dfn[u] = low[u] = ++tag;
@@ -33,10 +34,6 @@ void tarjan(int u, int fa) {
 
 int main() {
     scanf("%d %d", &n, &m);
-    dfn.resize(n + 1);
-    low.resize(n + 1);
-    res.resize(n + 1);
-    adj.resize(n + 1);
     for (int i = 1; i <= m; i++) {
         int u, v;
         scanf("%d %d", &u, &v);
