@@ -4,14 +4,14 @@
 #define MAXN 10001
 using namespace std;
 
-int n, m, tag, pos, idx;
-int dfn[MAXN], low[MAXN], scc[MAXN], size[MAXN], stk[MAXN], out[MAXN];
+int n, m, tag, idx;
+int dfn[MAXN], low[MAXN], scc[MAXN], size[MAXN], out[MAXN];
 bool inStack[MAXN];
-vector<int> adj[MAXN];
+vector<int> stk, adj[MAXN];
 
 void tarjan(int u) {
     dfn[u] = low[u] = ++tag;
-    stk[++pos] = u;
+    stk.push_back(u);
     inStack[u] = 1;
     for (int v : adj[u]) {
         if (!dfn[v]) {
@@ -23,16 +23,16 @@ void tarjan(int u) {
     }
     if (dfn[u] == low[u]) {
         idx++;
-        while (stk[pos] != u) {
-            scc[stk[pos]] = idx;
+        while (stk.size() && stk.back() != u) {
+            scc[stk.back()] = idx;
             size[idx]++;
-            inStack[stk[pos]] = 0;
-            pos--;
+            inStack[stk.back()] = 0;
+            stk.pop_back();
         }
-        scc[stk[pos]] = idx;
+        scc[u] = idx;
         size[idx]++;
-        inStack[stk[pos]] = 0;
-        pos--;
+        inStack[u] = 0;
+        stk.pop_back();
     }
 }
 
