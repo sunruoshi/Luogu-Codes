@@ -23,14 +23,13 @@ void tarjan(int u) {
     }
     if (dfn[u] == low[u]) {
         idx++;
-        while (stk.size() && stk.back() != u) {
+        while (stk.size()) {
+            int cur = stk.back();
             size[idx]++;
-            inStack[stk.back()] = 0;
+            inStack[cur] = 0;
             stk.pop_back();
+            if (cur == u) break;
         }
-        size[idx]++;
-        inStack[u] = 0;
-        stk.pop_back();
         if (size[idx] > 1) ans++;
     }
 }
