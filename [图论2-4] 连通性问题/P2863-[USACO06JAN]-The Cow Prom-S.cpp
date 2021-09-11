@@ -4,7 +4,7 @@
 #define MAXN 10001
 using namespace std;
 
-int n, m, tag, idx, ans;
+int n, m, tag, ans;
 int dfn[MAXN], low[MAXN], size[MAXN];
 bool inStack[MAXN];
 vector<int> stk, adj[MAXN];
@@ -22,15 +22,14 @@ void tarjan(int u) {
         }
     }
     if (dfn[u] == low[u]) {
-        idx++;
         while (stk.size()) {
             int cur = stk.back();
-            size[idx]++;
+            size[u]++;
             inStack[cur] = 0;
             stk.pop_back();
             if (cur == u) break;
         }
-        if (size[idx] > 1) ans++;
+        if (size[u] > 1) ans++;
     }
 }
 
@@ -42,10 +41,7 @@ int main() {
         adj[u].push_back(v);
     }
     for (int u = 1; u <= n; u++) {
-        if (!dfn[u]) {
-            tag = 0;
-            tarjan(u);
-        }
+        if (!dfn[u]) tarjan(u);
     }
     printf("%d", ans);
     return 0;
