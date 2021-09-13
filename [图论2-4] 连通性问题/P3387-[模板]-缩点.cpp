@@ -6,7 +6,7 @@
 using namespace std;
 
 int n, m, tag;
-int dfn[MAXN], low[MAXN], scc[MAXN], w[MAXN], in[MAXN], dis[MAXN];
+int dfn[MAXN], low[MAXN], scc[MAXN], w[MAXN], dp[MAXN];
 bool inStack[MAXN];
 vector<int> stk, adj[MAXN], dag[MAXN];
 
@@ -34,6 +34,15 @@ void tarjan(int u) {
     }
 }
 
+int DP(int u) {
+    if (dp[u]) return dp[u];
+    for (int v : dag[u]) {
+        dp[u] = max(dp[u], DP(v));
+    }
+    dp[u] += w[u];
+    return dp[u];
+}
+
 int main() {
     scanf("%d %d", &n, &m);
     for (int i = 1; i <= n; i++) {
@@ -49,28 +58,13 @@ int main() {
     }
     for (int u = 1; u <= n; u++) {
         for (int v : adj[u]) {
-            if (scc[u] != scc[v]) {
-                dag[scc[u]].push_back(scc[v]);
-                in[scc[v]]++;
-            }
+            if (scc[u] != scc[v]) dag[scc[u]].push_back(scc[v]);
         }
     }
-    queue<int> q;
-    for (int i = 1; i <= n; i++) {
-        if (scc[i] == i && !in[i]) {
-            q.push(i);
-            dis[i] = w[i];
-        }
+    int ans = 0;
+    for (int u = 1; u <= n; u++) {
+        ans = max(ans, DP(u));
     }
-    while (q.size()) {
-        int u = q.front();
-        q.pop();
-        for (int v : dag[u]) {
-            dis[v] = max(dis[v], dis[u] + w[v]);
-            in[v]--;
-            if (!in[v]) q.push(v);
-        }
-    }
-    printf("%d", *max_element(dis + 1, dis + n + 1));
+    printf("%d", ans);
     return 0;
 }
