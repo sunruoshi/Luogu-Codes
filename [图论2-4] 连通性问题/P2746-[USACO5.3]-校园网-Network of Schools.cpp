@@ -55,8 +55,9 @@ int main() {
         }
     }
     for (int i = 1; i <= n; i++) {
-        if (scc[i] == i && !in[i]) num1++;
-        if (scc[i] == i && !out[i]) num2++;
+        if (scc[i] != i) continue;
+        if (!in[i]) num1++;
+        if (!out[i]) num2++;
     }
     if (cnt == 1) printf("1\n0");
     else printf("%d\n%d", num1, max(num1, num2));
