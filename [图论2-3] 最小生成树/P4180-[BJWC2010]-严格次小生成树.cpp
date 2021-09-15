@@ -10,29 +10,6 @@ struct Edge {
     int u, v, w;
 };
 
-class UnionFind {
-    private:
-        int fa[MAXN];
-
-    public:
-        UnionFind(int n) {
-            for (int i = 1; i <= n; i++) {
-                fa[i] = i;
-            }
-        }
-
-        int Find(int x) {
-            return x == fa[x] ? x : fa[x] = Find(fa[x]);
-        }
-
-        bool Union(int x, int y) {
-            int xx = Find(x), yy = Find(y);
-            if (xx == yy) return false;
-            fa[xx] = yy;
-            return true;
-        }
-};
-
 class Solution {
     private:
         struct Edge {
@@ -40,15 +17,29 @@ class Solution {
             Edge(int _v, int _w) : v(_v), w(_w) {}
         };
 
-        int depth[MAXN], p[MAXN][31], maxWeight[MAXN][31], secWeight[MAXN][31];
+        int fa[MAXN], depth[MAXN], p[MAXN][31], maxWeight[MAXN][31], secWeight[MAXN][31];
         vector<Edge> mst[MAXN];
 
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
+
     public:
-        Solution() {
+        Solution(int n) {
             memset(p, 0, sizeof(p));
             memset(maxWeight, 0, sizeof(maxWeight));
             memset(secWeight, 0, sizeof(secWeight));
             memset(depth, 0, sizeof(depth));
+            for (int i = 1; i <= n; i++) {
+                fa[i] = i;
+            }
+        }
+
+        bool Union(int x, int y) {
+            int xx = Find(x), yy = Find(y);
+            if (xx == yy) return false;
+            fa[xx] = yy;
+            return true;
         }
 
         void init(int u, int fa) {
@@ -115,31 +106,30 @@ int main() {
     int n, m, num = 0;
     long long sum = 0;
     scanf("%d %d", &n, &m);
-    UnionFind uf(n);
     vector<Edge> edges(m);
     vector<bool> onMST(m);
     for (int i = 0; i < m; i++) {
         scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
     }
     sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
-    Solution sol;
+    Solution solve(n);
     for (int i = 0; i < m && num < n - 1; i++) {
         int u = edges[i].u, v = edges[i].v, w = edges[i].w;
-        if (uf.Union(u, v)) {
-            sol.addEdge(u, v, w);
+        if (solve.Union(u, v)) {
+            solve.addEdge(u, v, w);
             sum += w;
             onMST[i] = 1;
             num++;
         }
     }
-    sol.init(1, 0);
+    solve.init(1, 0);
     long long ans = 0x3f3f3f3f3f3f3f3f;
     for (int i = 0; i < m; i++) {
         int u = edges[i].u, v = edges[i].v, w = edges[i].w;
         if (!onMST[i]) {
-            int lca = sol.lca(u, v);
-            long long temp1 = sol.query(u, lca, w);
-            long long temp2 = sol.query(v, lca, w);
+            int lca = solve.lca(u, v);
+            long long temp1 = solve.query(u, lca, w);
+            long long temp2 = solve.query(v, lca, w);
             if (max(temp1, temp2) > -INF) ans = min(ans, sum - max(temp1, temp2) + w);
         }
     }

@@ -1,44 +1,52 @@
 #include <cstdio>
+#include <cstring>
 #include <vector>
 #include <algorithm>
+#define MAXN 10000
+#define INF 0x3f3f3f3f
 using namespace std;
 
 struct Edge {
     int u, v, w;
 };
 
-struct MSTEdge {
-    int v, w;
-    MSTEdge(int _v, int _w) : v(_v), w(_w) {}
-};
-
-class UnionFind {
+class Solution {
     private:
-        vector<int> fa;
+        struct Edge {
+            int v, w;
+            Edge(int _v, int _w) : v(_v), w(_w) {}
+        };
+
+        int fa[MAXN], depth[MAXN], p[MAXN][31], w[MAXN][31];
+        vector<Edge> mst[MAXN];
+
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
 
     public:
-        UnionFind(int n) {
-            fa.resize(n + 1);
+        Solution(int n) {
+            memset(p, 0, sizeof(p));
+            memset(w, 0, sizeof(w));
+            memset(depth, 0, sizeof(depth));
             for (int i = 1; i <= n; i++) {
                 fa[i] = i;
             }
         }
-        int Find(int x) {
-            return x == fa[x] ? x : fa[x] = Find(fa[x]);
-        }
+
         bool Union(int x, int y) {
             int xx = Find(x), yy = Find(y);
             if (xx == yy) return false;
             fa[xx] = yy;
             return true;
         }
-};
 
-class LCA {
-    private:
-        vector<vector<int>> p, w;
-        vector<int> depth;
-        void init(int u, int fa, int weight, vector<vector<MSTEdge>> &mst) {
+        void addEdge(int u, int v, int w) {
+            mst[u].push_back(Edge(v, w));
+            mst[v].push_back(Edge(u, w));
+        }
+
+        void init(int u, int fa, int weight) {
             p[u][0] = fa;
             w[u][0] = weight;
             depth[u] = depth[fa] + 1;
@@ -48,20 +56,13 @@ class LCA {
             }
             for (auto edge : mst[u]) {
                 int v = edge.v, w = edge.w;
-                if (v != fa) init(v, u, w, mst);
+                if (v != fa) init(v, u, w);
             }
         }
 
-    public:
-        LCA(int n, int m, vector<vector<MSTEdge>> &mst) {
-            p.resize(n, vector<int>(m));
-            w.resize(n, vector<int>(m));
-            depth.resize(n);
-            init(1, 0, 0x3f3f3f3f, mst);
-        }
-        int solve(int x, int y, UnionFind &uf) {
-            if (uf.Find(x) != uf.Find(y)) return -1;
-            int res = 0x3f3f3f3f;
+        int lca(int x, int y) {
+            if (Find(x) != Find(y)) return -1;
+            int res = INF;
             if (depth[x] < depth[y]) swap(x, y);
             int temp = depth[x] - depth[y];
             for (int i = 0; temp > 0; i++) {
@@ -87,27 +88,25 @@ class LCA {
 int main() {
     int n, m, q, num = 0;
     scanf("%d %d", &n, &m);
-    UnionFind uf(n);
-    vector<vector<MSTEdge>> mst(n + 1);
     vector<Edge> edges(m);
     for (int i = 0; i < m; i++) {
         scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
     }
     sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w > b.w; });
+    Solution solve(n);
     for (int i = 0; i < m && num < n - 1; i++) {
         int u = edges[i].u, v = edges[i].v, w = edges[i].w;
-        if (uf.Union(u, v)) {
-            mst[u].push_back(MSTEdge(v, w));
-            mst[v].push_back(MSTEdge(u, w));
+        if (solve.Union(u, v)) {
+            solve.addEdge(u, v, w);
             num++;
         }
     }
-    LCA lca(n + 1, 31, mst);
+    solve.init(1, 0, INF);
     scanf("%d", &q);
     while (q--) {
         int x, y;
         scanf("%d %d", &x, &y);
-        printf("%d\n", lca.solve(x, y, uf));
+        printf("%d\n", solve.lca(x, y));
     }
     return 0;
 }
