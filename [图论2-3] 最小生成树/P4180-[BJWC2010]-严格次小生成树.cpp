@@ -4,7 +4,6 @@
 #include <algorithm>
 #define MAXN 100001
 #define INF 0x3f3f3f3f
-#define INF64 0x3f3f3f3f3f3f3f3f
 using namespace std;
 
 struct Edge {
@@ -39,27 +38,27 @@ class UnionFind {
 
 class Solution {
     private:
-        int p[MAXN][31], maxx[MAXN][31], minn[MAXN][31], depth[MAXN];
+        int depth[MAXN], p[MAXN][31], maxWeight[MAXN][31], secWeight[MAXN][31];
         void init(int u, int fa, vector<vector<MSTEdge>> &mst) {
             p[u][0] = fa;
-            minn[u][0] = -INF;
+            secWeight[u][0] = -INF;
             depth[u] = depth[fa] + 1;
             for (int i = 1; (1 << i) <= depth[u]; i++) {
                 p[u][i] = p[p[u][i - 1]][i - 1];
                 int temp[4] = {
-                    maxx[u][i - 1], maxx[p[u][i - 1]][i - 1],
-                    minn[u][i - 1], minn[p[u][i - 1]][i - 1]
+                    maxWeight[u][i - 1], maxWeight[p[u][i - 1]][i - 1],
+                    secWeight[u][i - 1], secWeight[p[u][i - 1]][i - 1]
                 };
                 sort(temp, temp + 4);
-                maxx[u][i] = temp[3];
+                maxWeight[u][i] = temp[3];
                 int pos = 2;
                 while (pos >= 0 && temp[pos] == temp[3]) pos--;
-                minn[u][i] = (pos == -1 ? -INF : temp[pos]);
+                secWeight[u][i] = (pos == -1 ? -INF : temp[pos]);
             }
             for (auto edge : mst[u]) {
                 int v = edge.v, w = edge.w;
                 if (v != fa) {
-                    maxx[v][0] = w;
+                    maxWeight[v][0] = w;
                     init(v, u, mst);
                 }
             }
@@ -68,8 +67,8 @@ class Solution {
     public:
         Solution(vector<vector<MSTEdge>> &mst) {
             memset(p, 0, sizeof(p));
-            memset(maxx, 0, sizeof(maxx));
-            memset(minn, 0, sizeof(minn));
+            memset(maxWeight, 0, sizeof(maxWeight));
+            memset(secWeight, 0, sizeof(secWeight));
             memset(depth, 0, sizeof(depth));
             init(1, 0, mst);
         }
@@ -93,8 +92,8 @@ class Solution {
             int res = -INF;
             for (int i = 30; i >= 0; i--) {
                 if (depth[p[x][i]] >= depth[y]) {
-                    if (val != maxx[x][i]) res = max(res, maxx[x][i]);
-                    else res = max(res, minn[x][i]);
+                    if (val != maxWeight[x][i]) res = max(res, maxWeight[x][i]);
+                    else res = max(res, secWeight[x][i]);
                     x = p[x][i];
                 }
             }
@@ -124,7 +123,7 @@ int main() {
             num++;
         }
     }
-    long long ans = INF64;
+    long long ans = 0x3f3f3f3f3f3f3f3f;
     Solution sol(mst);
     for (int i = 0; i < m; i++) {
         int u = edges[i].u, v = edges[i].v, w = edges[i].w;
