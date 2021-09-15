@@ -4,30 +4,38 @@
 #define MAXN 500001
 using namespace std;
 
-int n, m, root, fa[MAXN], ans[MAXN];
-bool visited[MAXN];
+int n, m, root, ans[MAXN];
 vector<int> adj[MAXN];
 vector<pair<int, int>> query[MAXN];
 
-int Find(int x) {
-    return x == fa[x] ? x : fa[x] = Find(fa[x]);
-}
+class Tarjan {
+    private:
+        vector<int> fa, visited;
+        int Find(int x) {
+            return x == fa[x] ? x : fa[x] = Find(fa[x]);
+        }
 
-void tarjan(int u) {
-    fa[u] = u;
-    visited[u] = 1;
-    for (int v : adj[u]) {
-        if (!visited[v]) {
-            tarjan(v);
-            fa[v] = u;
+    public:
+        Tarjan(int n) {
+            fa.resize(n + 1);
+            visited.resize(n + 1);
         }
-    }
-    for (auto q : query[u]) {
-        if (visited[q.first]) {
-            ans[q.second] = Find(q.first);
+        void solve(int u) {
+            fa[u] = u;
+            visited[u] = 1;
+            for (int v : adj[u]) {
+                if (!visited[v]) {
+                    solve(v);
+                    fa[v] = u;
+                }
+            }
+            for (auto q : query[u]) {
+                if (visited[q.first]) {
+                    ans[q.second] = Find(q.first);
+                }
+            }
         }
-    }
-}
+};
 
 int main() {
     scanf("%d %d %d", &n, &m, &root);
@@ -43,7 +51,8 @@ int main() {
         query[x].push_back(make_pair(y, i));
         query[y].push_back(make_pair(x, i));
     }
-    tarjan(root);
+    Tarjan lca(n);
+    lca.solve(root);
     for (int i = 1; i <= m; i++) {
         printf("%d\n", ans[i]);
     }
