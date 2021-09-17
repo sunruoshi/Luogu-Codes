@@ -45,11 +45,9 @@ int main() {
         bool flag = 1;
         for (auto con : cons) {
             if (con.e) uf.Union(mp[con.x], mp[con.y]);
-            else {
-                if (uf.Find(mp[con.x]) == uf.Find(mp[con.y])) {
-                    flag = 0;
-                    break;
-                }
+            else if (uf.Find(mp[con.x]) == uf.Find(mp[con.y])) {
+                flag = 0;
+                break;
             }
         }
         if (flag) printf("YES\n");
