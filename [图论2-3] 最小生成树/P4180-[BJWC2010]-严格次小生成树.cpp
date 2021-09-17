@@ -128,9 +128,8 @@ int main() {
         int u = edges[i].u, v = edges[i].v, w = edges[i].w;
         if (!onMST[i]) {
             int lca = solve.lca(u, v);
-            long long temp1 = solve.query(u, lca, w);
-            long long temp2 = solve.query(v, lca, w);
-            if (max(temp1, temp2) > -INF) ans = min(ans, sum - max(temp1, temp2) + w);
+            long long maxUV = max(solve.query(u, lca, w), solve.query(v, lca, w));
+            if (maxUV > -INF) ans = min(ans, sum - maxUV + w);
         }
     }
     printf("%lld", ans);
