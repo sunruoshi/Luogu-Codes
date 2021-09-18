@@ -39,7 +39,7 @@ int main() {
         scanf("%d %d %d", &u, &v, &w);
         q.push(Edge(u, v, w));
     }
-    UnionFind uf(2 * n);
+    UnionFind uf(n << 1);
     while (q.size()) {
         int u = q.top().u, v = q.top().v, w = q.top().w;
         q.pop();

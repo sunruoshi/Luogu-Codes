@@ -24,7 +24,7 @@ class UnionFind {
 int main() {
     int n, m, q;
     scanf("%d %d %d", &n, &m, &q);
-    UnionFind uf(2 * n);
+    UnionFind uf(n << 1);
     for (int i = 1; i <= m; i++) {
         int x, y;
         scanf("%d %d", &x, &y);
