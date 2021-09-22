@@ -35,12 +35,13 @@ void tarjan(int u) {
 }
 
 int DP(int u) {
-    if (dp[u]) return dp[u];
+    int &res = dp[u];
+    if (res) return res;
     for (int v : dag[u]) {
-        dp[u] = max(dp[u], DP(v));
+        res = max(res, DP(v));
     }
-    dp[u] += w[u];
-    return dp[u];
+    res += w[u];
+    return res;
 }
 
 int main() {
