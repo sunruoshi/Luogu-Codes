@@ -1,9 +1,9 @@
 #include <cstdio>
+#include <cstring>
 #include <vector>
 #include <queue>
+#define MAXN 100001
 using namespace std;
-
-const int MAXN = 100001, INF = 0x3f3f3f3f;
 
 struct Edge {
     int v, w;
@@ -30,7 +30,7 @@ int main() {
         adj[u].push_back(Edge(v, w));
     }
     // Dijkstra
-    fill(dis, dis + MAXN, INF);
+    memset(dis, 0x3f, sizeof(dis));
     dis[s] = 0;
     priority_queue<Node> q;
     q.push(Node(s, 0));
