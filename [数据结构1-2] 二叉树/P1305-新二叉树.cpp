@@ -1,13 +1,10 @@
 #include <cstdio>
-using namespace std;
-
-const int MAXN = 26;
 
 int n, root;
 
 struct Node {
     int left, right;
-} node[MAXN];
+} node[26];
 
 void preOrder(int root) {
     if (root == -1) return;

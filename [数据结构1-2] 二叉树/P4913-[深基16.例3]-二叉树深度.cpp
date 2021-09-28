@@ -1,8 +1,7 @@
 #include <cstdio>
 #include <algorithm>
+#define MAXN 1000001
 using namespace std;
-
-const int MAXN = 1e6 + 1;
 
 int maxDepth;
 
