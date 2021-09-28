@@ -1,9 +1,7 @@
 #include <cstdio>
 #include <cstring>
 
-const int MAXN = 26;
-
-char inOrder[MAXN], preOrder[MAXN];
+char inOrder[26], preOrder[26];
 
 struct Node {
     char val;
