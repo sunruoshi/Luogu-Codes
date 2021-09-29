@@ -1,34 +1,38 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
-#define MAXN 501
-#define MAXT 4000001
-#define INF 0x3f3f3f3f3f3f3f3f
+#define MAXT 4000001 + 100
 using namespace std;
 
-int n, m, a[MAXN], s[MAXT], q[MAXT];
-long long dp[MAXT], sum, ans = INF;
+int cnt[MAXT], sum[MAXT], dp[MAXT];
 
 int main() {
+    int n, m, tmax = 0;
     scanf("%d %d", &n, &m);
     for (int i = 1; i <= n; i++) {
-        scanf("%d", &a[i]);
-        s[++a[i]]++;
-        sum += a[i];
+        int t;
+        scanf("%d", &t);
+        cnt[t]++;
+        sum[t] += t;
+        tmax = max(t, tmax);
     }
-    int max_t = *max_element(a + 1, a + n + 1);
-    int l = 1, r = 1;
-    for (int i = 1; i <= max_t + m; i++) {
-        s[i] += s[i - 1];
-        if (i > m) {
-            int temp = i - m;
-            while (l < r && (dp[temp] - dp[q[r]]) * (s[q[r]] - s[q[r - 1]]) <= (dp[q[r]] - dp[q[r - 1]]) * (s[temp] - s[q[r]])) r--;
-            q[++r] = temp;
+    for (int i = 1; i <= tmax + m; i++) {
+        cnt[i] += cnt[i - 1];
+        sum[i] += sum[i - 1];
+    }
+    memset(dp, 0x3f, sizeof(dp));
+    for (int i = 0; i < m; i++) {
+        dp[i] = cnt[i] * i - sum[i];
+    }
+    for (int i = m; i < tmax + m; i++) {
+        if (cnt[i] == cnt[i - m]) {
+            dp[i] = dp[i - m];
+            continue;
         }
-        while (l < r && dp[q[l]] - i * s[q[l]] >= dp[q[l + 1]] - i * s[q[l + 1]]) l++;
-        dp[i] = dp[q[l]] + i * (s[i] - s[q[l]]);
-        if (i >= max_t) ans = min(ans, dp[i]);
+        for (int j = max(0, i - (m << 1) + 1); j <= max(0, i - m); j++) {
+            dp[i] = min(dp[i], dp[j] + (cnt[i] - cnt[j]) * i - (sum[i] - sum[j]));
+        }
     }
-    printf("%lld", ans - sum);
+    printf("%d", *min_element(dp + tmax, dp + tmax + m));
     return 0;
 }
