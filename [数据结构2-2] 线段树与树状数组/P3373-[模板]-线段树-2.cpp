@@ -1,29 +1,30 @@
 #include <cstdio>
-#include <vector>
-using namespace std;
-
-struct Node {
-    long long val, mul, add;
-};
+#include <cstdlib>
 
 class SegmentTree {
     private:
-        vector<Node> d;
+        struct Node {
+            long long val, mul, add;
+        };
+
+        Node* d;
         int MOD;
-        void build(int s, int t, int root, vector<long long> &a) {
+
+        void build(int s, int t, int root, long long *a) {
             d[root].mul = 1;
             d[root].add = 0;
             if (s == t) {
                 d[root].val = a[s];
                 return;
             }
-            int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+            int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
             build(s, m, left, a);
             build(m + 1, t, right, a);
             d[root].val = (d[left].val + d[right].val) % MOD;
         }
+
         void pushDown(int s, int t, int root) {
-            int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+            int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
             d[left].val = (d[left].val * d[root].mul + d[root].add * (m - s + 1)) % MOD;
             d[right].val = (d[right].val * d[root].mul + d[root].add * (t - m)) % MOD;
             d[left].mul = (d[left].mul * d[root].mul) % MOD;
@@ -34,11 +35,11 @@ class SegmentTree {
             d[root].add = 0;
         }
     public:
-        SegmentTree(int n, int p, vector<long long> &a) {
-            d.resize(n * 3);
-            MOD = p;
+        SegmentTree(int n, int p, long long *a) : MOD(p) {
+            d = (Node*) malloc((n << 2) * sizeof(Node));
             build(1, n, 1, a);
         }
+
         void update_mul(int l, int r, long long v, int s, int t, int root) {
             if (l <= s && t <= r) {
                 d[root].val = (d[root].val * v) % MOD;
@@ -46,27 +47,29 @@ class SegmentTree {
                 d[root].add = (d[root].add * v) % MOD;
                 return;
             }
-            int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+            int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
             if (s != t) pushDown(s, t, root);
             if (l <= m) update_mul(l, r, v, s, m, left);
             if (r > m) update_mul(l, r, v, m + 1, t, right);
             d[root].val = (d[left].val + d[right].val) % MOD;
         }
+
         void update_add(int l, int r, long long v, int s, int t, int root) {
             if (l <= s && t <= r) {
                 d[root].val = (d[root].val + v * (t - s + 1)) % MOD;
                 d[root].add = (d[root].add + v) % MOD;
                 return;
             }
-            int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+            int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
             if (s != t) pushDown(s, t, root);
             if (l <= m) update_add(l, r, v, s, m, left);
             if (r > m) update_add(l, r, v, m + 1, t, right);
             d[root].val = (d[left].val + d[right].val) % MOD;
         }
+
         long long query(int l, int r, int s, int t, int root) {
             if (l <= s && t <= r) return d[root].val;
-            int m = s + ((t - s) >> 1), left = root * 2, right = root * 2 + 1;
+            int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
             if (s != t) pushDown(s, t, root);
             long long res = 0;
             if (l <= m) res = (res + query(l, r, s, m, left)) % MOD;
@@ -78,7 +81,7 @@ class SegmentTree {
 int main() {
     int n, m, p;
     scanf("%d %d %d", &n, &m, &p);
-    vector<long long> a(n + 1);
+    long long a[n + 1];
     for (int i = 1; i <= n; i++) {
         scanf("%lld", &a[i]);
     }
