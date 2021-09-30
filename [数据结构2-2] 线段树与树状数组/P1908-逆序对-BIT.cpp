@@ -1,24 +1,24 @@
 #include <cstdio>
-#include <vector>
 #include <algorithm>
 #define lowbit(i) ((i) & (-i))
 using namespace std;
 
 class BinaryIndexedTree {
     private:
-        vector<int> c;
+        int* c;
+        size_t len;
 
     public:
-        BinaryIndexedTree(int n) {
-            c.resize(n);
+        BinaryIndexedTree(int n) : len(n) {
+            c = (int*) malloc(n * sizeof(int));
         }
-        void update(unsigned pos) {
-            while (pos < c.size()) {
+        void update(size_t pos) {
+            while (pos < len) {
                 c[pos] += 1;
                 pos += lowbit(pos);
             }
         }
-        int query(unsigned pos) {
+        int query(size_t pos) {
             int res = 0;
             while (pos > 0) {
                 res += c[pos];
