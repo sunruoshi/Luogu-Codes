@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <algorithm>
-#define lowbit(i) ((i) & (-i))
 using namespace std;
 
 class BinaryIndexedTree {
@@ -15,14 +14,14 @@ class BinaryIndexedTree {
         void update(size_t pos) {
             while (pos < len) {
                 c[pos] += 1;
-                pos += lowbit(pos);
+                pos += pos & (-pos);
             }
         }
         int query(size_t pos) {
             int res = 0;
             while (pos > 0) {
                 res += c[pos];
-                pos -= lowbit(pos);
+                pos -= pos & (-pos);
             }
             return res;
         }
