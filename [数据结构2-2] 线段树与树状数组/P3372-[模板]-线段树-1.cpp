@@ -31,8 +31,7 @@ class SegmentTree {
         }
 
     public:
-        SegmentTree(int n, long long *a) {
-            d = (Node*) malloc((n << 2) * sizeof(Node));
+        SegmentTree(int n, long long *a) : d((Node*) malloc((n << 2) * sizeof(Node))) {
             build(1, n, 1, a);
         }
 

@@ -35,8 +35,7 @@ class SegmentTree {
             d[root].add = 0;
         }
     public:
-        SegmentTree(int n, int p, long long *a) : MOD(p) {
-            d = (Node*) malloc((n << 2) * sizeof(Node));
+        SegmentTree(int n, int p, long long *a) : d((Node*) malloc((n << 2) * sizeof(Node))), MOD(p) {
             build(1, n, 1, a);
         }
 
