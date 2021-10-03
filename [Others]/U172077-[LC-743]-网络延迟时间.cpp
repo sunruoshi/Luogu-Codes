@@ -1,10 +1,10 @@
 #include <cstdio>
+#include <cstring>
 #include <vector>
 #include <queue>
 #include <algorithm>
+#define INF 0x3f3f3f3f
 using namespace std;
-
-const int MAXN = 101, INF = 0x3f3f3f3f;
 
 struct Edge {
     int v, w;
@@ -19,18 +19,19 @@ struct Node {
     }
 };
 
-int n, m, k, ans, dis[MAXN];
-vector<Edge> adj[MAXN];
-bool visited[MAXN];
-
 int main() {
+    int n, m, k;
     scanf("%d %d %d", &n, &m, &k);
+    int dis[n + 1];
+    bool visited[n + 1];
+    vector<Edge> adj[n + 1];
+    memset(visited, 0, sizeof(visited));
     for (int i = 1; i <= m; i++) {
         int u, v, w;
         scanf("%d %d %d", &u, &v, &w);
         adj[u].push_back(Edge(v, w));
     }
-    fill(dis, dis + MAXN, INF);
+    memset(dis, 0x3f, sizeof(dis));
     dis[k] = 0;
     priority_queue<Node> q;
     q.push(Node(k, 0));
@@ -47,9 +48,7 @@ int main() {
             }
         }
     }
-    for (int i = 1; i <= n; i++) {
-        ans = max(ans, dis[i]);
-    }
+    int ans = *max_element(dis + 1, dis + n + 1);
     if (ans == INF) printf("-1");
     else printf("%d", ans);
     return 0;
