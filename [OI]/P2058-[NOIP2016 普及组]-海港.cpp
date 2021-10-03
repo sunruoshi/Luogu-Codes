@@ -1,7 +1,7 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <queue>
+#define MAXN 100001
 using namespace std;
-
-const int MAXN = 1e5 + 1;
 
 int n, ans, nations[MAXN];
 
@@ -11,14 +11,14 @@ struct People {
 
 int main() {
     scanf("%d", &n);
-    deque<People> today;
+    queue<People> today;
     for (int i = 0; i < n; i++) {
         int t, k;
         scanf("%d %d", &t, &k);
-        while (!today.empty() && t - today.front().time >= 86400) {
+        while (today.size() && t - today.front().time >= 86400) {
             nations[today.front().nation]--;
             if (nations[today.front().nation] == 0) ans--;
-            today.pop_front();
+            today.pop();
         }
         for (int j = 0; j < k; j++) {
             People person;
@@ -26,7 +26,7 @@ int main() {
             person.time = t;
             nations[person.nation]++;
             if (nations[person.nation] == 1) ans++;
-            today.push_back(person);
+            today.push(person);
         }
         printf("%d\n", ans);
     }
