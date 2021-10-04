@@ -14,21 +14,15 @@ int main(){
     for (int t = 1; t * 9 < n; t++) {
         sum = 0;
         for(int d = 9 * t + 2; d <= n; d++){
-            int a = d - 9 * t - 1;
-            int b = a + 2 * t;
-            int c = d - t;
-            sum += freq[a] * freq[b];
-            C[c] += freq[d] * sum;
-            D[d] += freq[c] * sum;
+            sum += freq[d - 9 * t - 1] * freq[d - 7 * t - 1];
+            C[d - t] += freq[d] * sum;
+            D[d] += freq[d - t] * sum;
         }
         sum = 0;
         for (int a = n - 9 * t - 1; a > 0; a--){
-            int b = a + 2 * t;
-            int c = b + 6 * t + 1;
-            int d = a + 9 * t + 1;
-            sum += freq[c] * freq[d];
-            A[a] += freq[b] * sum;
-            B[b] += freq[a] * sum;
+            sum += freq[a + 8 * t + 1] * freq[a + 9 * t + 1];
+            A[a] += freq[a + 2 * t] * sum;
+            B[a + 2 * t] += freq[a] * sum;
         }
     }
     for (int i = 1; i <= m; i++) {
