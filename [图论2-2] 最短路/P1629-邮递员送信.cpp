@@ -2,9 +2,9 @@
 #include <cstring>
 #include <vector>
 #include <queue>
+#define MAXN 1001
+#define INF 0x3f3f3f3f
 using namespace std;
-
-const int MAXN = 1001, INF = 0x3f3f3f3f;
 
 struct Edge {
     int v, w;
@@ -22,14 +22,14 @@ struct Node {
 vector<Edge> adj1[MAXN], adj2[MAXN];
 int n, m, ans, dis1[MAXN], dis2[MAXN];
 
-void dijkstra(int s, vector<Edge> adj[], int dis[]) {
+void dijkstra(int s, vector<Edge>* adj, int* dis) {
     bool visited[MAXN];
     memset(visited, 0, sizeof(visited));
     fill(dis, dis + MAXN, INF);
     priority_queue<Node> q;
     dis[s] = 0;
     q.push(Node(s, 0));
-    while (!q.empty()) {
+    while (q.size()) {
         int u = q.top().v;
         q.pop();
         if (visited[u]) continue;
