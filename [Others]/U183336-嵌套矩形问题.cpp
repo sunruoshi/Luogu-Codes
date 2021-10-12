@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstring>
+#include <string>
 #include <vector>
 #include <algorithm>
 using namespace std;
@@ -11,9 +12,11 @@ struct Rect {
 int DP(int u, int* dp, int* Next, vector<int>* adj) {
     if (dp[u]) return dp[u];
     for (int v : adj[u]) {
-        int temp = DP(v, dp, Next, adj);
-        if (temp > dp[u]) {
-            dp[u] = temp;
+        int res = DP(v, dp, Next, adj);
+        if (res > dp[u]) {
+            dp[u] = res;
+            Next[u] = v;
+        } else if (res == dp[u] && to_string(v) < to_string(Next[u])) {
             Next[u] = v;
         }
     }
@@ -50,6 +53,8 @@ int main() {
         dp[i] = DP(i, dp, Next, adj);
         if (dp[i] > ans) {
             ans = dp[i];
+            start = i;
+        } else if (dp[i] == ans && to_string(i) < to_string(start)) {
             start = i;
         }
     }
