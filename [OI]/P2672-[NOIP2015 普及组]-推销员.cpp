@@ -4,7 +4,7 @@
 using namespace std;
 
 struct Node {
-    int s, a;
+    int dis, val;
 };
 
 int main() {
@@ -18,20 +18,20 @@ int main() {
     memset(rightMax, 0, sizeof(rightMax));
     Node node[n + 1];
     for (int i = 1; i <= n; i++) {
-        scanf("%d", &node[i].s);
+        scanf("%d", &node[i].dis);
     }
     for (int i = 1; i <= n; i++) {
-        scanf("%d", &node[i].a);
+        scanf("%d", &node[i].val);
     }
-    sort(node + 1, node + n + 1, [](Node x, Node y) { return x.a > y.a; });
+    sort(node + 1, node + n + 1, [](Node x, Node y) { return x.val > y.val; });
     for (int i = 1; i <= n; i++) {
-        sum[i] = sum[i - 1] + node[i].a;
+        sum[i] = sum[i - 1] + node[i].val;
     }
     for (int i = 1; i <= n; i++) {
-        leftMax[i] = max(leftMax[i - 1], node[i].s << 1);
+        leftMax[i] = max(leftMax[i - 1], node[i].dis << 1);
     }
     for (int i = n; i >= 1; i--) {
-        rightMax[i] = max(rightMax[i + 1], (node[i].s << 1) + node[i].a);
+        rightMax[i] = max(rightMax[i + 1], (node[i].dis << 1) + node[i].val);
     }
     for (int i = 1; i <= n; i++) {
         printf("%d\n", max(sum[i] + leftMax[i], sum[i - 1] + rightMax[i]));
