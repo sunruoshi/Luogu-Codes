@@ -21,7 +21,7 @@ int main() {
     }
     int ans = 0;
     for (int i = 1; i <= n; i++) {
-        ans += i * ((sum[color[i]][i & 1] + (cnt[color[i]][i & 1] - 2) % MOD * number[i] + MOD) % MOD);
+        ans += i * ((sum[color[i]][i & 1] + (cnt[color[i]][i & 1] - 2) * number[i] + MOD) % MOD);
         ans %= MOD;
     }
     printf("%d", ans);
