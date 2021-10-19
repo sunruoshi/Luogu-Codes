@@ -4,15 +4,16 @@
 #include <algorithm>
 using namespace std;
 
+template<class T>
 class minHeap {
     private:
-        int* heap;
+        T* heap;
         int heapSize;
 
     public:
-        minHeap(int n) : heap((int*) malloc((n + 1) * sizeof(int))), heapSize(0) {}
+        minHeap(int n) : heap((int*) malloc((n + 1) * sizeof(T))), heapSize(0) {}
 
-        void push(int x) {
+        void push(T x) {
             heap[++heapSize] = x;
             int cur = heapSize;
             while (cur > 1) {
@@ -23,8 +24,8 @@ class minHeap {
             }
         }
 
-        int pop() {
-            int res = heap[1];
+        T pop() {
+            T res = heap[1];
             heap[1] = heap[heapSize--];
             int fa = 1;
             while ((fa << 1) <= heapSize) {
@@ -44,7 +45,7 @@ class minHeap {
 
 int main() {
     srand(time(0));
-    minHeap heap(10);
+    minHeap<int> heap(10);
     printf("Input sequence: ");
     for (int i = 1; i <= 10; i++) {
         int num = rand() % 100 + 1;
