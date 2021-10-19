@@ -11,9 +11,9 @@ class minHeap {
         int heapSize;
 
     public:
-        minHeap(int n) : heap((int*) malloc((n + 1) * sizeof(T))), heapSize(0) {}
+        minHeap(const int &n) : heap((int*) malloc((n + 1) * sizeof(T))), heapSize(0) {}
 
-        void push(T x) {
+        void push(const T &x) {
             heap[++heapSize] = x;
             int cur = heapSize;
             while (cur > 1) {
