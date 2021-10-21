@@ -10,7 +10,7 @@ int main() {
     int l = 1, r = n;
     while (l < n && a[l] < a[l + 1]) l++;
     while (r > 1 && a[r] < a[r - 1]) r--;
-    r = n - r - 1;
+    r = n - r + 1;
     if ((l & 1) || (r & 1)) printf("Alice");
     else printf("Bob");
     return 0;
