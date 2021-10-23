@@ -12,13 +12,16 @@ int main() {
         for (auto& x : a) {
             scanf("%lld", &x);
             sum += x;
-            x *= n;
+        }
+        if ((sum << 1) % n) {
+            printf("0\n");
+            continue;
         }
         map<long long, int> cnt;
-        long long res = 0;
+        long long res = 0, target = (sum << 1) / n;
         for (auto& x : a) {
-            res += cnt[sum - x];
-            cnt[x - sum]++;
+            if (x <= target && cnt[target - x]) res += cnt[target - x];
+            cnt[x]++;
         }
         printf("%lld\n", res);
     }
