@@ -8,24 +8,25 @@ class BinaryIndexedTree {
         size_t len;
 
     public:
-        BinaryIndexedTree(int n) : len(n) {
-            c = (int*) malloc(n * sizeof(int));
-        }
-        void update(size_t pos) {
-            while (pos < len) {
-                c[pos] += 1;
-                pos += pos & (-pos);
-            }
-        }
-        int query(size_t pos) {
-            int res = 0;
-            while (pos > 0) {
-                res += c[pos];
-                pos -= pos & (-pos);
-            }
-            return res;
-        }
+        BinaryIndexedTree(int n) : c((int*) malloc(n * sizeof(int))), len(n) {}
+        void update(size_t pos);
+        int query(size_t pos);
 };
+
+void BinaryIndexedTree::update(size_t pos) {
+    while (pos < len) {
+        c[pos] += 1;
+        pos += pos & (-pos);
+    }
+}
+int BinaryIndexedTree::query(size_t pos) {
+    int res = 0;
+    while (pos > 0) {
+        res += c[pos];
+        pos -= pos & (-pos);
+    }
+    return res;
+}
 
 int main() {
     int n;
