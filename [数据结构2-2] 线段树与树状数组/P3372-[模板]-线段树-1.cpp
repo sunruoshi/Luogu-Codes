@@ -1,41 +1,28 @@
 #include <cstdio>
 #include <cstdlib>
 
+template <class T>
 class SegmentTree {
     private:
         struct Node {
-            long long val, tag;
+            T val, tag;
+            Node() : val(0), tag(0) {}
         };
-
+        
         Node* d;
 
-        void build(int s, int t, int root, long long *a);
         void pushDown(int s, int t, int root);
 
     public:
-        SegmentTree(int n, long long *a) : d((Node*) malloc((n << 2) * sizeof(Node))) {
-            build(1, n, 1, a);
-        }
-
-        void update(int l, int r, int v, int s, int t, int root);
-        long long query(int l, int r, int s, int t, int root);
+        SegmentTree(int n) : d((Node*) malloc((n << 2) * sizeof(Node))) {}
+        void update(int l, int r, T v, int s, int t, int root);
+        T query(int l, int r, int s, int t, int root);
 
 };
 
-void SegmentTree::build(int s, int t, int root, long long *a) {
-    d[root].tag = 0;
-    if (s == t) {
-        d[root].val = a[s];
-        return;
-    }
-    int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
-    build(s, m, left, a);
-    build(m + 1, t, right, a);
-    d[root].val = d[left].val + d[right].val;
-}
-
-void SegmentTree::pushDown(int s, int t, int root) {
-    int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
+template <class T>
+void SegmentTree<T>::pushDown(int s, int t, int root) {
+    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
     d[left].val += d[root].tag * (m - s + 1);
     d[right].val += d[root].tag * (t - m);
     d[left].tag += d[root].tag;
@@ -43,24 +30,26 @@ void SegmentTree::pushDown(int s, int t, int root) {
     d[root].tag = 0;
 }
 
-void SegmentTree::update(int l, int r, int v, int s, int t, int root) {
+template <class T>
+void SegmentTree<T>::update(int l, int r, T v, int s, int t, int root) {
     if (l <= s && t <= r) {
         d[root].val += (t - s + 1) * v;
         d[root].tag += v;
         return;
     }
-    int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
+    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
     if (d[root].tag && s != t) pushDown(s, t, root);
     if (l <= m) update(l, r, v, s, m, left);
     if (r > m) update(l, r, v, m + 1, t, right);
     d[root].val = d[left].val + d[right].val;
 }
 
-long long SegmentTree::query(int l, int r, int s, int t, int root) {
+template <class T>
+T SegmentTree<T>::query(int l, int r, int s, int t, int root) {
     if (l <= s && t <= r) return d[root].val;
-    int m = s + ((t - s) >> 1), left = root << 1, right = (root << 1) + 1;
+    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
     if (d[root].tag && s != t) pushDown(s, t, root);
-    long long res = 0;
+    T res = 0;
     if (l <= m) res += query(l, r, s, m, left);
     if (r > m) res += query(l, r, m + 1, t, right);
     return res;
@@ -69,11 +58,12 @@ long long SegmentTree::query(int l, int r, int s, int t, int root) {
 int main() {
     int n, m;
     scanf("%d %d", &n, &m);
-    long long a[n + 1];
+    SegmentTree<long long> st(n);
     for (int i = 1; i <= n; i++) {
-        scanf("%lld", &a[i]);
+        long long v;
+        scanf("%lld", &v);
+        st.update(i, i, v, 1, n, 1);   
     }
-    SegmentTree st(n, a);
     while (m--) {
         int opt, x, y, k;
         scanf("%d %d %d", &opt, &x, &y);
