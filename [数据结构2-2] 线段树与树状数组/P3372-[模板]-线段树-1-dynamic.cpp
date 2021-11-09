@@ -13,7 +13,7 @@ class STNode {
     public:
         static void build(STNode* cur, int l, int r);
         static T query(STNode* cur, int l, int r);
-        static void update(STNode* cur, int l, int r, T tag);
+        static void update(STNode* cur, int l, int r, T v);
 };
 
 template <class T>
