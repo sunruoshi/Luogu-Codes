@@ -53,7 +53,7 @@ T STNode<T>::query(int l, int r) {
 
 template <class T>
 void STNode<T>::update(int l, int r, T v) {
-    if (this->s + 1 == this->t) {
+    if (l <= this->s && this->t <= r) {
         this->val += v * (this->t - this->s);
         this->tag += v;
         return;

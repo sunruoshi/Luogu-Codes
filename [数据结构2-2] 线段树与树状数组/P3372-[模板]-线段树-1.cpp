@@ -5,53 +5,64 @@ template <class T>
 class SegmentTree {
     private:
         struct Node {
+            int s, t;
             T val, tag;
             Node() : val(0), tag(0) {}
         };
-        
+
         Node* d;
 
-        void pushDown(int s, int t, int root);
+        void pushDown(int cur);
 
     public:
         SegmentTree(int n) : d((Node*) malloc((n << 2) * sizeof(Node))) {}
-        void update(int l, int r, T v, int s, int t, int root);
-        T query(int l, int r, int s, int t, int root);
+        void build(int cur, int l, int r);
+        void update(int l, int r, T v, int cur);
+        T query(int l, int r, int cur);
 
 };
 
-template <class T>
-void SegmentTree<T>::pushDown(int s, int t, int root) {
-    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
-    d[left].val += d[root].tag * (m - s + 1);
-    d[right].val += d[root].tag * (t - m);
-    d[left].tag += d[root].tag;
-    d[right].tag += d[root].tag;
-    d[root].tag = 0;
+template <class T> 
+void SegmentTree<T>::build(int cur, int l, int r) {
+    d[cur].s = l;
+    d[cur].t = r;
+    if (l + 1 == r) return;
+    build(cur << 1, l, (l + r) >> 1);
+    build((cur << 1) + 1, (l + r) >> 1, r);
 }
 
 template <class T>
-void SegmentTree<T>::update(int l, int r, T v, int s, int t, int root) {
-    if (l <= s && t <= r) {
-        d[root].val += (t - s + 1) * v;
-        d[root].tag += v;
+void SegmentTree<T>::pushDown(int cur) {
+    int lChild = cur << 1, rChild = (cur << 1) + 1;
+    d[lChild].val += d[cur].tag * (d[lChild].t - d[lChild].s);
+    d[rChild].val += d[cur].tag * (d[rChild].t - d[rChild].s);
+    d[lChild].tag += d[cur].tag;
+    d[rChild].tag += d[cur].tag;
+    d[cur].tag = 0;
+}
+
+template <class T>
+void SegmentTree<T>::update(int l, int r, T v, int cur) {
+    if (l <= d[cur].s && d[cur].t <= r) {
+        d[cur].val += (d[cur].t - d[cur].s) * v;
+        d[cur].tag += v;
         return;
     }
-    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
-    if (d[root].tag && s != t) pushDown(s, t, root);
-    if (l <= m) update(l, r, v, s, m, left);
-    if (r > m) update(l, r, v, m + 1, t, right);
-    d[root].val = d[left].val + d[right].val;
+    int lChild = cur << 1, rChild = (cur << 1) + 1;
+    if (d[cur].tag) pushDown(cur);
+    if (l < (d[cur].s + d[cur].t) >> 1) update(l, r, v, lChild);
+    if (r > (d[cur].s + d[cur].t) >> 1) update(l, r, v, rChild);
+    d[cur].val = d[lChild].val + d[rChild].val;
 }
 
 template <class T>
-T SegmentTree<T>::query(int l, int r, int s, int t, int root) {
-    if (l <= s && t <= r) return d[root].val;
-    int m = (s + t) >> 1, left = root << 1, right = (root << 1) + 1;
-    if (d[root].tag && s != t) pushDown(s, t, root);
+T SegmentTree<T>::query(int l, int r, int cur) {
+    if (l <= d[cur].s && d[cur].t <= r) return d[cur].val;
+    int lChild = cur << 1, rChild = (cur << 1) + 1;
+    if (d[cur].tag) pushDown(cur);
     T res = 0;
-    if (l <= m) res += query(l, r, s, m, left);
-    if (r > m) res += query(l, r, m + 1, t, right);
+    if (l < (d[cur].s + d[cur].t) >> 1) res += query(l, r, lChild);
+    if (r > (d[cur].s + d[cur].t) >> 1) res += query(l, r, rChild);
     return res;
 }
 
@@ -59,19 +70,20 @@ int main() {
     int n, m;
     scanf("%d %d", &n, &m);
     SegmentTree<long long> st(n);
+    st.build(1, 1, n + 1);
     for (int i = 1; i <= n; i++) {
         long long v;
         scanf("%lld", &v);
-        st.update(i, i, v, 1, n, 1);   
+        st.update(i, i + 1, v, 1);   
     }
     while (m--) {
         int opt, x, y, k;
         scanf("%d %d %d", &opt, &x, &y);
         if (opt == 1) {
             scanf("%d", &k);
-            st.update(x, y, k, 1, n, 1);
+            st.update(x, y + 1, k, 1);
         } else {
-            printf("%lld\n", st.query(x, y, 1, n, 1));
+            printf("%lld\n", st.query(x, y + 1, 1));
         }
     }
     return 0;
