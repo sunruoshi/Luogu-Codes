@@ -12,7 +12,7 @@ class SplayNode {
 
     public:
         T key; // key value
-        SplayNode(int k) : L(NULL), R(NULL), F(NULL), key(k) {}
+        SplayNode(T k) : L(NULL), R(NULL), F(NULL), key(k) {}
         
         SplayNode* find(T k);
         SplayNode* insert(T k);
