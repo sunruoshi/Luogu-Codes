@@ -1,5 +1,6 @@
 #include <cstdlib>
 
+template <class T>
 class SplayNode {
     private:
         SplayNode *L, *R, *F; // left-child, right-child, father
@@ -10,23 +11,24 @@ class SplayNode {
         static void splay(SplayNode* x, SplayNode* S);
 
     public:
-        int key; // key value
+        T key; // key value
         SplayNode(int k) : L(NULL), R(NULL), F(NULL), key(k) {}
         
-        SplayNode* find(int k);
-        SplayNode* insert(int k);
+        SplayNode* find(T k);
+        SplayNode* insert(T k);
         SplayNode* max();
         SplayNode* min();
-        SplayNode* next(int k);
-        SplayNode* prev(int k);
+        SplayNode* next(T k);
+        SplayNode* prev(T k);
         
-        static void split(int k, SplayNode* S, SplayNode* &x, SplayNode* &y);
+        static void split(T k, SplayNode* S, SplayNode* &x, SplayNode* &y);
         static void maintain(SplayNode* x, SplayNode* &S);
         static SplayNode* join(SplayNode* x, SplayNode* y);
         static SplayNode* deleteNode(SplayNode *x, SplayNode* S);
 };
 
-void SplayNode::leftRotate() {
+template <class T>
+void SplayNode<T>::leftRotate() {
     SplayNode* y = F;
     F = y->F;                         // set father of x to father of y
     if (F != NULL) {
@@ -39,7 +41,8 @@ void SplayNode::leftRotate() {
     this->R = y;                      // set right-child of x to y
 }
 
-void SplayNode::rightRotate() {
+template <class T>
+void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
     if (F != NULL) {
@@ -52,7 +55,8 @@ void SplayNode::rightRotate() {
     this->L = y;                      // set left-child of x to y
 }
 
-void SplayNode::splay(SplayNode* x, SplayNode* S) {
+template <class T>
+void SplayNode<T>::splay(SplayNode* x, SplayNode* S) {
     SplayNode* root = S->F;
     while (x->F != root) {
         SplayNode* y = x->F;
@@ -78,12 +82,14 @@ void SplayNode::splay(SplayNode* x, SplayNode* S) {
     }
 }
 
-void SplayNode::maintain(SplayNode* x, SplayNode* &S) {
+template <class T>
+void SplayNode<T>::maintain(SplayNode* x, SplayNode* &S) {
     splay(x, S);
     S = x;
 }
 
-SplayNode* SplayNode::find(int k) { // splay x to root after found x
+template <class T>
+SplayNode<T>* SplayNode<T>::find(T k) { // splay x to root after found x
     if (k == key) return this;
     if (k < key) {
         if (L == NULL) return NULL;
@@ -94,7 +100,8 @@ SplayNode* SplayNode::find(int k) { // splay x to root after found x
     }
 }
 
-SplayNode* SplayNode::insert(int k) { // splay x to root after inserted x
+template <class T>
+SplayNode<T>* SplayNode<T>::insert(T k) { // splay x to root after inserted x
     if (k <= key) {
         if (L == NULL) {
             L = new SplayNode(k);
@@ -110,7 +117,8 @@ SplayNode* SplayNode::insert(int k) { // splay x to root after inserted x
     }
 }
 
-SplayNode* SplayNode::deleteNode(SplayNode* x, SplayNode* S) {
+template <class T>
+SplayNode<T>* SplayNode<T>::deleteNode(SplayNode<T>* x, SplayNode<T>* S) {
     splay(x, S);
     SplayNode* a = x->L;
     SplayNode* b = x->R;
@@ -122,17 +130,20 @@ SplayNode* SplayNode::deleteNode(SplayNode* x, SplayNode* S) {
     return join(a, b);
 }
 
-SplayNode* SplayNode::max() {
+template <class T>
+SplayNode<T>* SplayNode<T>::max() {
     if (R == NULL) return this;
     return R->max();
 }
 
-SplayNode* SplayNode::min() {
+template <class T>
+SplayNode<T>* SplayNode<T>::min() {
     if (L == NULL) return this;
     return L->min();
 }
 
-SplayNode* SplayNode::prev(int k) {
+template <class T>
+SplayNode<T>* SplayNode<T>::prev(T k) {
     if (key <= k) {
         if (R == NULL) return this;
         SplayNode* tmp = R->prev(k);
@@ -144,7 +155,8 @@ SplayNode* SplayNode::prev(int k) {
     }
 }
 
-SplayNode* SplayNode::next(int k) {
+template <class T>
+SplayNode<T>* SplayNode<T>::next(T k) {
     if (k <= key) {
         if (L == NULL) return this;
         SplayNode* tmp = L->next(k);
@@ -156,7 +168,8 @@ SplayNode* SplayNode::next(int k) {
     }
 }
 
-SplayNode* SplayNode::join(SplayNode* x, SplayNode* y) {
+template <class T>
+SplayNode<T>* SplayNode<T>::join(SplayNode<T>* x, SplayNode<T>* y) {
     SplayNode* p = x->max();
     splay(p, x);
     p->R = y;
@@ -164,7 +177,8 @@ SplayNode* SplayNode::join(SplayNode* x, SplayNode* y) {
     return p;
 }
 
-void SplayNode::split(int k, SplayNode* S, SplayNode* &x, SplayNode* &y) {
+template <class T>
+void SplayNode<T>::split(T k, SplayNode<T>* S, SplayNode<T>* &x, SplayNode<T>* &y) {
     SplayNode* p = S->find(k);
     splay(p, S);
     x = p->L;
