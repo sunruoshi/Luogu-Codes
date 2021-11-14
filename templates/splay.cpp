@@ -1,3 +1,5 @@
+// template of splay
+// sam@2aliens.net
 #include <cstdlib>
 
 template <class T>

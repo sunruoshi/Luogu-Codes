@@ -1,3 +1,6 @@
+// template of segment tree
+// static version
+// sam@2aliens.net
 #include <cstdlib>
 
 template <class T>

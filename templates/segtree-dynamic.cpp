@@ -1,4 +1,5 @@
 // template of segment tree
+// dynamic version
 // sam@2aliens.net
 #include <cstdlib>
 
