@@ -24,14 +24,14 @@ void STNode<T>::build(int l, int r) {
     this->t = r;
     this->val = 0;
     this->tag = 0;
-    if (l + 1 == r) {                     // return after visit a leaf node
+    if (l + 1 == r) {
         this->lChild = this->rChild = NULL;
         return;
     }
     this->lChild = new STNode;
     this->rChild = new STNode;
-    this->lChild->build(l, (l + r) >> 1); // build left-subtree recursively
-    this->rChild->build((l + r) >> 1, r); // build right-subtree recursively
+    this->lChild->build(l, (l + r) >> 1);
+    this->rChild->build((l + r) >> 1, r);
 }
 
 template <class T>
@@ -55,7 +55,7 @@ T STNode<T>::query(int l, int r) {
 
 template <class T>
 void STNode<T>::update(int l, int r, T v) {
-    if (this->s + 1 == this->t) {
+    if (l <= this->s && this->t <= r) {
         this->val += v * (this->t - this->s);
         this->tag += v;
         return;
