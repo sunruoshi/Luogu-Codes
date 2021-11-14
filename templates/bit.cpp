@@ -1,10 +1,9 @@
 #include <vector>
-using namespace std;
 
 template <class T>
 class BinaryIndexedTree {
     private:
-        vector<T> c;
+        std::vector<T> c;
 
     public:
         BinaryIndexedTree(size_t n) { c.resize(n); }
