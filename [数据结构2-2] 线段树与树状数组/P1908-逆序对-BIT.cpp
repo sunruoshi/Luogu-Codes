@@ -1,26 +1,30 @@
-#include <cstdio>
+#include <iostream>
+#include <vector>
 #include <algorithm>
 using namespace std;
 
+template <class T>
 class BinaryIndexedTree {
     private:
-        int* c;
-        size_t len;
+        vector<T> c;
 
     public:
-        BinaryIndexedTree(int n) : c((int*) malloc(n * sizeof(int))), len(n) {}
-        void update(size_t pos);
-        int query(size_t pos);
+        BinaryIndexedTree(size_t n) { c.resize(n); }
+        void update(size_t pos, T v);
+        T query(size_t pos);
 };
 
-void BinaryIndexedTree::update(size_t pos) {
-    while (pos < len) {
-        c[pos] += 1;
+template <class T>
+void BinaryIndexedTree<T>::update(size_t pos, T v) {
+    while (pos < c.size()) {
+        c[pos] += v;
         pos += pos & (-pos);
     }
 }
-int BinaryIndexedTree::query(size_t pos) {
-    int res = 0;
+
+template <class T>
+T BinaryIndexedTree<T>::query(size_t pos) {
+    T res = 0;
     while (pos > 0) {
         res += c[pos];
         pos -= pos & (-pos);
@@ -29,23 +33,25 @@ int BinaryIndexedTree::query(size_t pos) {
 }
 
 int main() {
+    ios::sync_with_stdio(0);
     int n;
-    scanf("%d", &n);
-    int nums[n], temp[n];
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &nums[i]);
+    cin >> n;
+    vector<int> nums(n + 1), temp(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> nums[i];
         temp[i] = nums[i];
     }
-    sort(temp, temp + n);
-    for (int &num : nums) {
-        num = lower_bound(temp, temp + n, num) - temp + 1;
+    sort(temp.begin() + 1, temp.end());
+    for (int i = 1; i <= n; i++) {
+        int &num = nums[i];
+        num = lower_bound(temp.begin() + 1, temp.end(), num) - temp.begin();
     }
-    BinaryIndexedTree bit(n + 1);
+    BinaryIndexedTree<int> bit(n + 1);
     long long ans = 0;
-    for (int i = n - 1; i >= 0; i--) {
-        bit.update(nums[i]);
+    for (int i = n; i >= 1; i--) {
+        bit.update(nums[i], 1);
         ans += bit.query(nums[i] - 1);
     }
-    printf("%lld", ans);
+    cout << ans;
     return 0;
 }
