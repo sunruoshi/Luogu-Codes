@@ -9,24 +9,22 @@ class SplayNode {
         
         void leftRotate();
         void rightRotate();
-        
-        static void splay(SplayNode* x, SplayNode* S);
 
     public:
-        T key; // key value
-        SplayNode(T k) : L(NULL), R(NULL), F(NULL), key(k) {}
+        T val; // domain of value
+        SplayNode(T v) : L(NULL), R(NULL), F(NULL), val(v) {}
         
-        SplayNode* find(T k);
-        SplayNode* insert(T k);
+        SplayNode* find(T v);
+        SplayNode* insert(T v);
         SplayNode* max();
         SplayNode* min();
-        SplayNode* next(T k);
-        SplayNode* prev(T k);
+        SplayNode* next(T v);
+        SplayNode* prev(T v);
         
-        static void split(T k, SplayNode* S, SplayNode* &x, SplayNode* &y);
-        static void maintain(SplayNode* x, SplayNode* &S);
+        static void splay(SplayNode* x, SplayNode* &S);
+        static void split(T v, SplayNode* &S, SplayNode* &x, SplayNode* &y);
         static SplayNode* join(SplayNode* x, SplayNode* y);
-        static SplayNode* deleteNode(SplayNode *x, SplayNode* S);
+        static SplayNode* deleteNode(SplayNode *x, SplayNode* &S);
 };
 
 template <class T>
@@ -58,7 +56,7 @@ void SplayNode<T>::rightRotate() {
 }
 
 template <class T>
-void SplayNode<T>::splay(SplayNode* x, SplayNode* S) {
+void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
     SplayNode* root = S->F;
     while (x->F != root) {
         SplayNode* y = x->F;
@@ -82,45 +80,40 @@ void SplayNode<T>::splay(SplayNode* x, SplayNode* S) {
             }
         }
     }
-}
-
-template <class T>
-void SplayNode<T>::maintain(SplayNode* x, SplayNode* &S) {
-    splay(x, S);
     S = x;
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::find(T k) { // splay x to root after found x
-    if (k == key) return this;
-    if (k < key) {
+SplayNode<T>* SplayNode<T>::find(T v) { // splay x to root after found x
+    if (v == val) return this;
+    if (v < val) {
         if (L == NULL) return NULL;
-        return L->find(k);
+        return L->find(v);
     } else {
         if (R == NULL) return NULL;
-        return R->find(k);
+        return R->find(v);
     }
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::insert(T k) { // splay x to root after inserted x
-    if (k <= key) {
+SplayNode<T>* SplayNode<T>::insert(T v) { // splay x to root after inserted x
+    if (v <= val) {
         if (L == NULL) {
-            L = new SplayNode(k);
+            L = new SplayNode(v);
             L->F = this;
             return L;
-        } else return L->insert(k);
+        } else return L->insert(v);
     } else {
         if (R == NULL) {
-            R = new SplayNode(k);
+            R = new SplayNode(v);
             R->F = this;
             return R;
-        } else return R->insert(k);
+        } else return R->insert(v);
     }
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::deleteNode(SplayNode<T>* x, SplayNode<T>* S) {
+SplayNode<T>* SplayNode<T>::deleteNode(SplayNode<T>* x, SplayNode<T>* &S) {
     splay(x, S);
     SplayNode* a = x->L;
     SplayNode* b = x->R;
@@ -145,28 +138,28 @@ SplayNode<T>* SplayNode<T>::min() {
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::prev(T k) {
-    if (key <= k) {
+SplayNode<T>* SplayNode<T>::prev(T v) {
+    if (val <= v) {
         if (R == NULL) return this;
-        SplayNode* tmp = R->prev(k);
+        SplayNode* tmp = R->prev(v);
         if (tmp == NULL) return this;
         return tmp;
     } else {
         if (L == NULL) return NULL;
-        return L->prev(k);
+        return L->prev(v);
     }
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::next(T k) {
-    if (k <= key) {
+SplayNode<T>* SplayNode<T>::next(T v) {
+    if (v <= val) {
         if (L == NULL) return this;
-        SplayNode* tmp = L->next(k);
+        SplayNode* tmp = L->next(v);
         if (tmp == NULL) return this;
         return tmp;
     } else {
         if (R == NULL) return NULL;
-        return R->next(k);
+        return R->next(v);
     }
 }
 
@@ -180,7 +173,7 @@ SplayNode<T>* SplayNode<T>::join(SplayNode<T>* x, SplayNode<T>* y) {
 }
 
 template <class T>
-void SplayNode<T>::split(T k, SplayNode<T>* S, SplayNode<T>* &x, SplayNode<T>* &y) {
+void SplayNode<T>::split(T k, SplayNode<T>* &S, SplayNode<T>* &x, SplayNode<T>* &y) {
     SplayNode* p = S->find(k);
     splay(p, S);
     x = p->L;
