@@ -1,3 +1,5 @@
+// template of binary indexed tree
+// sam@2aliens.net
 #include <vector>
 
 template <class T>
