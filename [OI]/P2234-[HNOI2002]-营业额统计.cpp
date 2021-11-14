@@ -9,8 +9,6 @@ class SplayNode {
         void leftRotate();
         void rightRotate();
 
-        static void splay(SplayNode* x, SplayNode* S);
-
     public:
         int key;
 
@@ -19,8 +17,7 @@ class SplayNode {
         SplayNode* insert(int k);
         SplayNode* next(int k);
         SplayNode* prev(int k);
-        
-        static void maintain(SplayNode* x, SplayNode* &S);
+        static void splay(SplayNode* x, SplayNode* &S);
 };
 
 void SplayNode::leftRotate() {
@@ -49,7 +46,7 @@ void SplayNode::rightRotate() {
     this->L = y;
 }
 
-void SplayNode::splay(SplayNode* x, SplayNode* S) {
+void SplayNode::splay(SplayNode* x, SplayNode* &S) {
     SplayNode* root = S->F;
     while (x->F != root) {
         SplayNode* y = x->F;
@@ -73,6 +70,7 @@ void SplayNode::splay(SplayNode* x, SplayNode* S) {
             }
         }
     }
+    S = x;
 }
 
 SplayNode* SplayNode::insert(int k) {
@@ -115,11 +113,6 @@ SplayNode* SplayNode::next(int k) {
     }
 }
 
-void SplayNode::maintain(SplayNode* x, SplayNode* &S) {
-    splay(x, S);
-    S = x;
-}
-
 int main() {
     int n, k;
     scanf("%d %d", &n, &k);
@@ -128,14 +121,14 @@ int main() {
     for (int i = 2; i <= n; i++) {
         scanf("%d", &k);
         SplayNode* pre = root->prev(k);
-        if (pre != NULL) SplayNode::maintain(pre, root);
+        if (pre != NULL) SplayNode::splay(pre, root);
         SplayNode* nex = root->next(k);
-        if (nex != NULL) SplayNode::maintain(nex, root);
+        if (nex != NULL) SplayNode::splay(nex, root);
         if (pre == NULL) ans += nex->key - k;
         else if (nex == NULL) ans += k - pre->key;
         else ans += std::min(k - pre->key, nex->key - k);
         SplayNode* x = root->insert(k);
-        SplayNode::maintain(x, root);
+        SplayNode::splay(x, root);
     }
     printf("%d", ans);
     return 0;
