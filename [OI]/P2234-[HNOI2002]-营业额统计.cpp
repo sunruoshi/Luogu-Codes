@@ -1,7 +1,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <algorithm>
+using namespace std;
 
+template <class T>
 class SplayNode {
     private:
         SplayNode *L, *R, *F;
@@ -10,17 +12,18 @@ class SplayNode {
         void rightRotate();
 
     public:
-        int key;
+        T val;
+        SplayNode(T v) : L(NULL), R(NULL), F(NULL), val(v) {}
 
-        SplayNode(int k) : L(NULL), R(NULL), F(NULL), key(k) {}
-        
-        SplayNode* insert(int k);
-        SplayNode* next(int k);
-        SplayNode* prev(int k);
+        SplayNode* insert(T v);
+        SplayNode* next(T v);
+        SplayNode* prev(T v);
+
         static void splay(SplayNode* x, SplayNode* &S);
 };
 
-void SplayNode::leftRotate() {
+template <class T>
+void SplayNode<T>::leftRotate() {
     SplayNode* y = F;
     F = y->F;
     if (F != NULL) {
@@ -33,7 +36,8 @@ void SplayNode::leftRotate() {
     this->R = y;
 }
 
-void SplayNode::rightRotate() {
+template <class T>
+void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
     if (F != NULL) {
@@ -46,7 +50,8 @@ void SplayNode::rightRotate() {
     this->L = y;
 }
 
-void SplayNode::splay(SplayNode* x, SplayNode* &S) {
+template <class T>
+void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
     SplayNode* root = S->F;
     while (x->F != root) {
         SplayNode* y = x->F;
@@ -73,62 +78,65 @@ void SplayNode::splay(SplayNode* x, SplayNode* &S) {
     S = x;
 }
 
-SplayNode* SplayNode::insert(int k) {
-    if (k <= key) {
+template <class T>
+SplayNode<T>* SplayNode<T>::insert(T v) {
+    if (v <= val) {
         if (L == NULL) {
-            L = new SplayNode(k);
+            L = new SplayNode(v);
             L->F = this;
             return L;
-        } else return L->insert(k);
+        } else return L->insert(v);
     } else {
         if (R == NULL) {
-            R = new SplayNode(k);
+            R = new SplayNode(v);
             R->F = this;
             return R;
-        } else return R->insert(k);
+        } else return R->insert(v);
     }
 }
 
-SplayNode* SplayNode::prev(int k) {
-    if (key <= k) {
+template <class T>
+SplayNode<T>* SplayNode<T>::prev(T v) {
+    if (val <= v) {
         if (R == NULL) return this;
-        SplayNode* tmp = R->prev(k);
+        SplayNode* tmp = R->prev(v);
         if (tmp == NULL) return this;
         return tmp;
     } else {
         if (L == NULL) return NULL;
-        return L->prev(k);
+        return L->prev(v);
     }
 }
 
-SplayNode* SplayNode::next(int k) {
-    if (k <= key) {
+template <class T>
+SplayNode<T>* SplayNode<T>::next(T v) {
+    if (v <= val) {
         if (L == NULL) return this;
-        SplayNode* tmp = L->next(k);
+        SplayNode* tmp = L->next(v);
         if (tmp == NULL) return this;
         return tmp;
     } else {
         if (R == NULL) return NULL;
-        return R->next(k);
+        return R->next(v);
     }
 }
 
 int main() {
     int n, k;
     scanf("%d %d", &n, &k);
-    SplayNode* root = new SplayNode(k);
+    SplayNode<int>* root = new SplayNode<int>(k);
     int ans = k;
     for (int i = 2; i <= n; i++) {
         scanf("%d", &k);
-        SplayNode* pre = root->prev(k);
-        if (pre != NULL) SplayNode::splay(pre, root);
-        SplayNode* nex = root->next(k);
-        if (nex != NULL) SplayNode::splay(nex, root);
-        if (pre == NULL) ans += nex->key - k;
-        else if (nex == NULL) ans += k - pre->key;
-        else ans += std::min(k - pre->key, nex->key - k);
-        SplayNode* x = root->insert(k);
-        SplayNode::splay(x, root);
+        SplayNode<int>* pre = root->prev(k);
+        if (pre != NULL) SplayNode<int>::splay(pre, root);
+        SplayNode<int>* nex = root->next(k);
+        if (nex != NULL) SplayNode<int>::splay(nex, root);
+        if (pre == NULL) ans += nex->val - k;
+        else if (nex == NULL) ans += k - pre->val;
+        else ans += std::min(k - pre->val, nex->val - k);
+        SplayNode<int>* x = root->insert(k);
+        SplayNode<int>::splay(x, root);
     }
     printf("%d", ans);
     return 0;
