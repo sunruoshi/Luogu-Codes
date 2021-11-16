@@ -140,9 +140,9 @@ template <class T>
 SplayNode<T>* SplayNode<T>::prev(T v) {
     if (val <= v) {
         if (!R) return this;
-        SplayNode* tmp = R->prev(v);
-        if (!tmp) return this;
-        return tmp;
+        SplayNode* res = R->prev(v);
+        if (!res) return this;
+        return res;
     } else {
         if (!L) return NULL;
         return L->prev(v);
@@ -153,9 +153,9 @@ template <class T>
 SplayNode<T>* SplayNode<T>::next(T v) {
     if (v <= val) {
         if (!L) return this;
-        SplayNode* tmp = L->next(v);
-        if (!tmp) return this;
-        return tmp;
+        SplayNode* res = L->next(v);
+        if (!res) return this;
+        return res;
     } else {
         if (!R) return NULL;
         return R->next(v);
