@@ -52,11 +52,10 @@ void SplayNode<T>::leftRotate() {
 
 template <class T>
 void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
-    SplayNode* root = S->F;
-    while (x->F != root) {
+    while (x->F != NULL) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
-        if (z == root) {
+        if (z == NULL) {
             if (y->L == x) x->rightRotate();
             else x->leftRotate();
         } else {
