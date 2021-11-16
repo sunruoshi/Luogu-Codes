@@ -31,11 +31,11 @@ template <class T>
 void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
-    if (F != NULL) {
+    if (F) {
         if (F->L == y) F->L = this;
         else F->R = this;
     }
-    if (R != NULL) R->F = y;
+    if (R) R->F = y;
     y->L = R;
     y->F = this;
     this->R = y;
@@ -45,11 +45,11 @@ template <class T>
 void SplayNode<T>::leftRotate() {
     SplayNode* y = F;
     F = y->F;
-    if (F != NULL) {
+    if (F) {
         if (F->L == y) F->L = this;
         else F->R = this;
     }
-    if (L != NULL) L->F = y;
+    if (L) L->F = y;
     y->R = L;
     y->F = this;
     this->L = y;
@@ -57,10 +57,10 @@ void SplayNode<T>::leftRotate() {
 
 template <class T>
 void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
-    while (x->F != NULL) {
+    while (x->F) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
-        if (z == NULL) {
+        if (!z) {
             if (y->L == x) x->rightRotate(); // zig(x)
             else x->leftRotate();            // zag(x)
         } else {
@@ -86,10 +86,10 @@ template <class T>
 SplayNode<T>* SplayNode<T>::find(T v) {
     if (v == val) return this;
     if (v < val) {
-        if (L == NULL) return NULL;
+        if (!L) return NULL;
         return L->find(v);
     } else {
-        if (R == NULL) return NULL;
+        if (!R) return NULL;
         return R->find(v);
     }
 }
@@ -97,13 +97,13 @@ SplayNode<T>* SplayNode<T>::find(T v) {
 template <class T>
 SplayNode<T>* SplayNode<T>::insert(T v) {
     if (v <= val) {
-        if (L == NULL) {
+        if (!L) {
             L = new SplayNode(v);
             L->F = this;
             return L;
         } else return L->insert(v);
     } else {
-        if (R == NULL) {
+        if (!R) {
             R = new SplayNode(v);
             R->F = this;
             return R;
@@ -117,34 +117,34 @@ SplayNode<T>* SplayNode<T>::deleteNode(SplayNode<T>* x, SplayNode<T>* &S) {
     SplayNode* a = x->L;
     SplayNode* b = x->R;
     delete x;
-    if (a != NULL) a->F = NULL;
-    if (b != NULL) b->F = NULL;
-    if (a == NULL) return b;
-    if (b == NULL) return a;
+    if (a) a->F = NULL;
+    if (b) b->F = NULL;
+    if (!a) return b;
+    if (!b) return a;
     return join(a, b);
 }
 
 template <class T>
 SplayNode<T>* SplayNode<T>::max() {
-    if (R == NULL) return this;
+    if (!R) return this;
     return R->max();
 }
 
 template <class T>
 SplayNode<T>* SplayNode<T>::min() {
-    if (L == NULL) return this;
+    if (!L) return this;
     return L->min();
 }
 
 template <class T>
 SplayNode<T>* SplayNode<T>::prev(T v) {
     if (val <= v) {
-        if (R == NULL) return this;
+        if (!R) return this;
         SplayNode* tmp = R->prev(v);
-        if (tmp == NULL) return this;
+        if (!tmp) return this;
         return tmp;
     } else {
-        if (L == NULL) return NULL;
+        if (!L) return NULL;
         return L->prev(v);
     }
 }
@@ -152,12 +152,12 @@ SplayNode<T>* SplayNode<T>::prev(T v) {
 template <class T>
 SplayNode<T>* SplayNode<T>::next(T v) {
     if (v <= val) {
-        if (L == NULL) return this;
+        if (!L) return this;
         SplayNode* tmp = L->next(v);
-        if (tmp == NULL) return this;
+        if (!tmp) return this;
         return tmp;
     } else {
-        if (R == NULL) return NULL;
+        if (!R) return NULL;
         return R->next(v);
     }
 }

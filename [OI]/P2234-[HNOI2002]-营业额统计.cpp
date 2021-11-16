@@ -26,11 +26,11 @@ template <class T>
 void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
-    if (F != NULL) {
+    if (F) {
         if (F->L == y) F->L = this;
         else F->R = this;
     }
-    if (R != NULL) R->F = y;
+    if (R) R->F = y;
     y->L = R;
     y->F = this;
     this->R = y;
@@ -40,11 +40,11 @@ template <class T>
 void SplayNode<T>::leftRotate() {
     SplayNode* y = F;
     F = y->F;
-    if (F != NULL) {
+    if (F) {
         if (F->L == y) F->L = this;
         else F->R = this;
     }
-    if (L != NULL) L->F = y;
+    if (L) L->F = y;
     y->R = L;
     y->F = this;
     this->L = y;
@@ -52,10 +52,10 @@ void SplayNode<T>::leftRotate() {
 
 template <class T>
 void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
-    while (x->F != NULL) {
+    while (x->F) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
-        if (z == NULL) {
+        if (!z) {
             if (y->L == x) x->rightRotate();
             else x->leftRotate();
         } else {
@@ -80,13 +80,13 @@ void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
 template <class T>
 SplayNode<T>* SplayNode<T>::insert(T v) {
     if (v <= val) {
-        if (L == NULL) {
+        if (!L) {
             L = new SplayNode(v);
             L->F = this;
             return L;
         } else return L->insert(v);
     } else {
-        if (R == NULL) {
+        if (!R) {
             R = new SplayNode(v);
             R->F = this;
             return R;
@@ -97,12 +97,12 @@ SplayNode<T>* SplayNode<T>::insert(T v) {
 template <class T>
 SplayNode<T>* SplayNode<T>::prev(T v) {
     if (val <= v) {
-        if (R == NULL) return this;
+        if (!R) return this;
         SplayNode* tmp = R->prev(v);
-        if (tmp == NULL) return this;
+        if (!tmp) return this;
         return tmp;
     } else {
-        if (L == NULL) return NULL;
+        if (!L) return NULL;
         return L->prev(v);
     }
 }
@@ -110,12 +110,12 @@ SplayNode<T>* SplayNode<T>::prev(T v) {
 template <class T>
 SplayNode<T>* SplayNode<T>::next(T v) {
     if (v <= val) {
-        if (L == NULL) return this;
+        if (!L) return this;
         SplayNode* tmp = L->next(v);
-        if (tmp == NULL) return this;
+        if (!tmp) return this;
         return tmp;
     } else {
-        if (R == NULL) return NULL;
+        if (!R) return NULL;
         return R->next(v);
     }
 }
@@ -128,11 +128,11 @@ int main() {
     for (int i = 2; i <= n; i++) {
         scanf("%d", &k);
         SplayNode<int>* pre = root->prev(k);
-        if (pre != NULL) SplayNode<int>::splay(pre, root);
+        if (pre) SplayNode<int>::splay(pre, root);
         SplayNode<int>* nex = root->next(k);
-        if (nex != NULL) SplayNode<int>::splay(nex, root);
-        if (pre == NULL) ans += nex->val - k;
-        else if (nex == NULL) ans += k - pre->val;
+        if (nex) SplayNode<int>::splay(nex, root);
+        if (!pre) ans += nex->val - k;
+        else if (!nex) ans += k - pre->val;
         else ans += std::min(k - pre->val, nex->val - k);
         SplayNode<int>* x = root->insert(k);
         SplayNode<int>::splay(x, root);
