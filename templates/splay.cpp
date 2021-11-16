@@ -5,13 +5,13 @@
 template <class T>
 class SplayNode {
     private:
-        SplayNode *L, *R, *F; // left-child, right-child, father
+        SplayNode *L, *R, *F;
         
         void leftRotate();
         void rightRotate();
 
     public:
-        T val; // domain of value
+        T val;
         SplayNode(T v) : L(NULL), R(NULL), F(NULL), val(v) {}
         
         SplayNode* find(T v);
@@ -28,20 +28,6 @@ class SplayNode {
 };
 
 template <class T>
-void SplayNode<T>::leftRotate() {
-    SplayNode* y = F;
-    F = y->F;                         // set father of x to father of y
-    if (F != NULL) {
-        if (F->L == y) F->L = this;   // if y is a left-child, set x to a left-child
-        else F->R = this;             // else set x to a right-child
-    }
-    if (R != NULL) R->F = y;          // set father of right-child to y
-    y->L = R;                         // set left-child of y to right-child of x
-    y->F = this;                      // set father of y to x
-    this->R = y;                      // set right-child of x to y
-}
-
-template <class T>
 void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
@@ -49,10 +35,24 @@ void SplayNode<T>::rightRotate() {
         if (F->L == y) F->L = this;
         else F->R = this;
     }
-    if (L != NULL) L->F = y;          // set father of left-child to y
-    y->R = L;                         // set right-child of y to left-child of x
+    if (R != NULL) R->F = y;
+    y->L = R;
     y->F = this;
-    this->L = y;                      // set left-child of x to y
+    this->R = y;
+}
+
+template <class T>
+void SplayNode<T>::leftRotate() {
+    SplayNode* y = F;
+    F = y->F;
+    if (F != NULL) {
+        if (F->L == y) F->L = this;
+        else F->R = this;
+    }
+    if (L != NULL) L->F = y;
+    y->R = L;
+    y->F = this;
+    this->L = y;
 }
 
 template <class T>
@@ -62,21 +62,21 @@ void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
         if (z == root) {
-            if (y->L == x) x->leftRotate(); // zig(x)
-            else x->rightRotate();          // zag(x)
+            if (y->L == x) x->rightRotate(); // zig(x)
+            else x->leftRotate();            // zag(x)
         } else {
             if (y->L == x && z->L == y) {
-                y->leftRotate();            // zig(y) - zig(x)
-                x->leftRotate();
+                y->rightRotate();            // zig(y) - zig(x)
+                x->rightRotate();
             } else if (y->L == x && z->R == y) {
-                x->leftRotate();            // zig(x) - zag(x)
-                x->rightRotate();
-            } else if (y->R == x && z->R == y) {
-                y->rightRotate();           // zag(y) - zag(x)
-                x->rightRotate();
-            } else {
-                x->rightRotate();           // zag(x) - zig(x)
+                x->rightRotate();            // zig(x) - zag(x)
                 x->leftRotate();
+            } else if (y->R == x && z->R == y) {
+                y->leftRotate();             // zag(y) - zag(x)
+                x->leftRotate();
+            } else {
+                x->leftRotate();             // zag(x) - zig(x)
+                x->rightRotate();
             }
         }
     }
@@ -84,7 +84,7 @@ void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::find(T v) { // splay x to root after found x
+SplayNode<T>* SplayNode<T>::find(T v) {
     if (v == val) return this;
     if (v < val) {
         if (L == NULL) return NULL;
@@ -96,7 +96,7 @@ SplayNode<T>* SplayNode<T>::find(T v) { // splay x to root after found x
 }
 
 template <class T>
-SplayNode<T>* SplayNode<T>::insert(T v) { // splay x to root after inserted x
+SplayNode<T>* SplayNode<T>::insert(T v) {
     if (v <= val) {
         if (L == NULL) {
             L = new SplayNode(v);

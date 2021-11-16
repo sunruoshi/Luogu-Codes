@@ -23,7 +23,7 @@ class SplayNode {
 };
 
 template <class T>
-void SplayNode<T>::leftRotate() {
+void SplayNode<T>::rightRotate() {
     SplayNode* y = F;
     F = y->F;
     if (F != NULL) {
@@ -37,7 +37,7 @@ void SplayNode<T>::leftRotate() {
 }
 
 template <class T>
-void SplayNode<T>::rightRotate() {
+void SplayNode<T>::leftRotate() {
     SplayNode* y = F;
     F = y->F;
     if (F != NULL) {
@@ -57,21 +57,21 @@ void SplayNode<T>::splay(SplayNode* x, SplayNode* &S) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
         if (z == root) {
-            if (y->L == x) x->leftRotate();
-            else x->rightRotate();
+            if (y->L == x) x->rightRotate();
+            else x->leftRotate();
         } else {
             if (y->L == x && z->L == y) {
-                y->leftRotate();
-                x->leftRotate();
-            } else if (y->L == x && z->R == y) {
-                x->leftRotate();
-                x->rightRotate();
-            } else if (y->R == x && z->R == y) {
                 y->rightRotate();
                 x->rightRotate();
-            } else {
+            } else if (y->L == x && z->R == y) {
                 x->rightRotate();
                 x->leftRotate();
+            } else if (y->R == x && z->R == y) {
+                y->leftRotate();
+                x->leftRotate();
+            } else {
+                x->leftRotate();
+                x->rightRotate();
             }
         }
     }
