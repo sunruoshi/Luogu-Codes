@@ -39,6 +39,7 @@ class List<T>::Iterator {
     public:
         T val;
         Iterator *prev, *next;
+        
         Iterator(T x = 0, Iterator* p = NULL, Iterator* n = NULL) : val(x), prev(p), next(n) {}
 
         bool operator == (const Iterator &other) const;
@@ -172,8 +173,8 @@ T List<T>::back() {
 
 template <class T>
 typename List<T>::Iterator List<T>::find(const T &x) {
-    Iterator* p = head;
-    while (p->next) {
+    Iterator* p = head->next;
+    while (p != tail) {
         if (x == p->val) break;
         p = p->next;
     }
