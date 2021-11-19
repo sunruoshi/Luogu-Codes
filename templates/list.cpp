@@ -39,8 +39,9 @@ class List<T>::Iterator {
     public:
         T val;
         Iterator *prev, *next;
-        
-        Iterator(T x = 0, Iterator* p = NULL, Iterator* n = NULL) : val(x), prev(p), next(n) {}
+
+        Iterator() {}
+        Iterator(T x) : val(x), prev(NULL), next(NULL) {}
 
         bool operator == (const Iterator &other) const;
         bool operator != (const Iterator &other) const;
