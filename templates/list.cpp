@@ -11,7 +11,6 @@ class List {
         List() : len(0), head(new Iterator), tail(new Iterator) {
             head->next = tail;
             tail->prev = head;
-            rear = head;
         }
 
         Iterator begin();
@@ -31,7 +30,7 @@ class List {
         size_t size();
 
     private:
-        Iterator *head, *tail, *rear;
+        Iterator *head, *tail;
 };
 
 template <class T>
@@ -123,11 +122,11 @@ void List<T>::push_front(const T &x) {
 template <class T>
 void List<T>::push_back(const T &x) {
     Iterator* p = new Iterator(x);
-    rear->next = p;
-    p->prev = rear;
+    Iterator* pre = tail->prev;
+    pre->next = p;
+    p->prev = pre;
     p->next = tail;
     tail->prev = p;
-    rear = p;
     this->len++;
 }
 
@@ -147,7 +146,6 @@ void List<T>::pop_back() {
     Iterator* pre = tmp->prev;
     pre->next = tail;
     tail->prev = pre;
-    rear = pre;
     delete(tmp);
     this->len--;
 }
@@ -169,7 +167,7 @@ T List<T>::front() {
 
 template <class T>
 T List<T>::back() {
-    return rear->val;
+    return tail->prev->val;
 }
 
 template <class T>
