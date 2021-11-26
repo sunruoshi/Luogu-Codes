@@ -1,36 +1,62 @@
 #include <cstdio>
-#include <list>
-using namespace std;
+#include <cstdlib>
+#include <cstring>
 
-int n, m;
-list<int> q; // 空链表q
-list<int>::iterator pos[100001]; // 链表迭代器数组pos
-bool erased[100001]; // 标记当前位置是否被删除了
+struct Node {
+    int id;
+    Node *prev, *next;
+    Node(int i = 0) : id(i), prev(NULL), next(NULL) {}
+};
 
 int main() {
-    q.push_back(1); // 将1号同学加入链表q
-    pos[1] = q.begin(); // 将对应的地址加入pos
+    int n, m;
     scanf("%d", &n);
+
+    Node* a[n + 1];
+    bool erased[n + 1];
+    memset(erased, 0, sizeof(erased));
+
+    Node* head = new Node;
+    Node* tail = new Node;
+    Node* p = new Node(1);
+    p->prev = head;
+    p->next = tail;
+    head->next = p;
+    tail->prev = p;
+    a[1] = p;
+
     for (int i = 2; i <= n; i++) {
-        int k, p;
-        scanf("%d%d", &k, &p);
-        list<int>::iterator it = pos[k]; // 第k个同学的地址
-        if (p == 1) it++; // 如果p==1，需要插入到右边，需要将it右移一位
-        pos[i] = q.insert(it, i); // 插入操作，同时记录下地址
+        int k, opt;
+        scanf("%d %d", &k, &opt);
+        p = new Node(i);
+        Node* pre = opt ? a[k] : a[k]->prev;
+        p->next = pre->next;
+        pre->next->prev = p;
+        pre->next = p;
+        p->prev = pre;
+        a[i] = p;
     }
+
     scanf("%d", &m);
-    for (int i = 1; i <= m; i++) {
-        int d;
-        scanf("%d", &d);
-        if (!erased[d]) { // 如果当前位置没有被删除
-            q.erase(pos[d]); // 删除操作
-            erased[d] = true; // 标记当前位置已被删除
+    while (m--) {
+        int x;
+        scanf("%d", &x);
+        if (!erased[x]) {
+            Node* pre = a[x]->prev;
+            Node* nex = a[x]->next;
+            pre->next = nex;
+            nex->prev = pre;
+            delete(a[x]);
+            erased[x] = 1;
         }
     }
-    for (list<int>::iterator i = q.begin(); i != q.end(); i++) {
-        printf("%d", *i);
-        if (i != --q.end()) printf(" ");
-        else printf("\n");
+
+    p = head->next;
+    while (p != tail) {
+        printf("%d", p->id);
+        p = p->next;
+        if (p == tail) printf("\n");
+        else printf(" ");
     }
     return 0;
 }
