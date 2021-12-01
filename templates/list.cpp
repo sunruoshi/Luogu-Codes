@@ -136,7 +136,7 @@ void List<T>::pop_front() {
     Iterator* nex = tmp->next;
     head->next = nex;
     nex->prev = head;
-    delete(tmp);
+    delete tmp;
     this->len--;
 }
 
@@ -146,7 +146,7 @@ void List<T>::pop_back() {
     Iterator* pre = tmp->prev;
     pre->next = tail;
     tail->prev = pre;
-    delete(tmp);
+    delete tmp;
     this->len--;
 }
 
@@ -200,7 +200,7 @@ typename List<T>::Iterator List<T>::erase(const Iterator &it) {
     Iterator* tmp = pre->next;
     pre->next = nex;
     nex->prev = pre;
-    delete(tmp);
+    delete tmp;
     this->len--;
     return *(pre->next);
 }
