@@ -5,105 +5,97 @@ struct SplayNode {
     int val;
     SplayNode *L, *R, *F;
     SplayNode(int x) : val(x), L(NULL), R(NULL), F(NULL) {}
-
-    void rightRotate();
-    void leftRotate();
-    static void splay(SplayNode* x, SplayNode* &root);
-
-    SplayNode* insert(int x);
-    SplayNode* pred(int x);
-    SplayNode* succ(int x);
 };
 
-void SplayNode::rightRotate() {
-    SplayNode* y = F;
-    F = y->F;
-    if (F) {
-        if (y == F->L) F->L = this;
-        else F->R = this;
+void rightRotate(SplayNode* &cur) {
+    SplayNode* y = cur->F;
+    cur->F = y->F;
+    if (cur->F) {
+        if (y == cur->F->L) cur->F->L = cur;
+        else cur->F->R = cur;
     }
-    if (R) R->F = y;
-    y->L = R;
-    y->F = this;
-    this->R = y;
+    if (cur->R) cur->R->F = y;
+    y->L = cur->R;
+    y->F = cur;
+    cur->R = y;
 }
 
-void SplayNode::leftRotate() {
-    SplayNode* y = F;
-    F = y->F;
-    if (F) {
-        if (y == F->L) F->L = this;
-        else F->R = this;
+void leftRotate(SplayNode* &cur) {
+    SplayNode* y = cur->F;
+    cur->F = y->F;
+    if (cur->F) {
+        if (y == cur->F->L) cur->F->L = cur;
+        else cur->F->R = cur;
     }
-    if (L) L->F = y;
-    y->R = L;
-    y->F = this;
-    this->L = y;
+    if (cur->L) cur->L->F = y;
+    y->R = cur->L;
+    y->F = cur;
+    cur->L = y;
 }
 
-void SplayNode::splay(SplayNode* x, SplayNode* &root) {
+void splay(SplayNode* x, SplayNode* &root) {
     while (x->F) {
         SplayNode* y = x->F;
         SplayNode* z = y->F;
         if (!z) {
-            if (x == y->L) x->rightRotate();
-            else x->leftRotate();
+            if (x == y->L) rightRotate(x);
+            else leftRotate(x);
         } else {
             if (x == y->L && y == z->L) {
-                y->rightRotate();
-                x->rightRotate();
+                rightRotate(y);
+                rightRotate(x);
             } else if (x == y->L && y == z->R) {
-                x->rightRotate();
-                x->leftRotate();
+                rightRotate(x);
+                leftRotate(x);
             } else if (x == y->R && y == z->R) {
-                y->leftRotate();
-                x->leftRotate();
+                leftRotate(y);
+                leftRotate(x);
             } else {
-                x->leftRotate();
-                x->rightRotate();
+                leftRotate(x);
+                rightRotate(x);
             }
         }
     }
     root = x;
 }
 
-SplayNode* SplayNode::insert(int x) {
-    if (x <= val) {
-        if (!L) {
-            L = new SplayNode(x);
-            L->F = this;
-            return L;
-        } else return L->insert(x);
+SplayNode* insert(SplayNode* &cur, int x) {
+    if (x <= cur->val) {
+        if (!cur->L) {
+            cur->L = new SplayNode(x);
+            cur->L->F = cur;
+            return cur->L;
+        } else return insert(cur->L, x);
     } else {
-        if (!R) {
-            R = new SplayNode(x);
-            R->F = this;
-            return R;
-        } else return R->insert(x);
+        if (!cur->R) {
+            cur->R = new SplayNode(x);
+            cur->R->F = cur;
+            return cur->R;
+        } else return insert(cur->R, x);
     }
 }
 
-SplayNode* SplayNode::pred(int x) {
-    if (x >= val) {
-        if (!R) return this;
-        SplayNode* res = R->pred(x);
-        if (!res) return this;
+SplayNode* findPred(SplayNode* cur, int x) {
+    if (x >= cur->val) {
+        if (!cur->R) return cur;
+        SplayNode* res = findPred(cur->R, x);
+        if (!res) return cur;
         return res;
     } else {
-        if (!L) return NULL;
-        return L->pred(x);
+        if (!cur->L) return NULL;
+        return findPred(cur->L, x);
     }
 }
 
-SplayNode* SplayNode::succ(int x) {
-    if (x <= val) {
-        if (!L) return this;
-        SplayNode* res = L->succ(x);
-        if (!res) return this;
+SplayNode* findSucc(SplayNode* cur, int x) {
+    if (x <= cur->val) {
+        if (!cur->L) return cur;
+        SplayNode* res = findSucc(cur->L, x);
+        if (!res) return cur;
         return res;
     } else {
-        if (!R) return NULL;
-        return R->succ(x);
+        if (!cur->R) return NULL;
+        return findSucc(cur->R, x);
     }
 }
 
@@ -115,15 +107,15 @@ int main() {
     int ans = k;
     for (int i = 2; i <= n; i++) {
         cin >> k;
-        SplayNode* pred = root->pred(k);
-        if (pred) SplayNode::splay(pred, root);
-        SplayNode* succ = root->succ(k);
-        if (succ) SplayNode::splay(succ, root);
+        SplayNode* pred = findPred(root, k);
+        if (pred) splay(pred, root);
+        SplayNode* succ = findSucc(root, k);
+        if (succ) splay(succ, root);
         if (!pred) ans += succ->val - k;
         else if (!succ) ans += k - pred->val;
         else ans += min(k - pred->val, succ->val - k);
-        SplayNode* x = root->insert(k);
-        SplayNode::splay(x, root);
+        SplayNode* x = insert(root, k);
+        splay(x, root);
     }
     cout << ans;
 }
