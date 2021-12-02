@@ -74,6 +74,27 @@ SplayNode* insert(SplayNode* &cur, int x) {
     }
 }
 
+SplayNode* findNode(int x, SplayNode* cur) {
+    if (x == cur->val) return cur;
+    if (x < cur->val) {
+        if (!cur->L) return NULL;
+        return findNode(x, cur->L);
+    } else {
+        if (!cur->R) return NULL;
+        return findNode(x, cur->R);
+    }
+}
+
+SplayNode* findMax(SplayNode* cur) {
+    if (!cur->R) return cur;
+    return findMax(cur->R);
+}
+
+SplayNode* findMin(SplayNode* cur) {
+    if (!cur->L) return cur;
+    return findMin(cur->L);
+}
+
 SplayNode* findPred(SplayNode* cur, int x) {
     if (x >= cur->val) {
         if (!cur->R) return cur;
@@ -96,4 +117,30 @@ SplayNode* findSucc(SplayNode* cur, int x) {
         if (!cur->R) return NULL;
         return findSucc(cur->R, x);
     }
+}
+
+SplayNode* join(SplayNode* x, SplayNode* y) {
+    SplayNode* p = findMax(x);
+    splay(p, x);
+    p->R = y;
+    y->F = p;
+    return p;
+}
+
+SplayNode* deleteNode(SplayNode* x, SplayNode* &root) {
+    splay(x, root);
+    SplayNode *a = x->L, *b = x->R;
+    delete x;
+    if (a) a->F = NULL;
+    if (b) b->F = NULL;
+    if (!a) return b;
+    if (!b) return a;
+    return join(a, b);
+}
+
+void split(int k, SplayNode* &root, SplayNode* &x, SplayNode* &y) {
+    SplayNode* p = findNode(k, root);
+    splay(p, root);
+    x = p->L;
+    y = p->R;
 }
