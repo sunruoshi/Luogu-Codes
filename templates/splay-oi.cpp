@@ -1,3 +1,6 @@
+// template of splay tree
+// OI style
+// sam@2aliens.net
 #include <cstdlib>
 
 struct SplayNode {
