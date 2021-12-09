@@ -6,8 +6,8 @@
 template <class T>
 class STNode {
     private:
-        int s, t;                         // range [s, t)
-        T val, tag;                       // sum of range [s, t), lazytag
+        int st, ed;                       // range [st, ed)
+        T val, tag;                       // sum of range [st, ed), lazytag
         STNode *lChild, *rChild;
 
         void pushDown();                  // push down the lazytag
@@ -20,8 +20,8 @@ class STNode {
 
 template <class T>
 void STNode<T>::build(int l, int r) {
-    this->s = l;
-    this->t = r;
+    this->st = l;
+    this->ed = r;
     this->val = 0;
     this->tag = 0;
     if (l + 1 == r) {
@@ -36,8 +36,8 @@ void STNode<T>::build(int l, int r) {
 
 template <class T>
 void STNode<T>::pushDown() {
-    this->lChild->val += this->tag * (this->lChild->t - this->lChild->s);
-    this->rChild->val += this->tag * (this->rChild->t - this->rChild->s);
+    this->lChild->val += this->tag * (this->lChild->ed - this->lChild->st);
+    this->rChild->val += this->tag * (this->rChild->ed - this->rChild->st);
     this->lChild->tag += this->tag;
     this->rChild->tag += this->tag;
     this->tag = 0;
@@ -45,23 +45,23 @@ void STNode<T>::pushDown() {
 
 template <class T>
 T STNode<T>::query(int l, int r) {
-    if (l <= this->s && this->t <= r) return this->val;
+    if (l <= this->st && this->ed <= r) return this->val;
     if (this->tag) this->pushDown();
     T res = 0;
-    if (l < (this->s + this->t) >> 1) res += this->lChild->query(l, r);
-    if (r > (this->s + this->t) >> 1) res += this->rChild->query(l, r);
+    if (l < (this->st + this->ed) >> 1) res += this->lChild->query(l, r);
+    if (r > (this->st + this->ed) >> 1) res += this->rChild->query(l, r);
     return res;
 }
 
 template <class T>
 void STNode<T>::update(int l, int r, T v) {
-    if (l <= this->s && this->t <= r) {
-        this->val += v * (this->t - this->s);
+    if (l <= this->st && this->ed <= r) {
+        this->val += v * (this->ed - this->st);
         this->tag += v;
         return;
     }
     if (this->tag) this->pushDown();
-    if (l < (this->s + this->t) >> 1) this->lChild->update(l, r, v);
-    if (r > (this->s + this->t) >> 1) this->rChild->update(l, r, v);
+    if (l < (this->st + this->ed) >> 1) this->lChild->update(l, r, v);
+    if (r > (this->st + this->ed) >> 1) this->rChild->update(l, r, v);
     this->val = this->lChild->val + this->rChild->val;
 }
