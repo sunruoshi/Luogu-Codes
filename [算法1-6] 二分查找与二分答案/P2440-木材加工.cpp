@@ -10,7 +10,7 @@ bool check(int d) {
     for (int i = 1; i <= n; i++) {
         cnt += wood[i] / d;
     }
-    return cnt < k ? 0 : 1;
+    return cnt >= k;
 }
 
 int main() {
