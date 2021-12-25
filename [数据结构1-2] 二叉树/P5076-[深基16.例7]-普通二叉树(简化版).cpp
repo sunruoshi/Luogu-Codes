@@ -1,91 +1,83 @@
-#include <cstdio>
+#include <iostream>
+using namespace std;
 
-const int MAXN = 1e4, INF = 2147483647;
+const int INF = (unsigned) (1 << 31) - 1;
 
 struct Node {
-    int val, left, right, size, num;
-    Node() {}
-    Node(int _val, int _left, int _right, int _size, int _num) {
-        val = _val;
-        left = _left;
-        right = _right;
-        size = _size;
-        num = _num;
-    }
-} node[MAXN];
+    int val, size, cnt;
+    Node *L, *R;
+    Node(int x) : val(x), size(1), cnt(1), L(NULL), R(NULL) {}
+};
 
-int idx = 1, root;
-
-int newNode(int v) {
-    node[idx] = Node(v, 0, 0, 1, 1);
-    return idx++;
-}
-
-void update(int root) {
-    int left = node[root].left, right = node[root].right;
-    node[root].size = node[left].size + node[right].size + node[root].num;
-}
-
-int getRank(int x, int root) {
-    if (root) {
-        if (x < node[root].val) return getRank(x, node[root].left);
-        if (x > node[root].val) return getRank(x, node[root].right) + node[node[root].left].size + node[root].num;
-        return node[node[root].left].size + node[root].num;
-    }
-    return 1;
-}
-
-int getNum(int x, int root) {
-    if (x <= node[node[root].left].size) return getNum(x, node[root].left);
-    else if (x <= node[node[root].left].size + node[root].num) return node[root].val;
-    else return getNum(x - node[node[root].left].size - node[root].num, node[root].right);
-}
-
-int findPrev(int x, int root, int res) {
-    if (node[root].val >= x) {
-        if (!node[root].left) return res;
-        else return findPrev(x, node[root].left, res);
-    } else {
-        if (!node[root].right) return node[root].val < x ? node[root].val : res;
-        if (node[root].num) return findPrev(x, node[root].right, node[root].val);
-        else return findPrev(x, node[root].right, res);
-    }
-}
-
-int findNext(int x, int root, int res) {
-    if (node[root].val <= x) {
-        if (!node[root].right) return res;
-        else return findNext(x, node[root].right, res);
-    } else {
-        if (!node[root].left) return node[root].val > x ? node[root].val : res;
-        if (node[root].num) return findNext(x, node[root].left, node[root].val);
-        else return findNext(x, node[root].left, res);
-    }
-}
-
-void insertNode(int &root, int x) {
-    if (!root) {
-        root = newNode(x);
+void insert(Node* &cur, int x) {
+    if (!cur) {
+        cur = new Node(x);
         return;
     }
-    if (x < node[root].val) insertNode(node[root].left, x);
-    else if (x > node[root].val) insertNode(node[root].right, x);
-    else node[root].num++;
-    update(root);
+    cur->size++;
+    if (x < cur->val) insert(cur->L, x);
+    else if (x > cur->val) insert(cur->R, x);
+    else cur->cnt++;
+}
+
+Node* findPred(Node* cur, int x) {
+    if (x > cur->val) {
+        if (!cur->R) return cur;
+        Node* res = findPred(cur->R, x);
+        if (!res) return cur;
+        return res;
+    } else {
+        if (!cur->L) return NULL;
+        else return findPred(cur->L, x);
+    }
+}
+
+Node* findSucc(Node* cur, int x) {
+    if (x < cur->val) {
+        if (!cur->L) return cur;
+        Node* res = findSucc(cur->L, x);
+        if (!res) return cur;
+        return res;
+    } else {
+        if (!cur->R) return NULL;
+        else return findSucc(cur->R, x);
+    }
+}
+
+int getRank(Node* cur, int x) {
+    int sizeL = cur->L ? cur->L->size : 0;
+    if (cur->L && x < cur->val) return getRank(cur->L, x);
+    if (cur->R && x > cur->val) return getRank(cur->R, x) + sizeL + cur->cnt;
+    return sizeL + 1;
+}
+
+Node* findRank(Node* cur, int x) {
+    int sizeL = cur->L ? cur->L->size : 0;
+    if (cur->L && x <= sizeL) return findRank(cur->L, x);
+    if (cur->R && x > sizeL + cur->cnt) return findRank(cur->R, x - sizeL - cur->cnt);
+    return cur;
 }
 
 int main() {
-    int q;
-    scanf("%d", &q);
-    node[0] = Node(0, 0, 0, 0, 0);
+    int q, opt, x;
+    cin >> q;
+    Node* root = NULL;
     while (q--) {
-        int opt, x;
-        scanf("%d %d", &opt, &x);
-        if (opt == 1) printf("%d\n", getRank(x, root));
-        else if (opt == 2) printf("%d\n", getNum(x, root));
-        else if (opt == 3) printf("%d\n", findPrev(x, root, -INF));
-        else if (opt == 4) printf("%d\n", findNext(x, root, INF));
-        else if (opt == 5) insertNode(root, x);
+        cin >> opt >> x;
+        if (opt == 1) {
+            cout << getRank(root, x) << endl;
+        } else if (opt == 2) {
+            cout << findRank(root, x)->val << endl;
+        } else if (opt == 3) {
+            Node* pred = findPred(root, x);
+            cout << (pred ? pred->val : -INF) << endl;
+        } else if (opt == 4) {
+            Node* succ = findSucc(root, x);
+            cout << (succ ? succ->val : INF) << endl;
+        } else if (opt == 5) {
+            if (root) insert(root, x);
+            else root = new Node(x);
+        }
     }
     return 0;
 }
