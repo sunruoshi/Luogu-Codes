@@ -25,8 +25,9 @@ int main() {
     if (l == 1) l = 2;
     memset(notPrime, 0, sizeof(notPrime));
     for (int i = 1; i <= p; i++) {
-        long long start = max((l + primes[i] - 1) / primes[i] * primes[i], primes[i] << 1);
-        for (long long j = start; j <= r; j += primes[i]) {
+        int start = l;
+        while (start % primes[i]) start++;
+        for (long long j = max(start, primes[i] << 1); j <= r; j += primes[i]) {
             notPrime[j - l + 1] = 1;
         }
     }
