@@ -1,33 +1,33 @@
-#include <cstdio>
-#include <cstring>
+#include <iostream>
 using namespace std;
 
+const int MAXN = 1000;
+
+int n, m, g[MAXN + 1][MAXN + 1], d[MAXN + 2][MAXN + 2];
+
 int main() {
-    int n, m;
-    scanf("%d %d", &n, &m);
-    int g[n + 2][n + 2], flag[n + 2][n + 2];
-    memset(g, 0, sizeof(g));
-    memset(flag, 0, sizeof(flag));
+    ios::sync_with_stdio(0);
+    cin >> n >> m;
     for (int i = 1; i <= m; i++) {
         int x1, y1, x2, y2;
-        scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+        cin >> x1 >> y1 >> x2 >> y2;
         for (int j = x1; j <= x2; j++) {
-            flag[j][y1]++;
-            flag[j][y2 + 1]--;
+            d[j][y1]++;
+            d[j][y2 + 1]--;
         }
     }
-    for (int i = 1; i <= n + 1; i++) {
+    for (int i = 1; i <= n; i++) {
         int sum = 0;
-        for (int j = 1; j <= n + 1; j++) {
-            sum += flag[i][j];
+        for (int j = 1; j <= n; j++) {
+            sum += d[i][j];
             g[i][j] = sum;
         }
     }
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
-            printf("%d ", g[i][j]);
+            cout << g[i][j] << ' ';
         }
-        printf("\n");
+        cout << endl;
     }
     return 0;
 }
