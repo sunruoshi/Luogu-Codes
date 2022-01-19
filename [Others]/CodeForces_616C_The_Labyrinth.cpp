@@ -1,11 +1,12 @@
-#include <cstdio>
+#include <iostream>
+#include <string>
 #include <set>
 using namespace std;
 
 const int MAXN = 1001, DIRS[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 int n, m, cnt, ans[MAXN][MAXN];
-char g[MAXN][MAXN];
+string g[MAXN];
 bool vis[MAXN][MAXN];
 set<pair<int, int>> st;
 
@@ -26,9 +27,10 @@ void dfs(int x, int y) {
 }
 
 int main() {
-    scanf("%d %d", &n, &m);
+    ios::sync_with_stdio(0);
+    cin >> n >> m;
     for (int i = 0; i < n; i++) {
-        scanf("%s", g[i]);
+        cin >> g[i];
     }
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -43,10 +45,10 @@ int main() {
     }
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            if (g[i][j] == '.') printf(".");
-            else printf("%d", (ans[i][j] + 1) % 10);
+            if (g[i][j] == '.') cout << '.';
+            else cout << (ans[i][j] + 1) % 10;
         }
-        printf("\n");
+        cout << endl;
     }
     return 0;
 }
