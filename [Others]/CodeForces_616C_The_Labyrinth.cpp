@@ -45,8 +45,7 @@ int main() {
     }
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            if (g[i][j] == '.') cout << '.';
-            else cout << (ans[i][j] + 1) % 10;
+            cout << (g[i][j] == '.' ? '.' : char('0' + (ans[i][j] + 1) % 10));
         }
         cout << endl;
     }
