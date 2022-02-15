@@ -16,8 +16,7 @@ vector<int> mul(vector<int> &A, vector<int> &B) {
         res[i] = t % 10;
         t /= 10;
     }
-    while (res.size() > 500)
-        res.pop_back();
+    while (res.size() > 500) res.pop_back();
     return res;
 }
 
