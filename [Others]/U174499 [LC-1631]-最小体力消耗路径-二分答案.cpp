@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cmath>
-#include <deque>
+#include <queue>
 using namespace std;
 
 struct Node {
@@ -12,36 +12,37 @@ struct Node {
 int main() {
     int n, m, ans = 0, dirs[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
     scanf("%d %d", &n, &m);
-    int heights[n][m];
+    int h[n][m];
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            scanf("%d", &heights[i][j]);
+            scanf("%d", &h[i][j]);
         }
     }
-    int left = 0, right = 1e6 - 1;
-    while (left <= right) {
-        int mid = (left + right) / 2;
-        deque<Node> q;
-        q.push_back(Node(0, 0));
-        bool visited[n * m];
-        memset(visited, 0, sizeof(visited));
-        visited[0] = 1;
+    int l = 0, r = 1e6 - 1;
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        queue<Node> q;
+        q.push(Node(0, 0));
+        bool vis[n][m];
+        memset(vis, 0, sizeof(vis));
+        vis[0][0] = 1;
         while (q.size()) {
             int x = q.front().x, y = q.front().y;
-            q.pop_front();
+            q.pop();
             for (int i = 0; i < 4; i++) {
                 int nx = x + dirs[i][0], ny = y + dirs[i][1];
-                if (nx >= 0 && nx < n && ny >= 0 && ny < m && !visited[m * nx + ny] && abs(heights[x][y] - heights[nx][ny]) <= mid) {
-                    q.push_back(Node(nx, ny));
-                    visited[m * nx + ny] = 1;
+                if (nx < 0 || nx == n || ny < 0 || ny == m) continue;
+                if (!vis[nx][ny] && abs(h[x][y] - h[nx][ny]) <= mid) {
+                    q.push(Node(nx, ny));
+                    vis[nx][ny] = 1;
                 }
             }
         }
-        if (visited[n * m - 1]) {
+        if (vis[n - 1][m - 1]) {
             ans = mid;
-            right = mid - 1;
+            r = mid - 1;
         } else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
     printf("%d", ans);
