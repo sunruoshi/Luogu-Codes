@@ -7,7 +7,7 @@ struct Edge {
     int u, v, w;
 };
 
-int n, m, num, ans;
+int n, m, cnt, ans;
 vector<int> fa;
 
 void make_set() {
@@ -34,16 +34,17 @@ int main() {
     for (int i = 0; i < m; i++) {
         cin >> edges[i].u >> edges[i].v >> edges[i].w;
     }
+    // Kruskal
     make_set();
     sort(edges.begin(), edges.end(), [](Edge a, Edge b) { return a.w < b.w; });
     for (auto edge : edges) {
         if (union_set(edge.u, edge.v)) {
             ans += edge.w;
-            num++;
+            cnt++;
         }
-        if (num == n - 1) break;
+        if (cnt == n - 1) break;
     }
-    if (num != n - 1) cout << "orz";
+    if (cnt != n - 1) cout << "orz";
     else cout << ans;
     return 0;
 }
