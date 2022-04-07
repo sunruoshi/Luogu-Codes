@@ -5,15 +5,16 @@ const int MAXN = 2e5;
 
 int n, ans, c[MAXN + 1], a[MAXN + 1], vis[MAXN + 1];
 
-int cost(int to, int s, int res) {
-    res = min(res, c[to]);
-    return to == s ? res : cost(a[to], s, res);
-}
-
 void dfs(int cur, int s) {
     vis[cur] = s;
     int to = a[cur];
-    if (vis[to] == s) ans += cost(to, cur, c[to]);
+    if (vis[to] == s) {
+        int t = c[cur];
+        for (int i = to; i != cur; i = a[i]) {
+            t = min(t, c[i]);
+        }
+        ans += t;
+    }
     if (!vis[to]) dfs(to, s);
 }
 
