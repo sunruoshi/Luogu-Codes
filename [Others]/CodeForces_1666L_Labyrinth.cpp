@@ -33,13 +33,13 @@ int main() {
         int u = q.front();
         q.pop();
         for (const auto &v : adj[u]) {
+            if (v == s) continue;
             if (!vis[v]) {
                 vis[v] = 1;
                 q.push(v);
                 from[v] = u == s ? v : from[u];
                 pre[v] = u;
             } else {
-                if (v == s) continue;
                 if (u == s || from[u] != from[v]) {
                     cout << "Possible" << endl;
                     print_path(u, 2);
