@@ -109,6 +109,14 @@ nnoremap la ^
 nnoremap ld $
 nnoremap ls <C-d>
 nnoremap lw <C-u>
+nnoremap k gk
+nnoremap gk k
+nnoremap j gj
+nnoremap gj j
+nnoremap ; :
+
+" Cancel highlights of test search
+noremap <silent><leader>/ :nohls<CR>
 
 " Apply changes after save
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
