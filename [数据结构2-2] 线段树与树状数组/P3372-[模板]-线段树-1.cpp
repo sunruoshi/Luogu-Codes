@@ -7,7 +7,7 @@
 
 const int N = 1e5 + 1;
 
-struct segmment_tree {
+struct segment_tree {
     int l, r;
     ll w, t;
 } d[N << 2];
