@@ -3,54 +3,60 @@
 #define ll long long
 #define lc cur << 1
 #define rc (cur << 1) + 1
-#define mid ((s + t) >> 1)
+#define mid ((d[cur].l + d[cur].r) >> 1)
 
 const int N = 1e5 + 1;
 
-int n, m, a[N];
-ll d[N << 2], tag[N << 2];
+struct segmment_tree {
+    int l, r;
+    ll w, t;
+} d[N << 2];
 
+int n, m, a[N];
 
 inline void push_up(int cur) {
-    d[cur] = d[lc] + d[rc];
+    d[cur].w = d[lc].w + d[rc].w;
 }
 
-inline void push_down(int s, int t, int cur = 1) {
-    d[lc] += tag[cur] * (mid - s + 1);
-    d[rc] += tag[cur] * (t - mid);
-    tag[lc] += tag[cur];
-    tag[rc] += tag[cur];
-    tag[cur] = 0;
+inline void push_down(int cur) {
+    d[lc].w += d[cur].t * (mid - d[cur].l + 1);
+    d[rc].w += d[cur].t * (d[cur].r - mid);
+    d[lc].t += d[cur].t;
+    d[rc].t += d[cur].t;
+    d[cur].t = 0;
 }
 
-void build(int s, int t, int cur = 1) {
-    if (s == t) {
-        d[cur] = a[s];
+void build(int l, int r, int cur = 1) {
+    d[cur].l = l;
+    d[cur].r = r;
+    d[cur].t = 0;
+    if (l == r) {
+        d[cur].w = a[l];
         return;
     }
-    build(s, mid, lc);
-    build(mid + 1, t, rc);
+    build(l, mid, lc);
+    build(mid + 1, r, rc);
     push_up(cur);
 }
 
-void update(int l, int r, ll v, int s = 1, int t = n, int cur = 1) {
-    if (l <= s && t <= r) {
-        d[cur] += (t - s + 1) * v;
-        tag[cur] += v;
+void update(int l, int r, ll v, int cur = 1) {
+    if (l <= d[cur].l && d[cur].r <= r) {
+        d[cur].w += (d[cur].r - d[cur].l + 1) * v;
+        d[cur].t += v;
         return;
     }
-    if (s < t && tag[cur]) push_down(s, t, cur);
-    if (l <= mid) update(l, r, v, s, mid, lc);
-    if (r > mid) update(l, r, v, mid + 1, t, rc);
+    if (d[cur].l < d[cur].r && d[cur].t) push_down(cur);
+    if (l <= mid) update(l, r, v, lc);
+    if (r > mid) update(l, r, v, rc);
     push_up(cur);
 }
 
-ll query(int l, int r, int s = 1, int t = n, int cur = 1) {
-    if (l <= s && t <= r) return d[cur];
-    if (s < t && tag[cur]) push_down(s, t, cur);
+ll query(int l, int r, int cur = 1) {
+    if (l <= d[cur].l && d[cur].r <= r) return d[cur].w;
+    if (d[cur].l < d[cur].r && d[cur].t) push_down(cur);
     ll res = 0;
-    if (l <= mid) res = query(l, r, s, mid, lc);
-    if (r > mid) res += query(l, r, mid + 1, t, rc);
+    if (l <= mid) res += query(l, r, lc);
+    if (r > mid) res += query(l, r, rc);
     return res;
 }
 
