@@ -6,11 +6,11 @@ using namespace std;
 const int MAXN = 1e5 + 1;
 
 struct T {
-    int st, ed;
+    int arrive_time, leave_time;
     bool operator < (const T &x) const {
-        return st < x.st;
+        return arrive_time < x.arrive_time;
     }
-} a[MAXN], b[MAXN];
+} t1[MAXN], t2[MAXN];
 
 struct P {
     int leave_time, port_no;
@@ -20,16 +20,16 @@ struct P {
     }
 };
 
-int n, m1, m2, ra[MAXN], rb[MAXN];
+int n, m1, m2, r1[MAXN], r2[MAXN];
 
 void solve(T* t, int m, int* res) {
-    priority_queue<P, vector<P>> plane;
+    priority_queue<P> plane;
     priority_queue<int, vector<int>, greater<int>> port;
     for (int i = 1; i <= n; i++) {
         port.push(i);
     }
     for (int i = 1; i <= m; i++) {
-        while (plane.size() && t[i].st >= plane.top().leave_time) {
+        while (plane.size() && t[i].arrive_time >= plane.top().leave_time) {
             port.push(plane.top().port_no);
             plane.pop();
         }
@@ -37,7 +37,7 @@ void solve(T* t, int m, int* res) {
         int cur = port.top();
         port.pop();
         res[cur]++;
-        plane.push(P(t[i].ed, cur));
+        plane.push(P(t[i].leave_time, cur));
     }
     for (int i = 1; i <= n; i++) {
         res[i] += res[i - 1];
@@ -47,18 +47,18 @@ void solve(T* t, int m, int* res) {
 int main() {
     cin >> n >> m1 >> m2;
     for (int i = 1; i <= m1; i++) {
-        cin >> a[i].st >> a[i].ed;
+        cin >> t1[i].arrive_time >> t1[i].leave_time;
     }
     for (int i = 1; i <= m2; i++) {
-        cin >> b[i].st >> b[i].ed;
+        cin >> t2[i].arrive_time >> t2[i].leave_time;
     }
-    sort(a + 1, a + m1 + 1);
-    sort(b + 1, b + m2 + 1);
-    solve(a, m1, ra);
-    solve(b, m2, rb);
+    sort(t1 + 1, t1 + m1 + 1);
+    sort(t2 + 1, t2 + m2 + 1);
+    solve(t1, m1, r1);
+    solve(t2, m2, r2);
     int ans = 0;
     for (int i = 0; i <= n; i++) {
-        ans = max(ans, ra[i] + rb[n - i]);
+        ans = max(ans, r1[i] + r2[n - i]);
     }
     cout << ans << endl;
     return 0;
