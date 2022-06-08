@@ -6,24 +6,18 @@ using namespace std;
 const int N = 1e5 + 1;
 
 int n, s, t;
-double a[N], b[N], sum[N];
+double a[N], sum[N];
 
 bool check(double x) {
     for (int i = 1; i <= n; i++) {
-        b[i] = a[i] - x;
-    }
-    sum[0] = 0;
-    for (int i = 1; i <= n; i++) {
-        sum[i] = sum[i - 1] + b[i];
+        sum[i] = sum[i - 1] + a[i] - x;
     }
     deque<int> q;
-    for (int i = 1; i <= n; i++) {
-        if (i >= s) {
-            while (q.size() && sum[i - s] < sum[q.back()]) q.pop_back();
-            q.push_back(i - s);
-        }
-        if (q.size() && q.front() < i - t) q.pop_front();
-        if (q.size() && sum[i] - sum[q.front()] >= 0) return 1;
+    for (int i = s; i <= n; i++) {
+        while (q.size() && sum[i - s] < sum[q.back()]) q.pop_back();
+        q.push_back(i - s);
+        while (q.front() < i - t) q.pop_front();
+        if (sum[i] - sum[q.front()] >= 0) return 1;
     }
     return 0;
 }
