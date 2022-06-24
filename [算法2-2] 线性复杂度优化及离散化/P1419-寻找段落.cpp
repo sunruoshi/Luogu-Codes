@@ -33,15 +33,15 @@ int main() {
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
     }
-    double l = -1e4, r = 1e4;
+    double l = -1e4, r = 1e4, ans;
     while (r - l > EPS) {
         double mid = (l + r) / 2;
         if (check(mid)) {
-            l = mid;
+            ans = l = mid;
         } else {
             r = mid;
         }
     }
-    cout << fixed << setprecision(3) << l << endl;
+    cout << fixed << setprecision(3) << ans << endl;
     return 0;
 }
