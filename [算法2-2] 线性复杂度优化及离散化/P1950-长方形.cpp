@@ -28,21 +28,11 @@ int main() {
                 r[s.top()] = j;
                 s.pop();
             }
+            l[j] = s.size() ? s.top() : 0;
             s.push(j);
         }
         while (s.size()) {
             r[s.top()] = m + 1;
-            s.pop();
-        }
-        for (int j = m; j >= 1; j--) {
-            while (s.size() && h[i][s.top()] > h[i][j]) {
-                l[s.top()] = j;
-                s.pop();
-            }
-            s.push(j);
-        }
-        while (s.size()) {
-            l[s.top()] = 0;
             s.pop();
         }
         for (int j = 1; j <= m; j++) {
