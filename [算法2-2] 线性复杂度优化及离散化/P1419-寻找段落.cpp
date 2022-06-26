@@ -7,22 +7,21 @@ const int N = 1e5 + 1;
 const double EPS = 1e-5;
 
 int n, s, t;
-double a[N], sum[N];
+double a[N], b[N];
 
 bool check(double x) {
     for (int i = 1; i <= n; i++) {
-        sum[i] = sum[i - 1] + a[i] - x;
+        b[i] = b[i - 1] + a[i] - x;
     }
     deque<int> q;
-    // 对于一个右端点为 i ，左端点为 i - t + 1 到 i - s + 1 的区间都是合法的
-    // 找到所有合法的区间中和最大的区间
-    // 如果最大区间和大于 0 ，则说明还存在更大的答案。
-    // 否则要缩小答案
-    for (int i = s; i <= n; i++) {
-        while (q.size() && sum[i - s] < sum[q.back()]) q.pop_back();
-        q.push_back(i - s);
-        while (q.front() < i - t) q.pop_front();
-        if (sum[i] - sum[q.front()] > EPS) return 1;
+    // 对于一个右端点为 r ，左端点 l 为 r - t + 1 到 r - s + 1 的区间都是合法的
+    // sum(l, r) = b[r] - b[l - 1];
+    // 滑动窗口+单调队列求所有合法段落的最大和
+    for (int r = s; r <= n; r++) {
+        while (q.size() && b[r - s] < b[q.back()]) q.pop_back();
+        q.push_back(r - s);
+        while (q.front() < r - t) q.pop_front();
+        if (b[r] - b[q.front()] > 0) return 1;
     }
     return 0;
 }
