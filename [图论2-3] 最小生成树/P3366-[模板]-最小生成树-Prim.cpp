@@ -7,10 +7,10 @@ using namespace std;
 const int N = 5001, INF = 0x3f3f3f3f;
 
 struct Vert {
-    int id, dis;
-    Vert(int x, int y) : id(x), dis(y) {}
+    int id, key;
+    Vert(int x, int y) : id(x), key(y) {}
     bool operator < (const Vert &a) const {
-        return dis > a.dis;
+        return key > a.key;
     }
 };
 
