@@ -7,8 +7,8 @@ using namespace std;
 const int N = 5001, INF = 0x3f3f3f3f;
 
 struct Vert {
-    int v, dis;
-    Vert(int a, int b) : v(a), dis(b) {}
+    int id, dis;
+    Vert(int x, int y) : id(x), dis(y) {}
     bool operator < (const Vert &a) const {
         return dis > a.dis;
     }
@@ -32,7 +32,7 @@ int main() {
     priority_queue<Vert> pq;
     pq.push(Vert(1, 0));
     while (pq.size()) {
-        int u = pq.top().v;
+        int u = pq.top().id;
         pq.pop();
         if (vis[u]) continue;
         vis[u] = 1;
