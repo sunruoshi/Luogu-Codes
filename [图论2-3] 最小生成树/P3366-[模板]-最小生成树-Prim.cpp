@@ -19,7 +19,6 @@ vector<pair<int, int>> adj[N];
 bool vis[N];
 
 int main() {
-    int n, m;
     cin >> n >> m;
     while (m--) {
         int u, v, w;
