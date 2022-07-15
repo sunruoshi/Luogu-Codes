@@ -4,25 +4,19 @@
 #include <cstring>
 using namespace std;
 
-const int MAXN = 5000, INF = 0x3f3f3f3f;
+const int N = 5001, INF = 0x3f3f3f3f;
 
-struct Node {
+struct Vert {
     int v, dis;
-    Node(int a, int b) : v(a), dis(b) {}
-    bool operator < (const Node &a) const {
+    Vert(int a, int b) : v(a), dis(b) {}
+    bool operator < (const Vert &a) const {
         return dis > a.dis;
     }
 };
 
-struct Edge {
-    int v, w;
-    Edge() {}
-    Edge(int a, int b) : v(a), w(b) {}
-};
-
-int n, m, cnt, ans, dis[MAXN + 1];
-vector<Edge> adj[MAXN + 1];
-bool vis[MAXN + 1];
+int n, m, cnt, ans, dis[N];
+vector<pair<int, int>> adj[N];
+bool vis[N];
 
 int main() {
     int n, m;
@@ -30,14 +24,14 @@ int main() {
     while (m--) {
         int u, v, w;
         cin >> u >> v >> w;
-        adj[u].push_back(Edge(v, w));
-        adj[v].push_back(Edge(u, w));
+        adj[u].push_back(make_pair(v, w));
+        adj[v].push_back(make_pair(u, w));
     }
     // Prim
     memset(dis, 0x3f, sizeof(dis));
     dis[1] = 0;
-    priority_queue<Node> pq;
-    pq.push(Node(1, 0));
+    priority_queue<Vert> pq;
+    pq.push(Vert(1, 0));
     while (pq.size()) {
         int u = pq.top().v;
         pq.pop();
@@ -46,10 +40,10 @@ int main() {
         ans += dis[u];
         cnt++;
         for (auto e : adj[u]) {
-            int v = e.v, w = e.w;
+            int v = e.first, w = e.second;
             if (!vis[v] && w < dis[v]) {
                 dis[v] = w;
-                pq.push(Node(v, dis[v]));
+                pq.push(Vert(v, dis[v]));
             }
         }
     }
