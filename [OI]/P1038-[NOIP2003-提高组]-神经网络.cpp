@@ -29,7 +29,6 @@ int main() {
     while (q.size()) {
         int x = q.front();
         q.pop();
-        if (c[x] <= 0) continue;
         for (auto e : adj[x]) {
             int y = e.v, w = e.w;
             c[y] += w * c[x];
