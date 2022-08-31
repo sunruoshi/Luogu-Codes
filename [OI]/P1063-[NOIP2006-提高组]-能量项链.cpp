@@ -12,9 +12,8 @@ int main() {
         cin >> a[i];
         a[i + n] = a[i];
     }
-    for (int l = 1; l <= n; l++) {
-        for (int i = 1; i + l <= 2 * n; i++) {
-            int j = i + l;
+    for (int i = (n << 1) - 1; i >= 0; i--) {
+        for (int j = i + 1; j <= (n << 1); j++) {
             for (int k = i + 1; k < j; k++) {
                 dp[i][j] = max(dp[i][j], a[i] * a[k] * a[j] + dp[i][k] + dp[k][j]);
             }
