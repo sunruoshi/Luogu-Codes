@@ -2,9 +2,18 @@
 #include <algorithm>
 using namespace std;
 
-const int N = 1000;
+const int N = 201;
 
 int n, a[N], f[N][N], ans;
+
+int DP(int l, int r) {
+    if (f[l][r]) return f[l][r];
+    if (r - l == 1) return 0;
+    for (int k = l + 1; k < r; k++) {
+        f[l][r] = max(f[l][r], DP(l, k) + DP(k, r) + a[l] * a[k] * a[r]);
+    }
+    return f[l][r];
+}
 
 int main() {
     cin >> n;
@@ -12,6 +21,7 @@ int main() {
         cin >> a[i];
         a[i + n] = a[i];
     }
+    /*
     for (int i = (n << 1) - 1; i >= 0; i--) {
         for (int j = i + 1; j <= (n << 1); j++) {
             for (int k = i + 1; k < j; k++) {
@@ -19,7 +29,8 @@ int main() {
             }
         }
     }
-    for (int i = 1; i <= n; i++) ans = max(ans, f[i][n + i]);
+    */
+    for (int i = 1; i <= n; i++) ans = max(ans, DP(i, n + i));
     cout << ans << endl;
     return 0;
 }
