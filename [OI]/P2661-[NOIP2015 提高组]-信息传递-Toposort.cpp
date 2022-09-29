@@ -1,13 +1,12 @@
-#include <cstdio>
+#include <iostream>
 #include <vector>
-#include <deque>
-#include <algorithm>
+#include <queue>
 using namespace std;
 
-const int MAXN = 200001, INF = 0x3f3f3f3f;
+const int N = 2e5 + 1, INF = 0x3f3f3f3f;
 
-int n, ans = INF, in[MAXN];
-vector<int> adj[MAXN];
+int n, ans = INF, in[N];
+vector<int> adj[N];
 
 void dfs(int u, int s, int len) {
     in[u]--;
@@ -21,28 +20,28 @@ void dfs(int u, int s, int len) {
 }
 
 int main() {
-    scanf("%d", &n);
+    cin >> n;
     for (int u = 1; u <= n; u++) {
         int v;
-        scanf("%d", &v);
+        cin >> v;
         adj[u].push_back(v);
         in[v]++;
     }
-    deque<int> q;
+    queue<int> q;
     for (int i = 1; i <= n; i++) {
-        if (!in[i]) q.push_back(i);
+        if (!in[i]) q.push(i);
     }
     while (q.size()) {
         int u = q.front();
-        q.pop_front();
+        q.pop();
         for (int v : adj[u]) {
             in[v]--;
-            if (!in[v]) q.push_back(v);
+            if (!in[v]) q.push(v);
         }
     }
     for (int i = 1; i <= n; i++) {
         if (in[i]) dfs(i, i, 1);
     }
-    printf("%d", ans);
+    cout << ans << endl;
     return 0;
 }

@@ -1,16 +1,15 @@
-#include <cstdio>
+#include <iostream>
 #include <vector>
-#include <algorithm>
-#define MAXN 200001
 using namespace std;
 
-int n, tag, ans = 0x3f3f3f3f;
-int dfn[MAXN], low[MAXN];
-bool inStack[MAXN];
-vector<int> adj[MAXN], stk;
+const int N = 2e5 + 1, INF = 0x3f3f3f3f;
+
+int n, id, ans = INF, dfn[N], low[N];
+bool inStack[N];
+vector<int> adj[N], stk;
 
 void tarjan(int u) {
-    dfn[u] = low[u] = ++tag;
+    dfn[u] = low[u] = ++id;
     stk.push_back(u);
     inStack[u] = 1;
     for (int v : adj[u]) {
@@ -35,15 +34,15 @@ void tarjan(int u) {
 }
 
 int main() {
-    scanf("%d", &n);
+    cin >> n;
     for (int u = 1; u <= n; u++) {
         int v;
-        scanf("%d", &v);
+        cin >> v;
         adj[u].push_back(v);
     }
     for (int u = 1; u <= n; u++) {
         if (!dfn[u]) tarjan(u);
     }
-    printf("%d", ans);
+    cout << ans << endl;
     return 0;
 }
