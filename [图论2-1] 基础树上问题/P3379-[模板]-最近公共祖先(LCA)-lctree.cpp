@@ -5,18 +5,18 @@
 using namespace std;
 
 int n, m, root;
-int fa[MAXN], depth[MAXN], size[MAXN], son[MAXN], top[MAXN];
+int fa[MAXN], depth[MAXN], siz[MAXN], son[MAXN], top[MAXN];
 vector<int> adj[MAXN];
 
 void dfs1(int u) {
-    size[u] = 1;
+    siz[u] = 1;
     depth[u] = depth[fa[u]] + 1;
     for (int v : adj[u]) {
         if (v == fa[u]) continue;
         fa[v] = u;
         dfs1(v);
-        size[u] += size[v];
-        if (!son[u] || size[v] > size[son[u]]) son[u] = v;
+        siz[u] += siz[v];
+        if (!son[u] || siz[v] > siz[son[u]]) son[u] = v;
     }
 }
 
@@ -30,8 +30,10 @@ void dfs2(int u, int tp) {
 
 int lca(int u, int v) {
     while (top[u] != top[v]) {
-        if (depth[top[u]] > depth[top[v]]) u = fa[top[u]];
-        else v = fa[top[v]];
+        if (depth[top[u]] > depth[top[v]])
+            u = fa[top[u]];
+        else
+            v = fa[top[v]];
     }
     return depth[u] < depth[v] ? u : v;
 }
