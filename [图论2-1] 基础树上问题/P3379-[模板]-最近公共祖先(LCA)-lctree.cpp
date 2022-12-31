@@ -1,12 +1,12 @@
 #include <cstdio>
 #include <vector>
-#include <algorithm>
-#define MAXN 500001
 using namespace std;
 
-int n, m, root;
-int fa[MAXN], depth[MAXN], siz[MAXN], son[MAXN], top[MAXN];
-vector<int> adj[MAXN];
+const int N = 5e5 + 1;
+
+int n, m, s;
+int fa[N], depth[N], siz[N], son[N], top[N];
+vector<int> adj[N];
 
 void dfs1(int u) {
     siz[u] = 1;
@@ -30,28 +30,29 @@ void dfs2(int u, int tp) {
 
 int lca(int u, int v) {
     while (top[u] != top[v]) {
-        if (depth[top[u]] > depth[top[v]])
+        if (depth[top[u]] > depth[top[v]]) {
             u = fa[top[u]];
-        else
+        } else {
             v = fa[top[v]];
+        }
     }
     return depth[u] < depth[v] ? u : v;
 }
 
 int main() {
-    scanf("%d %d %d", &n, &m, &root);
+    scanf("%d %d %d", &n, &m, &s);
     for (int i = 1; i < n; i++) {
-        int x, y;
-        scanf("%d %d", &x, &y);
-        adj[x].push_back(y);
-        adj[y].push_back(x);
+        int u, v;
+        scanf("%d %d", &u, &v);
+        adj[u].push_back(v);
+        adj[v].push_back(u);
     }
-    dfs1(root);
-    dfs2(root, root);
+    dfs1(s);
+    dfs2(s, s);
     while (m--) {
-        int x, y;
-        scanf("%d %d", &x, &y);
-        printf("%d\n", lca(x, y));
+        int a, b;
+        scanf("%d %d", &a, &b);
+        printf("%d\n", lca(a, b));
     }
     return 0;
 }
