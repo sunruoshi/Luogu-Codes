@@ -4,7 +4,7 @@ using namespace std;
 
 const int N = 5e4 + 1, INF = 0x3f3f3f3f;
 
-int n, w[N], fa[N], siz[N], val[N], depth[N], zdson[N], cdson[N], cut, ans = INF;
+int n, w[N], fa[N], siz[N], f[N], depth[N], zdson[N], cdson[N], cut, ans = INF;
 vector<int> adj[N];
 
 void dfs(int u, int pre) {
@@ -15,7 +15,7 @@ void dfs(int u, int pre) {
         depth[v] = depth[u] + 1; // 根结点深度为 0
         dfs(v, u);
         siz[u] += siz[v];
-        val[u] += val[v] + siz[v];
+        f[u] += f[v] + siz[v];
         if (siz[v] > siz[zdson[u]]) {
             cdson[u] = zdson[u];
             zdson[u] = v;
@@ -39,11 +39,11 @@ void solve(int u) { // 自 1 向下枚举切断的边
         // 切断 (u, v) 这条边
         cut = v;
         int A = INF, B = INF;
-        for (int i = u; i; i = fa[i]) { // 重新计算 u 所在部分的大小
+        for (int i = u; i; i = fa[i]) { // 重新计算 v 祖先的 siz
             siz[i] -= siz[v];
         }
-        get(1, val[1] - val[v] - depth[v] * siz[v], siz[1], A);
-        get(v, val[v], siz[v], B);
+        get(1, f[1] - f[v] - depth[v] * siz[v], siz[1], A);
+        get(v, f[v], siz[v], B);
         ans = min(ans, A + B);
         for (int i = u; i; i = fa[i]) { // 回溯
             siz[i] += siz[v];
