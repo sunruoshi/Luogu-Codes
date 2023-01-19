@@ -4,7 +4,7 @@ using namespace std;
 
 const int N = 5e4 + 1, INF = 0x3f3f3f3f;
 
-int n, w[N], fa[N], siz[N], f[N], depth[N], zdson[N], cdson[N], cut, ans = INF;
+int n, w[N], fa[N], siz[N], f[N], depth[N], son[N][2], cut, ans = INF;
 vector<int> adj[N];
 
 void dfs(int u, int pre) {
@@ -16,19 +16,19 @@ void dfs(int u, int pre) {
         dfs(v, u);
         siz[u] += siz[v];
         f[u] += f[v] + siz[v];
-        if (siz[v] > siz[zdson[u]]) {
-            cdson[u] = zdson[u];
-            zdson[u] = v;
-        } else if (siz[v] > siz[cdson[u]]) {
-            cdson[u] = v;
+        if (siz[v] > siz[son[u][0]]) {
+            son[u][1] = son[u][0];
+            son[u][0] = v;
+        } else if (siz[v] > siz[son[u][1]]) {
+            son[u][1] = v;
         }
     }
 }
 
 void get(int u, int now, int all, int &res) {
     res = min(res, now);
-    int v = zdson[u];
-    if (v == cut || siz[cdson[u]] > siz[zdson[u]]) v = cdson[u];
+    int v = son[u][0];
+    if (v == cut || siz[son[u][1]] > siz[son[u][0]]) v = son[u][1];
     if (!v) return;
     if (siz[v] * 2 > all) get(v, now + all - 2 * siz[v], all, res);
 }
